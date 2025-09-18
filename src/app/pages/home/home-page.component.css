@@ -1,0 +1,47 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #f0f4f8, #d9e2ec); /* Azul muy suave */
+  color: #333;
+}
+
+
+/* Contenido principal centrado */
+.main-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Bloque de contenido */
+.content {
+  max-width: 700px;
+  background-color: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.content h1 {
+  font-family: 'Poppins', sans-serif; /* Fuente moderna y atractiva */
+  font-weight: 700;
+  font-size: 2.5rem;
+  color: #000; /* Negro intenso para QR-MANAGER */
+  margin-bottom: 1rem;
+}
+
+.content p {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* Footer se queda abajo automáticamente */
+shared-footer {
+  flex-shrink: 0;
+}

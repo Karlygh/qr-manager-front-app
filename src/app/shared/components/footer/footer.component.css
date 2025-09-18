@@ -1,0 +1,103 @@
+/* Estilo general del footer */
+.footer {
+  background-color: #183146; /* Color principal */
+  background-color: ;
+  color: #e0e0e0;
+  padding: 40px 0; /* Aumentado el padding */
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3); /* Sombra mejorada */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente moderna */
+}
+
+/* Contenedor */
+.footer .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  gap: 40px; /* Aumentado el gap */
+  padding: 0 30px; /* Aumentado el padding */
+}
+
+/* Orientación enlaces */
+.footer-column {
+  flex: 1;
+  min-width: 250px; /* Aumentado el min-width */
+}
+
+/* Titulos */
+.footer h5 {
+  font-size: 1.2rem; /* Aumentado el tamaño */
+  margin-bottom: 20px; /* Aumentado el margen */
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: 600; /* Aumentado el peso */
+  letter-spacing: 1px; /* Espaciado de letras */
+}
+
+/* Enlaces */
+.footer a {
+  color: #a8c9e0; /* Color de enlace mejorado */
+  text-decoration: none;
+  display: block;
+  margin-bottom: 10px; /* Aumentado el margen */
+  transition: color 0.3s ease, transform 0.3s ease; /* Transición mejorada */
+}
+
+/* Iconos redes sociales */
+.footer .social-icons a {
+  margin-right: 20px; /* Aumentado el margen */
+  font-size: 1.8rem; /* Aumentado el tamaño */
+  color: #a8c9e0; /* Color de icono mejorado */
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.3s ease; /* Transición mejorada */
+}
+
+/* Enlaces y Iconos Hover */
+.footer a:hover,
+.footer .social-icons a:hover {
+  color: #fff;
+  transform: translateY(-3px); /* Elevación mejorada */
+}
+
+/* Copyright */
+.footer .copyright {
+  margin-top: 30px; /* Aumentado el margen */
+  text-align: center;
+  font-size: 1rem; /* Aumentado el tamaño */
+  color: #bbb;
+  transition: color 0.3s ease;
+}
+
+.footer .copyright:hover {
+  color: #dcdcdc;
+}
+
+/* Iconos de redes sociales SVG (ejemplo) */
+.footer .social-icons img {
+  width: 28px; /* Ajustado el tamaño */
+  height: 28px;
+  vertical-align: middle;
+  margin-right: 15px; /* Ajustado el margen */
+  transition: transform 0.3s ease;
+}
+
+.footer .social-icons img:hover {
+  transform: scale(1.15); /* Aumento mejorado */
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .footer .container {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+  }
+  .footer-column {
+      min-width: 100%; /* Ajuste para móviles */
+  }
+  .footer .social-icons {
+      margin-bottom: 20px; /* Margen para iconos en móviles */
+  }
+}

@@ -1,0 +1,36 @@
+<footer class="footer">
+  <div class="container">
+      <div class="footer-column datos-contacto text-center">
+          <h5>Contacto</h5>
+          <hr>
+          <div *ngFor="let item of footerItems " class="mb-5">
+              <a *ngIf="item.url" [routerLink]="item.url" class="value " >{{ item.label }}</a>
+          </div>
+      </div>
+
+
+      <!-- Más información -->
+      <div class="footer-column informacion-web text-center">
+          <h5>Información Web</h5>
+          <hr>
+          <p><a href="" class="value">Home</a></p>
+          <p><a href="" class="value">Nosotros</a></p>
+          <p><a href="" class="value">Contacto</a></p>
+          <p><a href="" class="value">Preguntas Frecuentes</a></p>
+      </div>
+
+      <!-- Redes Sociales -->
+      <div class="footer-column social-icons text-center">
+          <h5>Síguenos</h5>
+          <hr>
+          <a href="{{facebook}}" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="{{twitter}}" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="{{instagram}}" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      </div>
+  </div>
+
+  <!-- Copyright -->
+  <div class="copyright">
+      <p>&copy; 2025 QR MANAGER. Todos los derechos reservados.</p>
+  </div>
+</footer>
