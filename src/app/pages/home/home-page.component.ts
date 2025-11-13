@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Encabezado } from '../../encabezado/encabezado';
 import { EncabezadoEjemplos } from "../../encabezado-ejemplos/encabezado-ejemplos";
+import { QrManagerInfo } from '../../qr-manager-info/qr-manager-info';
 
 @Component({
   standalone: true,
@@ -10,7 +11,8 @@ import { EncabezadoEjemplos } from "../../encabezado-ejemplos/encabezado-ejemplo
     CommonModule,
     RouterModule,
     Encabezado,
-    EncabezadoEjemplos
+    EncabezadoEjemplos,
+    QrManagerInfo,
 ],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css'],

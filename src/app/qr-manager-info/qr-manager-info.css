@@ -1,0 +1,100 @@
+.recafy-panel {
+  background-color: #105f34;
+  color: #fff;
+  position: relative;
+}
+
+  .device-wrapper {
+    position: relative;
+  }
+
+  /* === IMÁGENES === */
+  .monitor {
+    transition: transform 0.4s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+  }
+
+.phone {
+  position: absolute;
+  bottom: -40px;
+  right: -35px; /* 💡 fuerza el desplazamiento más a la derecha */
+  width: 33%;
+  border: 2px solid #fff; /* borde más fino */
+  border-radius: 20px;
+  transform: rotate(3deg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  z-index: 3;
+}
+.phone:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+  .device-wrapper:hover .monitor {
+    transform: translateY(-5px);
+  }
+
+  .device-wrapper:hover .phone {
+    transform: translateY(-8px) rotate(0deg);
+  }
+
+  /* === FEATURE BOX === */
+  .feature-box {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+  }
+
+  .feature-box:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-4px);
+  }
+
+  .icon-box {
+    width: 45px;
+    height: 45px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    margin-right: 1rem;
+    flex-shrink: 0;
+  }
+
+  /* === BOTÓN === */
+  .btn-light {
+    color: #105f34 !important;
+    background: #fff;
+    transition: all 0.3s ease;
+  }
+
+  .btn-light:hover {
+    background: #f8f9fa;
+    transform: translateY(-2px);
+  }
+
+  .hover-grow {
+    transition: all 0.3s ease;
+  }
+
+  .hover-grow:hover {
+    transform: scale(1.05);
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 768px) {
+    .phone {
+      position: relative;
+      bottom: 0;
+      right: 0;
+      width: 55%;
+      transform: rotate(0deg);
+      margin-top: 1.5rem;
+    }
+  }
