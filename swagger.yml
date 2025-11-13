@@ -1,0 +1,2043 @@
+openapi: 3.0.3
+info:
+  title: Business Manager API
+  description: |
+    API para la gestión de negocios, productos, horarios, alérgenos y más.
+  version: 1.0.0
+  contact:
+    email: soporte@businessmanager.com
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Servidor local de desarrollo
+
+tags:
+  - name: business
+    description: Business operations
+  - name: product
+    description: Menu product management
+  - name: allergen
+    description: Allergen management
+  - name: category
+    description: Categories
+  - name: subcategory
+    description: Subcategories
+  - name: schedule_opening
+    description: Opening hours
+  - name: schedule_kitchen
+    description: Kitchen hours
+  - name: facilities
+    description: Business facilities
+  - name: wifi
+    description: WiFi information
+  - name: social_network
+    description: Business social networks
+
+paths:
+  /business:
+    get:
+      tags: [business]
+      summary: Retrieve all business (paginated)
+      operationId: getAllBusiness
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          example: "Café Central"
+          description: Filter by partial or full business name
+
+        - name: createdAtFrom
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          example: "2025-08-01"
+          description: Minimum creation date (inclusive)
+
+        - name: createdAtTo
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          example: "2025-08-10"
+          description: Maximum creation date (exclusive)
+
+      responses:
+        '200':
+          description: Page of business
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageBusinessResponse'
+    post:
+      tags: [business]
+      summary: Create new business
+      operationId: createBusiness
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BusinessRequest'
+      responses:
+        '201':
+          description: Business created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessResponse'
+        '500':
+          description: The business could not be created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /business/{businessId}:
+    get:
+      tags: [business]
+      summary: Obtain the business by id
+      operationId: getBusinessById
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Business Details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessResponse'
+        '500':
+          description: The business could not be retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      tags: [business]
+      summary: Update a business by id
+      operationId: updateBusinessById
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BusinessRequest'
+      responses:
+        '200':
+          description: Business updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessResponse'
+        '500':
+          description: The business could not be updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags: [business]
+      summary: Delete a businnes by id
+      operationId: deleteBusinessById
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Business deleted successfully
+        '500':
+          description: The business could not be deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /business/{businessId}/products:
+    get:
+      tags: [business]
+      summary: Get all products of a business by the business id
+      operationId: getBusinessProductsById
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Products of a business
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessWithProductsResponse'
+        '500':
+          description: The business products could not be retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /products:
+    get:
+      tags: [product]
+      summary: Retrieve all products
+      description: Returns a list of all available products.
+      operationId: getAllProducts
+      responses:
+        '200':
+          description: Retrieved product list successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags: [product]
+      summary: Create new product
+      description: Creates a new product
+      operationId: createProduct
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '400':
+          description: Invalid input
+        '409':
+          description: Product already exists
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /products/{productId}:
+    get:
+      tags: [product]
+      summary: Obtain the product by id
+      operationId: getProductById
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Retrieved product successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '500':
+          description: Product couldn't be obtained
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      tags: [product]
+      summary: Update a product by ID
+      operationId: updateProductById
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '200':
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '500':
+          description: The product couldn't be updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags: [product]
+      summary: Delete product by ID
+      operationId: deleteProductById
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Product eliminated successfully
+        '500':
+          description: Failed to eliminate product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /allergens:
+    get:
+      tags: [allergen]
+      summary: Obtain all the allergens for a dropdown.
+      operationId: getListOfAllergerns
+      responses:
+        '200':
+          description: Returned list of allergens.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AllergenResponse'
+        '500':
+          description: Failed to load the list of allergens
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /product/allergens/{productId}:
+    get:
+      tags: [allergen]
+      summary: Obtain allergens associated with the product when shown in menu.
+      operationId: getAllergensForProduct
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Correctly returned list of allergens for product.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AllergenResponse'
+        '500':
+          description: Failed to obtain list of allergens for product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags: [ allergen ]
+      summary: Remove multiple allergens from a product
+      operationId: deleteMultipleAllergensByProductId
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: allergenIds
+          in: query
+          required: true
+          explode: true
+          style: form
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+      responses:
+        '204':
+          description: Allergens successfully removed
+        '404':
+          description: Product or some allergens not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /product/{productId}/allergens/{allergenId}:
+    delete:
+      tags: [allergen]
+      summary: Remove one allergen from a product.
+      operationId: deleteAllergenFromProduct
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: allergenId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Allergen successfully removed
+        '404':
+          description: Product or allergen not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /category/{id}:
+    get:
+      tags: [category]
+      summary: Obtain category by id
+      operationId: getCategoryById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Category details obatained successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponse'
+        '500':
+          description: Error obtaining category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags: [ category ]
+      summary: Create a category with business id
+      operationId: createCategory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+      responses:
+        '201':
+          description: Category created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponse'
+        '500':
+          description: Failed to create category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    patch:
+      tags: [category]
+      summary: Update a category
+      operationId: updateCategoryById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+      responses:
+        '200':
+          description: Category updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponse'
+        '500':
+          description: Failed to update the category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags: [category]
+      summary: Eliminate a category by ID
+      operationId: deleteCategoryById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Category eliminated successfully
+
+  /category/all/{businessId}:
+    get:
+      tags: [ category ]
+      summary: Get call the categories
+      operationId: getAllCategoriesByBusinessId
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: List of categories obtained successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryResponse'
+        '500':
+          description: Failed to obtain the list of categories
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /subcategory:
+    post:
+      tags: [subcategory]
+      summary: Create a new subcategory
+      operationId: createSubCategory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubCategoryRequest'
+      responses:
+        '201':
+          description: Successfully created subcategory
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubCategoryResponse'
+        '500':
+          description: Failed to create a subcategory
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /subcategory/{subCategoryId}:
+    patch:
+      tags: [subcategory]
+      summary: Update subcategory
+      operationId: updateSubCategoryById
+      parameters:
+        - name: subCategoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubCategoryRequest'
+      responses:
+        '200':
+          description: Successfully updated subcategory
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubCategoryResponse'
+        '500':
+          description: Failed to update subcategory
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags: [subcategory]
+      summary: Delete a subcategory
+      operationId: deleteSubCategoryById
+      parameters:
+        - name: subCategoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Successfully deleted subcategory
+        '500':
+          description: Failed to delete subcategory
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /subcategory/{categoryId}:
+    get:
+      tags: [subcategory]
+      summary: Get call the subcategories by category Id
+      operationId: getAllSubCategoriesByCategoryId
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: List of subcategories obtained successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubCategoryResponse'
+        '500':
+          description: Failed to obtain the list of subcategories
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      tags: [subcategory]
+      summary: Delete all subcategories by category Id
+      operationId: deleteAllSubCategoriesByCategoryId
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: All subcategories deleted successfully by category ID
+        '500':
+          description: Couldn't delete all subcategories by category ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /subcategory/business/{businessId}:
+    get:
+      tags: [subcategory]
+      summary: Get all the subcategories by business Id
+      operationId: getAllSubCategoriesByBusinessId
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: List of all subcategories obtained successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubCategoryResponse'
+        '500':
+          description: Failed to obtain the list of subcategories
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /schedule/opening-hours/{businessId}:
+    get:
+      tags: [schedule_opening]
+      summary: Retrieve schedule from a specific business
+      operationId: findAllOpeningHours
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+
+      responses:
+        '200':
+          description: Lista de horarios de apertura
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OpeningHourResponse'
+        '500':
+          description: No se han podido obtener los horarios de apertura
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags: [schedule_opening]
+      summary: Save schedule
+      operationId: saveOpeningHour
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpeningHourRequest'
+      responses:
+        '201':
+          description: Horario creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpeningHourResponse'
+        '500':
+          description: No se ha podido crear el horario de apertura
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /schedule/opening-hours/all/{businessId}:
+    post:
+      tags: [ schedule_opening ]
+      summary: Save all opening hours
+      operationId: saveOpeningHours
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/OpeningHourRequest'
+      responses:
+        '201':
+          description: Opening hours created successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OpeningHourResponse'
+        '500':
+          description: Failed to create opening hours
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags: [schedule_opening]
+      summary: Delete all opening hours
+      operationId: deleteOpeningHours
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Opening hours deleted successfully
+        '500':
+          description: Failed to delete opening hours
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /schedule/opening-hours/{id}:
+    patch:
+      tags: [schedule_opening]
+      summary: Update schedule
+      operationId: updateOpeningHour
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpeningHourRequest'
+      responses:
+        '200':
+          description: Horario actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpeningHourResponse'
+        '500':
+          description: No se ha podido actualizar el horario de apertura
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags: [schedule_opening]
+      summary: Delete schedule
+      operationId: deleteOpeningHour
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Horario eliminado correctamente
+        '500':
+          description: No se ha podido eliminar el horario de apertura
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /schedule/kitchen-hours/{businessId}:
+    get:
+      tags: [schedule_kitchen]
+      summary: Retrieve kitchen schedule from a specific business
+      operationId: findAllKitchenHours
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Lista de horarios de cocina
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KitchenHourResponse'
+        '500':
+          description: No se han podido obtener los horarios de cocina
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags: [schedule_kitchen]
+      summary: Crear horario de cocina
+      operationId: saveKitchenHour
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KitchenHourRequest'
+      responses:
+        '201':
+          description: Horario creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KitchenHourResponse'
+        '500':
+          description: No se ha podido crear el horario de cocina
+          content:
+            application/json:
+              schema:
+
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /schedule/kitchen-hours/all/{businessId}:
+    post:
+      tags: [ schedule_kitchen ]
+      summary: Save all kitchen hours
+      operationId: saveKitchenHours
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/KitchenHourRequest'
+      responses:
+        '201':
+          description: Kitchen hours created successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KitchenHourResponse'
+        '500':
+          description: Failed to create kitchen hours
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags: [schedule_kitchen]
+      summary: Delete all kitchen hours
+      operationId: deleteKitchenHours
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Kitchen hours deleted successfully
+        '500':
+          description: Failed to delete kitchen hours
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /schedule/kitchen-hours/{id}:
+    patch:
+      tags: [schedule_kitchen]
+      summary: Actualizar horario de cocina
+      operationId: updateKitchenHour
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KitchenHourRequest'
+      responses:
+        '200':
+          description: Horario actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KitchenHourResponse'
+        '500':
+          description: No se ha podido actualizar el horario de cocina
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags: [schedule_kitchen]
+      summary: Eliminar horario de cocina
+      operationId: deleteKitchenHour
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Horario eliminado correctamente
+        '500':
+          description: No se ha podido eliminar el horario de cocina
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /facilities:
+    post:
+      tags: [facilities]
+      summary: Crear instalación
+      operationId: saveFacility
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilityRequest'
+      responses:
+        '201':
+          description: Instalación creada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityResponse'
+        '500':
+          description: No se ha podido crear la instalacion del negocio
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /facilities/{id}:
+    get:
+      tags: [facilities]
+      summary: Obtener instalaciones del negocio
+      operationId: findAllFacilities
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Lista de instalaciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FacilityResponse'
+        '500':
+          description: No se han podido obtener las instalaciones del negocio
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags: [facilities]
+      summary: Actualizar instalación
+      operationId: updateFacility
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilityRequest'
+      responses:
+        '200':
+          description: Instalación actualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityResponse'
+        '500':
+          description: No se ha podido actualizar la instalacion del negocio
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      tags: [facilities]
+      summary: Eliminar instalación
+      operationId: deleteFacility
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Instalación eliminada correctamente
+        '500':
+          description: No se ha podido eliminar la instalacion del negocio
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /wifi:
+    post:
+      tags: [wifi]
+      summary: Crear configuración de WiFi
+      operationId: saveWifi
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WifiRequest'
+      responses:
+        '201':
+          description: WiFi creada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WifiResponse'
+
+  /business/{businessId}/wifi:
+    get:
+      tags: [wifi]
+      summary: Obtener configuración de WIFI mediante el id del negocio
+      operationId: getBusinessWifi
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Detalles del wifi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WifiResponse'
+        '500':
+          description: No se ha podido obtener la configuración del wifi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /business/{businessId}/wifi/{wifiId}:
+    patch:
+      tags: [wifi]
+      summary: Actualizar configuración de WiFi
+      operationId: updateWifi
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: wifiId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WifiRequest'
+      responses:
+        '200':
+          description: WiFi actualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WifiResponse'
+        '500':
+          description: No se ha podido actualizar el wifi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags: [wifi]
+      summary: Eliminar configuración de WiFi
+      operationId: deleteWifi
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: wifiId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: WiFi eliminada correctamente
+        '500':
+          description: No se ha podido eliminar el wifi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /social-network:
+    post:
+      tags: [social_network]
+      summary: Crear red social
+      operationId: saveSocialNetwork
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SocialNetworkRequest'
+      responses:
+        '201':
+          description: Red social creada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialNetworkResponse'
+        '500':
+          description: No se ha podido crear la red social
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /social-network/all/{businessId}:
+    post:
+      tags: [ social_network ]
+      summary: Save all social networks
+      operationId: saveSocialNetworks
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/SocialNetworkRequest'
+      responses:
+        '201':
+          description: Social networks created successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SocialNetworkResponse'
+        '500':
+          description: Failed to create social networks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags: [ social_network ]
+      summary: Delete all social networks
+      operationId: deleteSocialNetworks
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Social networks deleted successfully
+        '500':
+          description: Failed to delete social networks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /social-network/{id}:
+    get:
+      tags: [social_network]
+      summary: Obtener redes sociales del negocio
+      operationId: findAllSocialNetworks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Lista de redes sociales
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SocialNetworkResponse'
+        '500':
+          description: No se han podido obtener las redes sociales
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      tags: [social_network]
+      summary: Actualizar red social
+      operationId: updateSocialNetwork
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SocialNetworkRequest'
+      responses:
+        '200':
+          description: Red social actualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialNetworkResponse'
+        '500':
+          description: No se ha podido actualizar la red social
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      tags: [social_network]
+      summary: Eliminar red social
+      operationId: deleteSocialNetwork
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Red social eliminada correctamente
+        '500':
+          description: No se ha podido eliminar la red social
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    BusinessRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          example: "Café Central"
+        address:
+          type: string
+          maxLength: 150
+          example: "Calle Mayor 123, Madrid"
+        phoneNumber:
+          type: string
+          maxLength: 20
+          example: "+34 600 123 456"
+        email:
+          type: string
+          maxLength: 100
+          example: "contacto@cafecentral.es"
+        description:
+          type: string
+          maxLength: 500
+          example: "Cafetería acogedora con productos ecológicos."
+        imageLogo:
+          type: string
+          format: binary
+          example: photo.jpg
+
+    BusinessResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          maxLength: 100
+          example: "Café Central"
+        address:
+          type: string
+          maxLength: 150
+          example: "Calle Mayor 123, Madrid"
+        phoneNumber:
+          type: string
+          maxLength: 20
+          example: "+34 600 123 456"
+        email:
+          type: string
+          maxLength: 100
+          example: "contacto@cafecentral.es"
+        description:
+          type: string
+          maxLength: 500
+          example: "Cafetería acogedora con productos ecológicos."
+        imageLogo:
+          type: string
+          maxLength: 255
+          example: "https://cdn.example.com/logo/cafecentral.png"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2025-08-01T17:45:00"
+        wifi:
+          $ref: '#/components/schemas/WifiResponse'
+        openingHours:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpeningHourResponse'
+        kitchenHours:
+          type: array
+          items:
+            $ref: '#/components/schemas/KitchenHourResponse'
+        facilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/FacilityResponse'
+        socialNetworks:
+          type: array
+          items:
+            $ref: '#/components/schemas/SocialNetworkResponse'
+
+    BusinessWithProductsResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          maxLength: 100
+          example: "Café Central"
+        address:
+          type: string
+          maxLength: 150
+          example: "Calle Mayor 123, Madrid"
+        phoneNumber:
+          type: string
+          maxLength: 20
+          example: "+34 600 123 456"
+        email:
+          type: string
+          maxLength: 100
+          example: "contacto@cafecentral.es"
+        description:
+          type: string
+          maxLength: 500
+          example: "Cafetería acogedora con productos ecológicos."
+        imageLogo:
+          type: string
+          maxLength: 255
+          example: "https://cdn.example.com/logo/cafecentral.png"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2025-08-01T17:45:00"
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductByBusinessResponse'
+        wifi:
+          $ref: '#/components/schemas/WifiResponse'
+        openingHours:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpeningHourResponse'
+        kitchenHours:
+          type: array
+          items:
+            $ref: '#/components/schemas/KitchenHourResponse'
+        facilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/FacilityResponse'
+        socialNetworks:
+          type: array
+          items:
+            $ref: '#/components/schemas/SocialNetworkResponse'
+
+    PageBusinessResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessResponse'
+        totalElements:
+          type: integer
+          example: 100
+        totalPages:
+          type: integer
+          example: 10
+        size:
+          type: integer
+          example: 10
+        number:
+          type: integer
+          example: 0
+        numberOfElements:
+          type: integer
+          example: 10
+        first:
+          type: boolean
+          example: true
+        last:
+          type: boolean
+          example: false
+        empty:
+          type: boolean
+          example: false
+
+    ProductRequest:
+      type: object
+      properties:
+        businessId:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          maxLength: 100
+          example: "Pizza cuatro quesos"
+        price:
+          type: number
+          format: float
+          example: 7.99
+        image:
+          type: string
+          format: binary
+          example: photo.jpg
+        description:
+          type: string
+          maxLength: 500
+          example: "Pizza italiana cuatro quesos recien elaborada."
+        label:
+          type: string
+          maxLength: 30
+          example: "natural"
+        status:
+          type: boolean
+          description: Indicates whether the product is available.
+          example: true
+        categoryId:
+          type: integer
+          format: int64
+          example: 5
+        subcategoryId:
+          type: integer
+          format: int64
+          example: 5
+        allergenIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+          example: [2, 4]
+
+    ProductResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        business:
+          $ref: '#/components/schemas/BusinessResponse'
+        name:
+          type: string
+          maxLength: 100
+          example: "Pizza cuatro quesos"
+        price:
+          type: number
+          format: float
+          example: 7.99
+        image:
+          type: string
+          maxLength: 255
+          example: "https://cdn.example.com/products/pizza-cuatro-quesos.png"
+        description:
+          type: string
+          maxLength: 500
+          example: "Pizza italiana cuatro quesos recien elaborada."
+        label:
+          type: string
+          maxLength: 30
+          example: "artesanal"
+        status:
+          type: boolean
+          description: Indicates whether the product is available.
+          example: true
+        categoryId:
+          type: integer
+          format: int64
+          example: 2
+        subCategoryId:
+          type: integer
+          format: int64
+          example: 5
+        allergens:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllergenResponse'
+          example:
+            - id: 2
+              name: "Gluten"
+            - id: 4
+              name: "Lácteos"
+
+    ProductByBusinessResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          maxLength: 100
+          example: "Pizza cuatro quesos"
+        price:
+          type: number
+          format: float
+          example: 7.99
+        image:
+          type: string
+          maxLength: 255
+          example: "https://cdn.example.com/products/pizza-cuatro-quesos.png"
+        description:
+          type: string
+          maxLength: 500
+          example: "Pizza italiana cuatro quesos recien elaborada."
+        label:
+          type: string
+          maxLength: 30
+          example: "artesanal"
+        status:
+          type: boolean
+          description: Indicates whether the product is available.
+          example: true
+        categoryId:
+          type: integer
+          format: int64
+          example: 2
+        subCategoryId:
+          type: integer
+          format: int64
+          example: 5
+        allergens:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllergenResponse'
+          example:
+            - id: 2
+              name: "Gluten"
+            - id: 4
+              name: "Lácteos"
+
+    AllergenResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 2
+        name:
+          type: string
+          maxLength: 50
+          example: "Gluten"
+
+    CategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          example: "Bebidas"
+        image:
+          type: string
+          format: binary
+          example: photo.jpg
+
+    CategoryResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        businessId:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          maxLength: 50
+          example: "Bebidas"
+        image:
+          type: string
+          maxLength: 255
+          example: "https://cdn.example.com/categories/bebidas.png"
+        subCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubCategoryResponse'
+
+    SubCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          example: "Zumos"
+        categoryId:
+          type: integer
+          format: int64
+          example: 1
+
+    SubCategoryResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 5
+        name:
+          type: string
+          maxLength: 50
+          example: "Zumos"
+        categoryId:
+          type: integer
+          format: int64
+          example: 1
+
+    OpeningHourRequest:
+      type: object
+      properties:
+        businessId:
+          type: integer
+          format: int64
+          example: 1
+        day:
+          type: string
+          enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+          example: "monday"
+        openingTime:
+          type: string
+          format: time
+          example: "08:00:00"
+        closingTime:
+          type: string
+          format: time
+          example: "22:00:00"
+        status:
+          type: boolean
+          example: true
+
+    OpeningHourResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        businessId:
+          type: integer
+          format: int64
+          example: 1
+        day:
+          type: string
+          enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+          example: "monday"
+        openingTime:
+          type: string
+          format: time
+          example: "08:00:00"
+        closingTime:
+          type: string
+          format: time
+          example: "22:00:00"
+        status:
+          type: boolean
+          example: true
+
+    KitchenHourRequest:
+      type: object
+      properties:
+        businessId:
+          type: integer
+          format: int64
+          example: 1
+        day:
+          type: string
+          enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+          example: "monday"
+        openingTime:
+          type: string
+          format: time
+          example: "12:00:00"
+        closingTime:
+          type: string
+          format: time
+          example: "16:00:00"
+
+    KitchenHourResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 2
+        businessId:
+          type: integer
+          format: int64
+          example: 1
+        day:
+          type: string
+          enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+          example: "monday"
+        openingTime:
+          type: string
+          format: time
+          example: "12:00:00"
+        closingTime:
+          type: string
+          format: time
+          example: "16:00:00"
+        status:
+          type: boolean
+          example: true
+
+    FacilityRequest:
+      type: object
+      properties:
+        businessId:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          maxLength: 50
+          example: "Terraza"
+
+    FacilityResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        businessId:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          maxLength: 50
+          example: "Terraza"
+
+    WifiRequest:
+      type: object
+      properties:
+        businessId:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          maxLength: 50
+          example: "CaféCentral_Wifi"
+        password:
+          type: string
+          maxLength: 100
+          example: "cafecentral2024"
+
+    WifiResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        businessId:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          maxLength: 50
+          example: "CaféCentral_Wifi"
+        password:
+          type: string
+          maxLength: 100
+          example: "cafecentral2024"
+
+    SocialNetworkRequest:
+      type: object
+      properties:
+        businessId:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          maxLength: 30
+          example: "Instagram"
+        url:
+          type: string
+          maxLength: 255
+          example: "https://instagram.com/cafecentral"
+
+    SocialNetworkResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        businessId:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          maxLength: 30
+          example: "Instagram"
+        url:
+          type: string
+          maxLength: 255
+          example: "https://instagram.com/cafecentral"
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 500
+          description: "Código de estado HTTP que indica el tipo de error."
+        message:
+          type: string
+          example: "Entity not found"
+          description: "Mensaje descriptivo del error que proporciona más detalles."
+        details:
+          type: string
+          example: "The entity with the given ID does not exist."
+          description: "Información adicional o detalles sobre el error (opcional)."
+

@@ -1,103 +1,169 @@
-/* Estilo general del footer */
-.footer {
-  background-color: #183146; /* Color principal */
-  background-color: ;
-  color: #e0e0e0;
-  padding: 40px 0; /* Aumentado el padding */
-  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3); /* Sombra mejorada */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente moderna */
+/* =========================================
+   Estilo General del Footer
+========================================= */
+.qr-footer {
+    background-color: #6aa486; /* Verde oscuro (como el texto de tu navbar) */
+    color: #e7e7e7; /* Gris claro */
+    padding: 60px 0 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Contenedor */
-.footer .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  max-width: 1200px;
-  margin: 0 auto;
-  flex-wrap: wrap;
-  gap: 40px; /* Aumentado el gap */
-  padding: 0 30px; /* Aumentado el padding */
+.qr-footer-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    flex-wrap: wrap;
+    gap: 40px; /* Espacio entre columnas */
 }
 
-/* Orientación enlaces */
-.footer-column {
-  flex: 1;
-  min-width: 250px; /* Aumentado el min-width */
+/* -----------------------------------------
+   Estilos de Columnas
+----------------------------------------- */
+.qr-footer-column {
+    flex-grow: 1;
+    min-width: 200px; /* Tamaño base para desktop */
 }
 
-/* Titulos */
-.footer h5 {
-  font-size: 1.2rem; /* Aumentado el tamaño */
-  margin-bottom: 20px; /* Aumentado el margen */
-  text-transform: uppercase;
-  color: #fff;
-  font-weight: 600; /* Aumentado el peso */
-  letter-spacing: 1px; /* Espaciado de letras */
+.qr-footer-column h5 {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    color: #6aa486; /* Verde claro */
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    border-left: 3px solid #6aa486; /* Detalle decorativo */
+    padding-left: 10px;
 }
 
-/* Enlaces */
-.footer a {
-  color: #a8c9e0; /* Color de enlace mejorado */
-  text-decoration: none;
-  display: block;
-  margin-bottom: 10px; /* Aumentado el margen */
-  transition: color 0.3s ease, transform 0.3s ease; /* Transición mejorada */
+/* -----------------------------------------
+   Sección Logo y Slogan
+----------------------------------------- */
+.qr-logo-brand {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #105f34;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 10px;
 }
 
-/* Iconos redes sociales */
-.footer .social-icons a {
-  margin-right: 20px; /* Aumentado el margen */
-  font-size: 1.8rem; /* Aumentado el tamaño */
-  color: #a8c9e0; /* Color de icono mejorado */
-  text-decoration: none;
-  transition: color 0.3s ease, transform 0.3s ease; /* Transición mejorada */
+.qr-slogan {
+    font-size: 0.9rem;
+    color:#e7e7e7;
+    margin-bottom: 20px;
 }
 
-/* Enlaces y Iconos Hover */
-.footer a:hover,
-.footer .social-icons a:hover {
-  color: #fff;
-  transform: translateY(-3px); /* Elevación mejorada */
+/* -----------------------------------------
+   Enlaces y Hover
+----------------------------------------- */
+.qr-link {
+    color: #105f34;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+    font-weight: 500;
 }
 
-/* Copyright */
-.footer .copyright {
-  margin-top: 30px; /* Aumentado el margen */
-  text-align: center;
-  font-size: 1rem; /* Aumentado el tamaño */
-  color: #bbb;
-  transition: color 0.3s ease;
+.qr-link:hover {
+    color: #e7e7e7; /* Resaltado en verde claro */
+    transform: translateX(5px); /* Deslizamiento sutil */
 }
 
-.footer .copyright:hover {
-  color: #dcdcdc;
+/* -----------------------------------------
+   Iconos Redes Sociales
+----------------------------------------- */
+.qr-social-icons {
+    margin-top: 30px;
+}
+.qr-social-icons a {
+    color: #105f34; /* Verde claro */
+    font-size: 1.6rem;
+    margin-right: 15px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+.qr-social-icons a:hover {
+    color: #fff;
+    transform: scale(1.1);
 }
 
-/* Iconos de redes sociales SVG (ejemplo) */
-.footer .social-icons img {
-  width: 28px; /* Ajustado el tamaño */
-  height: 28px;
-  vertical-align: middle;
-  margin-right: 15px; /* Ajustado el margen */
-  transition: transform 0.3s ease;
+/* -----------------------------------------
+   Copyright y Separador
+----------------------------------------- */
+.qr-footer-bottom {
+    max-width: 1200px;
+    margin: 40px auto 0;
+    padding: 0 20px;
+    text-align: center;
 }
 
-.footer .social-icons img:hover {
-  transform: scale(1.15); /* Aumento mejorado */
+.qr-separator {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+    margin: 20px 0;
 }
 
-/* Responsividad */
+.qr-copyright {
+    font-size: 0.85rem;
+    color: #a8c9e0;
+}
+
+/* =========================================
+   Responsividad (Móviles)
+========================================= */
 @media (max-width: 768px) {
-  .footer .container {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-  }
-  .footer-column {
-      min-width: 100%; /* Ajuste para móviles */
-  }
-  .footer .social-icons {
-      margin-bottom: 20px; /* Margen para iconos en móviles */
-  }
+    .qr-footer-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .qr-footer-column {
+        min-width: 90%;
+        margin-bottom: 20px;
+    }
+
+    /* Centrar iconos en móviles */
+    .qr-social-icons {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    /* Eliminar el borde decorativo de los títulos en móvil */
+    .qr-footer-column h5 {
+        border-left: none;
+        padding-left: 0;
+    }
+
+    /* Alinear enlaces de la lista a la izquierda para mejor lectura en móvil */
+    .qr-info-links,
+    .qr-support-legal {
+        text-align: left;
+    }
+
+    /* Mover los links a la izquierda para mejor UX en móvil */
+    .qr-link {
+        display: inline-block; /* Permite que los links fluyan en lugar de ser bloques */
+        margin-right: 20px;
+        margin-bottom: 8px;
+    }
+}
+.link-estatico {
+    color: #e7e7e7; /* Color para resaltar que es la página actual */
+    text-decoration: underline; /* Subrayado permanente */
+    display: block;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    
+    /* ❌ SIN PROPIEDADES TRANSITION NI TRANSFORM */
+}
+
+/* Si usas la clase link-subrayado solo para el subrayado (opcional): */
+.link-subrayado {
+    text-decoration: underline;
 }

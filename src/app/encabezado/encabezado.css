@@ -1,0 +1,185 @@
+/* ====================================
+   1. SECCIÓN HERO Y FONDO
+   ==================================== */
+
+.hero-section {
+    background: linear-gradient(135deg, #1f2f3f 0%, #388e3c 100%); 
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+    padding-top: 100px;
+    padding-bottom: 100px;
+    min-height: 80vh;
+}
+
+.hero-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2); 
+    z-index: 0;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+}
+
+/* ====================================
+   2. ESTILOS DE TEXTO Y TIPOGRAFÍA
+   ==================================== */
+
+.hero-section h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.key-features {
+    font-size: 1.2rem;
+    color: #a5d6a7;
+    font-weight: 500;
+}
+
+.registration-link {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 5px 15px;
+    transition: background-color 0.3s;
+}
+
+.registration-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.registration-link a {
+    color: #ffffff !important;
+}
+
+.benefits-list h5 {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin-bottom: 8px;
+    font-weight: 400;
+}
+
+/* ====================================
+   3. ESTILOS DE BOTONES
+   ==================================== */
+
+.btn-primary {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #388E3C;
+    border-color: #388E3C;
+    transform: translateY(-2px);
+}
+
+.btn-outline-light {
+    border-color: #ffffff;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.btn-outline-light:hover {
+    background-color: #ffffff;
+    color: #1f2f3f;
+}
+
+/* ====================================
+   4. MOCKUP DE MÓVIL Y CARROUSEL
+   ==================================== */
+
+.mobile-mockup-container {
+    position: relative;
+    width: 320px; 
+    height: 640px; 
+    border: 15px solid #000;
+    border-radius: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    background-color: #000; 
+    overflow: hidden; 
+    margin: 20px auto; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mockup-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.carousel-inner {
+    height: 100%;
+}
+
+.carousel-item {
+    height: 100%;
+}
+
+.carousel-item img {
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px; 
+    height: 80px;
+    background-color: #ffffff; 
+    border-radius: 50%;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+
+.video-play-button:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    background-color: #ffffff;
+}
+
+.video-play-button i {
+    font-size: 2rem;
+    color: #4CAF50;
+    margin-left: 5px;
+}
+
+/* ====================================
+   5. MEDIA QUERIES
+   ==================================== */
+
+@media (max-width: 992px) {
+    .hero-section {
+        min-height: auto;
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+    .mobile-mockup-container {
+        width: 250px;
+        height: 500px;
+        margin-top: 50px;
+    }
+}

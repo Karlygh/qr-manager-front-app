@@ -1,44 +1,38 @@
-<nav class="navbar navbar-expand-lg">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg navbar-light shadow-sm py-3 sticky-top custom-navbar">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+    
+    <a class="navbar-brand d-flex align-items-center fw-bold fs-4 rounded" routerLink="/home">
+    <img src="../../../assets/mockup/QR-Managerverdeconfondo.png" alt="Logo" class="me-2 rounded">    <span class="brand-text d-none d-sm-inline-block">QR-Manager</span>
+</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
+
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item" *ngFor="let item of navbarItems">
-          <!-- Dropdown para "Mi Perfil" -->
-          <ng-container *ngIf="item.subItems?.length; else navLinkTemplate">
-            <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i *ngIf="item.icon" class="pi" [ngClass]="item.icon"></i>
-                {{ item.label }}
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li *ngFor="let subItem of item.subItems">
-                  <a *ngIf="subItem.url" class="dropdown-item" [routerLink]="subItem.url">{{ subItem.label }}</a>
-                  <a *ngIf="subItem.action" class="dropdown-item" (click)="subItem.action()">{{ subItem.label }}</a>
-                </li>
-              </ul>
-            </div>
-          </ng-container>
-
-          <!-- Links normales -->
-          <ng-template #navLinkTemplate>
-            <a class="nav-link active" aria-current="page" *ngIf="item.url; else logoutTemplate" [routerLink]="item.url">
-              <i *ngIf="item.icon" class="pi" [ngClass]="item.icon"></i>
-              {{ item.label }}
-            </a>
-          </ng-template>
-
-          <!-- Acciones como Logout -->
-          <ng-template #logoutTemplate>
-            <a class="nav-link active" aria-current="page" *ngIf="item.action" (click)="item.action()">
-              <i *ngIf="item.icon" class="pi" [ngClass]="item.icon"></i>
-              {{ item.label }}
-            </a>
-          </ng-template>
+        <li class="nav-item mx-2">
+          <a class="nav-link" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a>
+        </li>
+        <li class="nav-item mx-2">
+          <a class="nav-link" routerLink="/carta-digital" routerLinkActive="active">Carta Digital</a>
+        </li>
+        <li class="nav-item mx-2">
+          <a class="nav-link" routerLink="/tu-restaurante" routerLinkActive="active">Tu Restaurante</a>
+        </li>
+        <li class="nav-item mx-2">
+          <a class="nav-link" routerLink="/precios" routerLinkActive="active">Precios</a>
+        </li>
+        <li class="nav-item mx-2">
+          <a class="nav-link" routerLink="/contacto" routerLinkActive="active">Contacto</a>
         </li>
       </ul>
+
+      <div class="d-flex ms-lg-3 mt-3 mt-lg-0">
+        <a routerLink="/comienzagratis" class="btn btn-primary px-4 rounded-pill me-2">Comienza gratis</a>
+        <a routerLink="/iniciar-sesion" class="custom-button">Iniciar sesión</a>
+      </div>
     </div>
   </div>
 </nav>

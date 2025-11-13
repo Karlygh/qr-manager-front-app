@@ -1,36 +1,43 @@
-<footer class="footer">
-  <div class="container">
-      <div class="footer-column datos-contacto text-center">
-          <h5>Contacto</h5>
-          <hr>
-          <div *ngFor="let item of footerItems " class="mb-5">
-              <a *ngIf="item.url" [routerLink]="item.url" class="value " >{{ item.label }}</a>
-          </div>
-      </div>
+<footer class="qr-footer">
+    <div class="qr-footer-container">
 
+        <div class="qr-footer-column qr-logo-section">
+            <a href="#" class="qr-logo-brand">
+                <span class="qr-logo-text">QR-MANAGER</span>
+            </a>
+            <p class="qr-slogan">Digitaliza tu menú. Simplifica la experiencia.</p>
+            
+            <div class="qr-social-icons">
+                <a href="{{facebook}}" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="{{twitter}}" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="{{instagram}}" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
 
-      <!-- Más información -->
-      <div class="footer-column informacion-web text-center">
-          <h5>Información Web</h5>
-          <hr>
-          <p><a href="" class="value">Home</a></p>
-          <p><a href="" class="value">Nosotros</a></p>
-          <p><a href="" class="value">Contacto</a></p>
-          <p><a href="" class="value">Preguntas Frecuentes</a></p>
-      </div>
+      <div class="qr-footer-column qr-info-links">
+    <h5>Información Rápida</h5>
+    <a href="#" class="link-estatico link-subrayado">Home</a> 
+    
+    <a href="#" class="qr-link">Tu Restaurante</a>
+    <a href="#" class="qr-link">Precios</a>
+    <a href="#" class="qr-link">Preguntas Frecuentes</a>
+</div>
 
-      <!-- Redes Sociales -->
-      <div class="footer-column social-icons text-center">
-          <h5>Síguenos</h5>
-          <hr>
-          <a href="{{facebook}}" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-          <a href="{{twitter}}" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-          <a href="{{instagram}}" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-      </div>
-  </div>
+       <div class="qr-footer-column qr-support-legal">
+    <h5>Soporte</h5>
+    <a href="#" class="link-estatico link-subrayado">Contacto</a> 
+    
+    <a href="#" class="qr-link">Términos de Servicio</a>
+    <a href="#" class="qr-link">Política de Privacidad</a>
+    
+    <div *ngFor="let item of footerItems" class="qr-contact-dynamic mt-3">
+        <a *ngIf="item.url" [routerLink]="item.url" class="qr-link qr-contact-item">{{ item.label }}</a>
+    </div>
+</div>
+    </div>
 
-  <!-- Copyright -->
-  <div class="copyright">
-      <p>&copy; 2025 QR MANAGER. Todos los derechos reservados.</p>
-  </div>
+    <div class="qr-footer-bottom">
+        <hr class="qr-separator">
+        <p class="qr-copyright">&copy; 2025 QR MANAGER. Todos los derechos reservados.</p>
+    </div>
 </footer>

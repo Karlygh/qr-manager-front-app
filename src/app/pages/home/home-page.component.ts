@@ -1,23 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NavbarComponent } from "../../shared/components/navbar/navbar.component";
-import { FooterComponent } from "../../shared/components/footer/footer.component";
+import { Encabezado } from '../../encabezado/encabezado';
 
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    NavbarComponent,
-    FooterComponent
-],
-  templateUrl: './home-page.component.html',
-  styleUrl: './home-page.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    Encabezado],
+  templateUrl: './home-page.component.html',
+  styleUrls: ['./home-page.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export default class HomeComponent {
-  public title = "QR-MANAGER"
-
-
+// Usamos export normal y clase con convención de nombre de archivo
+export class HomePageComponent { 
+  public title = "QR-MANAGER"
 }
