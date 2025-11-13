@@ -2,13 +2,16 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Encabezado } from '../../encabezado/encabezado';
+import { EncabezadoEjemplos } from "../../encabezado-ejemplos/encabezado-ejemplos";
 
 @Component({
   standalone: true,
   imports: [
-    CommonModule,
-    RouterModule,
-    Encabezado],
+    CommonModule,
+    RouterModule,
+    Encabezado,
+    EncabezadoEjemplos
+],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
