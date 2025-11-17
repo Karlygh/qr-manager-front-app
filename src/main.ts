@@ -1,3 +1,4 @@
+import 'zone.js';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { App } from './app/app'; // Usa la clase App
 import { provideRouter } from '@angular/router'; 

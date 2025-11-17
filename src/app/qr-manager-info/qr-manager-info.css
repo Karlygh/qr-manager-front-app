@@ -67,6 +67,19 @@
     flex-shrink: 0;
   }
 
+  .highlight-subtitle {
+    color: #0d6eff;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+    background-color:#9cbae7;
+    padding: 0.5rem 1rem;
+  }
+
+  .highlight-subtitle:hover {
+    color: #ffdb4d;
+    text-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+  }
+
   /* === BOTÓN === */
   .btn-light {
     color: #105f34 !important;
@@ -85,6 +98,11 @@
 
   .hover-grow:hover {
     transform: scale(1.05);
+  }
+  h2 {
+        font-family: 'Momo Trust Display', sans-serif;
+        letter-spacing: 0.12em;
+        border-bottom: 1px solid #99cfb1;
   }
 
   /* === RESPONSIVE === */
