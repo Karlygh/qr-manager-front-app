@@ -1,0 +1,119 @@
+
+
+/* Azul para Títulos y Bordes de Alerta */
+.text-primary {
+    color: #0d6eff !important; 
+}
+.border-primary {
+    border-color: #0d6eff !important; 
+}
+
+/* Verde Oscuro para el botón principal */
+.btn-success {
+    background-color: #105f34; 
+    border-color: #105f34;
+    color: white; 
+}
+
+/* Ajuste para los checks de la lista en la alerta de confianza */
+.text-success {
+    color: #105f34 !important; 
+}
+
+/* Fondo de página ligero */
+.container {
+    background-color: #f8f9fa; 
+    min-height: 100vh;
+}
+
+/* 2. Panel del Formulario (Look & Feel) */
+.form-panel {
+    background-color: white;
+    /* Sombra suave y ligeramente verdosa para levantar el panel */
+    box-shadow: 0 10px 30px rgba(106, 164, 134, 0.2); 
+    border-radius: 18px; /* Bordes más suaves */
+    border: 1px solid #e0e0e0; 
+    padding: 3rem !important; /* Más espacio interno */
+}
+
+/* Títulos de Sección (Fieldset/Legend) */
+legend {
+    font-size: 1.4rem; 
+    color: #105f34 !important; /* Verde Oscuro para las leyendas */
+    border-bottom: 2px solid #6aa486; /* Línea con Verde Oliva */
+    padding-bottom: 8px;
+    margin-bottom: 20px !important;
+    font-weight: 700;
+}
+
+/* Etiquetas de campo */
+.form-label {
+    font-weight: 600; 
+    color: #34495e;
+    margin-bottom: 0.5rem;
+}
+
+/* 3. Estilo de Inputs y Placeholders */
+
+.form-control {
+    border-radius: 10px; 
+    padding: 0.75rem 1rem;
+    border: 1px solid #ccc;
+    transition: all 0.2s;
+}
+
+/* REQUERIDO: Placeholder más pequeño y discreto */
+.form-control::placeholder {
+    color: #999;
+    font-size: 0.85rem; /* ¡Texto de placeholder más pequeño! */
+    font-style: italic;
+}
+
+/* Foco de Input (Azul Brillante para Feedback) */
+.form-control:focus {
+    border-color: #0d6eff; /* Azul Detalle */
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 255, 0.3); 
+    background-color: #fafff8; /* Fondo muy ligero para resaltar el foco */
+}
+
+/* Input Inválido */
+.form-control.is-invalid {
+    border-color: #dc3545; 
+    background-color: #fff7f7;
+}
+
+/* Área de Carga de Logo */
+.logo-upload-box {
+    border-style: dashed !important;
+    border-color: #6aa486 !important; 
+    background-color: #f6fdf9; 
+    transition: border-color 0.3s;
+    border-radius: 10px;
+}
+
+.logo-upload-box:hover {
+    border-color: #105f34 !important; /* Verde Oscuro en hover */
+}
+
+/* 4. Efectos del Botón de Envío */
+
+.transition-hover {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.btn-success:hover {
+    background-color: #0c4d2b; 
+    border-color: #0c4d2b;
+    transform: translateY(-4px); /* Efecto de "levantamiento" */
+    /* Sombra para el botón */
+    box-shadow: 0 10px 20px rgba(16, 95, 52, 0.5); 
+}
+
+/* 5. Ajuste de Alerta (texto de confianza) */
+.alert-info {
+    border-color: #0d6eff ; 
+    background-color: #f7faff;
+}
+.text-info {
+    color: #7c3268 ; 
+}

@@ -24,8 +24,7 @@ export class Precios {
         '✔ 20 QR para usar.',
         '✔ Modo idioma extra (añadir varios idiomas al menú).',
         '✔ Ayuda tu primera vez en tu primera carta.',
-        
-      ],
+      ],  
       isFeatured: true
     },
     {

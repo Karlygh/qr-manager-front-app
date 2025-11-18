@@ -1,0 +1,92 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+      
+      <header class="text-center mb-5">
+        <h2 class="display-5 fw-bold text-primary">🚀 ¡Crea tu Espacio de Gestión!</h2>
+        <p class="lead text-muted">Para desbloquear todas las funcionalidades de control de clientes, inventario y operaciones, necesitamos la información fundamental de tu negocio.</p>
+         <div class="alert alert-light border-start border-5 border-primary text-primary text-start mt-4 p-3" role="alert">
+        <i class="bi bi-info-circle-fill me-2 text-primary"></i> 
+        <small class="text-primary">Al registrar tu negocio, iniciarás la configuración inicial de tu Panel de Control. Podrás acceder para empezar con tu negocio. Los datos son 100% confidenciales.</small>
+</div>
+      </header>
+
+      <form [formGroup]="businessForm" (submit)="onSubmit()" class="form-panel p-4 p-md-5 shadow-lg border-0 rounded-3 row g-4">
+        
+        <fieldset class="col-12 mb-4 border-bottom pb-4">
+            <legend class="fw-bold mb-3 text-secondary">1. Identidad de Marca</legend>
+
+            <div class="col-12 mb-3">
+              <label class="form-label">Nombre del Negocio *</label>
+              <input type="text" formControlName="name" class="form-control form-control-lg" required 
+                     [ngClass]="{'is-invalid': nameControl?.invalid && (nameControl?.dirty || nameControl?.touched)}">
+              
+              <div *ngIf="nameControl?.invalid && (nameControl?.dirty || nameControl?.touched)" class="invalid-feedback">
+                  <div *ngIf="nameControl?.errors?.['required']">El nombre del negocio es obligatorio.</div>
+                  <div *ngIf="nameControl?.errors?.['minlength']">Debe tener al menos 3 caracteres.</div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Una breve descripción</label>
+              <textarea formControlName="description" class="form-control" rows="3" placeholder="Describe a qué se dedica tu negocio (ej: Venta de café y postres)."
+                [ngClass]="{'is-invalid': descriptionControl?.invalid && (descriptionControl?.dirty || descriptionControl?.touched)}"></textarea>
+              
+              <div *ngIf="descriptionControl?.invalid && (descriptionControl?.dirty || descriptionControl?.touched)" class="invalid-feedback">
+                  <div *ngIf="descriptionControl?.errors?.['minlength']">La descripción debe tener al menos 5 caracteres.</div>
+              </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="col-12 mb-4 border-bottom pb-4">
+            <legend class="fw-bold mb-3 text-secondary">2. Contacto y Ubicación</legend>
+            
+            <div class="row g-4">
+                <div class="col-md-6 col-12">
+                  <label class="form-label">Email Principal *</label>
+                  <input type="email" formControlName="email" class="form-control" placeholder="contacto@minegocio.com" required
+                         [ngClass]="{'is-invalid': emailControl?.invalid && (emailControl?.dirty || emailControl?.touched)}">
+                  
+                  <div *ngIf="emailControl?.invalid && (emailControl?.dirty || emailControl?.touched)" class="invalid-feedback">
+                      <div *ngIf="emailControl?.errors?.['required']">El email es obligatorio.</div>
+                      <div *ngIf="emailControl?.errors?.['email']">Debe ser un email con formato válido.</div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-12">
+                  <label class="form-label">Teléfono</label>
+                  <input type="text" formControlName="phoneNumber" class="form-control" placeholder="9 dígitos, sin prefijo"
+                    [ngClass]="{'is-invalid': phoneNumberControl?.invalid && (phoneNumberControl?.dirty || phoneNumberControl?.touched)}">
+                  
+                  <div *ngIf="phoneNumberControl?.invalid && (phoneNumberControl?.dirty || phoneNumberControl?.touched)" class="invalid-feedback">
+                      <div *ngIf="phoneNumberControl?.errors?.['minlength'] || phoneNumberControl?.errors?.['maxLength']">El teléfono debe tener exactamente 9 dígitos.</div>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">Dirección</label>
+                  <input type="text" formControlName="address" class="form-control" placeholder="Ej: Calle Gran Vía 10, Madrid, España">
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="col-12 mb-4 pb-4">
+          <legend class="fw-bold mb-3 text-secondary">3. Personalización (Logo)</legend>
+          
+          <div class="logo-upload-box text-center p-4 border border-dashed rounded-3">
+            <p class="mb-1 text-muted">Sube tu logo para personalizar tu sistema.</p>
+            <input type="file" (change)="onFileChange($event)" class="form-control">
+          </div>
+        </fieldset>
+
+
+        <div class="col-12 mt-4">
+          <button type="submit" [disabled]="businessForm.invalid" class="btn btn-success btn-lg w-100 shadow-sm transition-hover">
+            <i class="bi bi-rocket-takeoff me-2"></i> Crear y Acceder al Sistema
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

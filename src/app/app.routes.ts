@@ -7,8 +7,9 @@ import { TuRestaurante } from './pages/tu-restaurante/tu-restaurante';
 import { Precios } from './pages/precios/precios'; 
 import { Contacto } from './pages/contacto/contacto'; 
 import error404PageComponent from './pages/error/error404-page.component';
-import { Comienzagratis } from './comienzagratis/comienzagratis';
 import { Login } from './login/login';
+import { CreateBusiness } from './create-business/create-business';
+
 
 export const routes: Routes = [
   // RUTAS PRINCIPALES
@@ -17,8 +18,8 @@ export const routes: Routes = [
   { path: 'tu-restaurante', component: TuRestaurante }, 
   { path: 'precios', component: Precios }, 
   { path: 'contacto', component: Contacto }, 
-  { path: 'comienzagratis', component: Comienzagratis },
   { path: 'login',component: Login},
+  { path: 'crear-negocio', component: CreateBusiness},
   
   
 
