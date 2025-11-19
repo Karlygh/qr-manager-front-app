@@ -1,0 +1,162 @@
+/* ---------------------------------- */
+/* Estilos Normalizados (sin :root) */
+/* ---------------------------------- */
+
+/* Colores utilizados en este componente */
+/* --accent: #ff3366; */
+/* --text-light: #ffffff; */
+/* --bg-dark: #000; */
+
+/* Estilos de la sección HERO adaptados para Bootstrap */
+.hero {
+    position: relative;
+    /* Usar min-height para asegurar que cubra la vista si el contenido es corto */
+    min-height: 100vh; 
+    display: flex;
+    align-items: center;
+    background-image: url('../../../assets/mockup/fondoherocarrousel.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;    padding-top: 50px; 
+    color: #ffffff; /* Asegura que el texto sea blanco */
+}
+.hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Overlay semitransparente opcional */
+    background-color: rgba(0, 0, 0, 0.10); 
+    z-index: 1;
+}
+
+/* Tipografía */
+.hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: rgb(35, 57, 30);
+    /* Sombra de texto para mejor legibilidad */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7), 
+                 -1px -1px 8px#105f34;
+    /* Borde de texto (webkit) */
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.942);
+}
+.hero-title .line {
+    display: block;
+}
+.hero-title .accent {
+    color: #75c298; /* Reemplaza var(--accent) */
+}
+.hero-description {
+    font-size: 1.45rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    color: #f0f0f0; /* Reemplaza var(--text-light) */
+    -webkit-text-stroke: 1px #0a150f;
+    background-color: rgba(16, 95, 52, 0.7);
+    padding: 5px;
+}
+
+/* Stats */
+.hero-stats .stat-number {
+    font-size: 3rem;
+    font-weight: 1700;
+    color: #edf4f0; /* Reemplaza var(--accent) */
+    -webkit-text-stroke: 1px #0a3b20;
+
+}
+
+/* Imagen y Carrusel */
+.hero-image-wrapper {
+    position: relative;
+    padding: 1rem;
+}
+.hero-carousel {
+    border: 5px solid #75c298; /* Reemplaza var(--accent) */
+    border-radius: 10px;
+    overflow: hidden;
+}
+.carousel-slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+.carousel-indicators .indicator {
+    /* Estilos para los círculos indicadores */
+    width: 10px; 
+    height: 10px; 
+    background-color: #ffffff; /* Reemplaza var(--text-light) */
+}
+.carousel-indicators .indicator.active {
+    background-color: #0a3b20; /* Reemplaza var(--accent) */
+}
+.carousel-indicators {
+    /* Ajuste para centrar los indicadores */
+    padding: 5px 0;
+}
+
+/* Botones CTA */
+.cta-button {
+    padding: 1rem 2rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+.primary {
+    background-color: #0a3b20; /* Reemplaza var(--accent) */
+    color: #fff;
+}
+.outline {
+    background-color: #f0f0f0;
+    border: 2px solid #ffffff; /* Reemplaza var(--text-light) */
+    color: #0a3b20; /* Reemplaza var(--text-light) */
+}
+.outline:hover {
+    background-color: #ffffff; /* Reemplaza var(--text-light) */
+    color: #000; /* Reemplaza var(--bg-dark) */
+}
+.stat-number,
+.stat-label {
+    color: #ffffff;                       /* Blanco REAL */
+    font-weight: 800;                     /* Mucho más relleno */
+    -webkit-text-stroke: 0.6px #000;      /* Borde sin comerse el interior */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    font-size: 1.3rem;
+}
+
+
+
+/* Tags Flotantes */
+.floating-tags {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+}
+.floating-tags .tag {
+    background-color:#7ed2a4; /* Reemplaza var(--bg-dark) */
+    color: #262525; /* Reemplaza var(--text-light) */
+    border: 1px solid #ffffff; /* Reemplaza var(--text-light) */
+    margin-bottom: 5px;
+    display: block;
+}
+.scroll-indicator span {
+    color: #ffffff; /* Reemplaza var(--text-light) */
+}
+
+.cta-group {
+    margin-bottom: 40px;
+    letter-spacing: 5px;
+    font-size: 1.2rem;
+}
+
+
+/* Media query para desktop */
+@media (min-width: 992px) {
+    .hero-title {
+        font-size: 5rem;
+    }
+}

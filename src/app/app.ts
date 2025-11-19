@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLink } from '@angular/router';
 // 👈 IMPORTA TU NAVBAR AQUI (Ejemplo de ruta)
 import { NavbarComponent } from './shared/components/navbar/navbar.component'; 
 import { FooterComponent } from './shared/components/footer/footer.component';
@@ -10,6 +10,7 @@ import { FooterComponent } from './shared/components/footer/footer.component';
   standalone: true, 
   imports: [
     RouterOutlet,
+  
     NavbarComponent,
     FooterComponent,
   ],
