@@ -31,6 +31,11 @@
     z-index: 1;
 }
 
+.hero-left {
+    position: relative; /* Necesario para que z-index funcione correctamente */
+    z-index: 5; /* Un valor superior al z-index: 1 del .hero-bg */
+}
+
 /* Tipografía */
 .hero-title {
     font-size: 3rem;
@@ -100,23 +105,37 @@
 /* Botones CTA */
 .cta-button {
     padding: 1rem 2rem;
-    border-radius: 5px;
+    border-radius: 8px;
     text-decoration: none;
     font-weight: 600;
     transition: all 0.3s ease;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 .primary {
-    background-color: #0a3b20; /* Reemplaza var(--accent) */
+    background-color: #0a3b20;
     color: #fff;
+    border: 2px solid #0a3b20;
+}
+.primary:hover {
+    background-color: #75c298;
+    border-color: #75c298;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(117, 194, 152, 0.4);
 }
 .outline {
-    background-color: #f0f0f0;
-    border: 2px solid #ffffff; /* Reemplaza var(--text-light) */
-    color: #0a3b20; /* Reemplaza var(--text-light) */
+    background-color: transparent;
+    border: 2px solid #ffffff;
+    color: #ffffff;
 }
 .outline:hover {
-    background-color: #ffffff; /* Reemplaza var(--text-light) */
-    color: #000; /* Reemplaza var(--bg-dark) */
+    background-color: #ffffff;
+    color: #0a3b20;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
 }
 .stat-number,
 .stat-label {
@@ -151,6 +170,11 @@
     margin-bottom: 40px;
     letter-spacing: 5px;
     font-size: 1.2rem;
+}
+
+.feature-image {
+    max-width: 80px;
+    height: auto;
 }
 
 

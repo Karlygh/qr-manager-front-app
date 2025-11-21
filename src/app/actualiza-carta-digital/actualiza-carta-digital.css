@@ -1,0 +1,172 @@
+/*
+  ==========================================
+  Estilos Generales de la Sección
+  ==========================================
+*/
+#menu-update-section-header {
+  background-color: #c7eed4; /* Fondo claro similar al de la web */
+  color: #2c3e50; /* Color de texto principal */
+}
+
+.title-main {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #0a3b20; /* Azul primario */
+  background-color: #afd2bf;
+  padding:10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.lead {
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: rgb(77, 147, 99);
+}
+h5 {
+  color: #0a3b20;
+  font-weight: 600;
+  font-size: 3rem;
+}
+
+
+/*
+  ==========================================
+  Estilo de la Imagen del Mockup
+  ==========================================
+*/
+.menu-mockup-img {
+  max-width: 80%; /* Controla el tamaño máximo de la imagen en LG y superior */
+  height: auto;
+  border-radius: 15px; /* Bordes redondeados */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Sombra para profundidad */
+  margin: 20px auto;
+  display: block;
+}
+.google-section .feature-card {
+  background-color: red;
+}
+
+/*
+  ==========================================
+  Prevenir Scroll Horizontal
+  ==========================================
+*/
+.card-body {
+  overflow-x: hidden;
+}
+
+.card-body .row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.card-body .col-md-4,
+.card-body .col-md-8 {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/*
+  ==========================================
+  Efectos Hover y Visuales
+  ==========================================
+*/
+.card-title {
+  color: #0a3b20;
+  font-weight: 700;
+  font-size: 2.5rem;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.card-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #4d9363, #afd2bf);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.card-title:hover::after {
+  width: 100px;
+}
+
+.card-text {
+  font-size: 1.2rem;
+  margin-top: 2%;
+  transition: color 0.3s ease;
+  color: rgb(11, 36, 146);
+}
+
+.text-muted {
+  color: #4d9363 ;
+  font-weight: 500;
+}
+
+
+.text-secondary {
+  color: #2d5a3d ;
+  font-weight: 500;
+}
+
+.list-unstyled li {
+  padding: 0.8rem 0;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #2d5a3d;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  padding-left: 1rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+.list-unstyled li:hover {
+  background-color: #488ccc;
+  transform: translateX(8px);
+  color: #0a3b20;
+  box-shadow: 0 2px 8px rgba(77, 147, 99, 0.1);
+  border: 1px solid #488ccc;
+}
+
+.menu-mockup-img {
+  transition: all 0.4s ease;
+}
+
+.menu-mockup-img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 35px rgba(10, 59, 32, 0.2);
+}
+.text-light-blue {
+  color: #1767e7; /* Azul más claro */
+  font-size: 1rem;
+}
+
+
+/*
+  ==========================================
+  Media Queries para Responsividad
+  ==========================================
+*/
+@media (max-width: 991.98px) {
+  .title-main {
+    font-size: 2rem;
+  }
+  
+  /* La imagen se apila encima del texto en pantallas pequeñas */
+  .menu-mockup-img {
+    max-width: 60%; /* Ajuste para que la imagen no sea demasiado grande en tablet/móvil */
+    margin-bottom: 2rem; /* Espacio debajo de la imagen */
+  }
+}
+
+@media (max-width: 575.98px) {
+  .menu-mockup-img {
+    max-width: 80%; /* Ajuste para móviles más pequeños */
+  }
+}

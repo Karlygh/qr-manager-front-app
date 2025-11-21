@@ -1,0 +1,56 @@
+
+/* Contenedor principal */
+.feature-card {
+  border-radius: 20px;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+}
+
+/* Imagen */
+.hover-img {
+  transition: transform .4s ease, box-shadow .4s ease;
+}
+
+.hover-img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+}
+
+/* Lista con hover */
+.hover-list-item {
+  padding: 8px 0;
+  font-size: 1.05rem;
+  transition: color .3s ease, transform .3s ease;
+}
+
+.hover-list-item:hover {
+  color: #0d6efd;
+  transform: translateX(5px);
+    background-color: #d7f6e6;
+
+}
+
+/* Texto */
+.text-info {
+  color: #488ccc;
+}
+
+.text-primary {
+  color: #0d6efd ;
+}
+h3{
+    color: #0a3b20 ;
+    font-size:2.5rem ;
+
+}
+.text-cha {
+    color: rgb(11, 36, 146) ;
+}
+.text-cho {
+    color: #0d6efd ;
+    font-size:1rem;
+}
