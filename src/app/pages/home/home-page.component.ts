@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { Encabezado } from '../../encabezado/encabezado';
 import { EncabezadoEjemplos } from "../../encabezado-ejemplos/encabezado-ejemplos";
 import { QrManagerInfo } from '../../qr-manager-info/qr-manager-info';
-import { Precios } from "../precios/precios";
+import { Precios } from '../precios/precios';
 
 @Component({
   standalone: true,
@@ -13,8 +13,7 @@ import { Precios } from "../precios/precios";
     RouterModule,
     Encabezado,
     EncabezadoEjemplos,
-    QrManagerInfo,
-    Precios
+    QrManagerInfo,Precios
 ],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css']

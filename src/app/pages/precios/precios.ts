@@ -1,14 +1,16 @@
-import { Component } from '@angular/core';
+import { Component,Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { PreguntasFrecuentes } from "../../preguntas-frecuentes/preguntas-frecuentes";
 
 @Component({
   selector: 'app-precios',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PreguntasFrecuentes],
   templateUrl: './precios.html',
   styleUrl: './precios.css'
 })
 export class Precios {
+  @Input() mostrarFaqs: boolean = true;
   isYearly = false;
 
   plans = [

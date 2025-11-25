@@ -62,7 +62,8 @@
               "buildTarget": "qr-manager-front:build:production"
             },
             "development": {
-              "buildTarget": "qr-manager-front:build:development"
+              "buildTarget": "qr-manager-front:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

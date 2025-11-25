@@ -16,10 +16,9 @@
 }
 
 .price-card:hover {
-  transform: translateY(-5px) scale(1.05);
+  transform: translateY(-5px);
   box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
-
 
 .price {
   font-size: 2rem;
@@ -35,10 +34,8 @@
 
 .price-card.featured {
   border: 2px solid #000;
-  /* sin transform */
+  transform: scale(1.05);
 }
-
-
 
 .price-card.featured .price {
   color: #000;
@@ -186,10 +183,9 @@ h2.titulo-uno {
 }
 
 .price-card.premium:hover {
-  transform: translateY(-5px) scale(1.02);
+  transform: translateY(-5px);
   box-shadow: 0 8px 25px rgba(250, 204, 21, 0.4);
 }
-
 
 .annual-price-highlight {
   color: #292d2e;
@@ -218,8 +214,12 @@ h2.titulo-uno {
   margin-bottom: 10px;
   overflow: hidden;
 }
+
 .accordion-item{
   background-color: #e9f5ef;
+}
+.accordion-item:hover {
+  background-color: rgb(205, 229, 201);
 }
 
 /* ======================
@@ -336,10 +336,9 @@ h2.titulo-dos {
   }
 
   /* Asegura que no haya escala que cause overflow */
- .price-card.featured {
-  border: 2px solid #000;
-  /* (El tamaño será igual al resto) */
-}
+  .price-card.featured {
+    transform: scale(1) !important;
+  }
 
   /* Reduce tamaño del precio para que no empuje el ancho */
   .price {

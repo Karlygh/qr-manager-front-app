@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { BusinessService } from '../services/business.service'; 
 import { CommonModule } from '@angular/common'; 
-import { Observable } from 'rxjs'; // 👈 Importación requerida para el casting
+import { Observable } from 'rxjs'; 
+import { Router } from '@angular/router'; // 👈 COMENTARIO DE ACCIÓN: Asegúrate de que esta línea esté presente.
 
-// 🛑 1. INTERFAZ PARA TIPAR LA RESPUESTA DE LA API
+// Interfaz para tipar la respuesta de la API
 interface BusinessCreationResponse {
   id: number;
 }
@@ -13,8 +14,8 @@ interface BusinessCreationResponse {
   selector: 'app-create-business',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule], 
-  templateUrl: './create-business.html',
-  styleUrls: ['./create-business.css'] 
+  templateUrl: './detalles-negocio.html',
+  styleUrls: ['./detalles-negocio.css'] 
 })
 export class CreateBusiness implements OnInit {
 
@@ -24,6 +25,7 @@ export class CreateBusiness implements OnInit {
   constructor(
     private businessService: BusinessService,
     private fb: FormBuilder,
+    private router: Router // 👈 COMENTARIO DE ACCIÓN: Asegúrate de que 'router' esté inyectado aquí.
   ) {}
 
   ngOnInit(): void {
@@ -36,6 +38,7 @@ export class CreateBusiness implements OnInit {
     });
   }
 
+  // Getters para el HTML
   get nameControl() { return this.businessForm.get('name'); }
   get emailControl() { return this.businessForm.get('email'); }
   get phoneNumberControl() { return this.businessForm.get('phoneNumber'); } 
@@ -47,13 +50,14 @@ export class CreateBusiness implements OnInit {
     }
   }
 
-  onSubmit() {
+ onSubmit() {
     if (this.businessForm.invalid) {
       this.businessForm.markAllAsTouched();
       console.error('El formulario tiene errores de validación.');
       return;
     }
     
+    // 3. CONSTRUCCIÓN DE FORMDATA
     const formValue = this.businessForm.value;
     const formData = new FormData();
     
@@ -67,14 +71,18 @@ export class CreateBusiness implements OnInit {
       formData.append('imageLogo', this.selectedFile, this.selectedFile.name); 
     }
 
-    // 🛑 2. APLICAMOS EL CASTING EXPLÍCITO 'as'
-    // Forzamos a TypeScript a tratar el Observable como Observable<BusinessCreationResponse>
+    // 4. LLAMADA Y REDIRECCIÓN
+    // Aplicamos el casting aquí 
     (this.businessService.createBusiness(formData) as Observable<BusinessCreationResponse>).subscribe({
-      next: (res) => { // El error de tipo en 'res' desaparece
+      // 🛑 CORRECCIÓN: Quitamos el ': BusinessCreationResponse' de 'res'
+      next: (res) => { 
         console.log('Negocio creado con éxito:', res);
-        alert('¡Negocio creado correctamente! ID: ' + res.id); 
+        
+        // LÓGICA DE REDIRECCIÓN
+        this.router.navigate(['/negocio', res.id]); 
       },
       error: (err) => {
+        // ... (Tu manejo de errores)
         let errorMessage = 'Error desconocido al crear el negocio.';
         if (err.error && err.error.message) {
              errorMessage = err.error.message;

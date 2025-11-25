@@ -79,6 +79,7 @@
     border-color: var(--color-accent);
     transform: translateY(-5px); /* Pequeño levantamiento */
     box-shadow: 0 5px 15px rgba(239, 239, 239, 0.2);
+    padding: 40px;
 }
 p.step-description {
     color: #d7f6e6;

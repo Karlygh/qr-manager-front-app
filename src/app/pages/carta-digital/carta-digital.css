@@ -10,26 +10,39 @@
 /* Estilos de la sección HERO adaptados para Bootstrap */
 .hero {
     position: relative;
-    /* Usar min-height para asegurar que cubra la vista si el contenido es corto */
     min-height: 100vh; 
     display: flex;
     align-items: center;
     background-image: url('../../../assets/mockup/fondoherocarrousel.png');
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;    padding-top: 50px; 
-    color: #ffffff; /* Asegura que el texto sea blanco */
+    background-repeat: no-repeat;
+    padding-top: 50px; 
+    color: #ffffff;
+    overflow: hidden;
 }
+
+/* FONDO PREMIUM: oscurecido + desenfoque + degradado elegante */
 .hero-bg {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* Overlay semitransparente opcional */
-    background-color: rgba(0, 0, 0, 0.10); 
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(5, 30, 20, 0.92),
+        rgba(5, 30, 20, 0.65),
+        rgba(5, 30, 20, 0.3)
+    );
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     z-index: 1;
 }
+
+/* Todo el contenido por encima del efecto */
+.hero-container {
+    position: relative;
+    z-index: 5;
+}
+
 
 .hero-left {
     position: relative; /* Necesario para que z-index funcione correctamente */
@@ -62,6 +75,7 @@
     -webkit-text-stroke: 1px #0a150f;
     background-color: rgba(16, 95, 52, 0.7);
     padding: 5px;
+    border-radius: 8px;
 }
 
 /* Stats */
@@ -145,13 +159,30 @@
     text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
     font-size: 1.3rem;
 }
+.cta-group {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* mantiene Ver planes a la derecha */
+    gap: 15px;
+    padding: 4px;
+}
+
+
+/* Igualamos altura visual exacta */
+.cta-button {
+    line-height: 1;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 
 
 /* Tags Flotantes */
 .floating-tags {
     position: absolute;
-    top: 0;
+    top: -1px;
     right: 0;
     z-index: 10;
 }
@@ -161,6 +192,8 @@
     border: 1px solid #ffffff; /* Reemplaza var(--text-light) */
     margin-bottom: 5px;
     display: block;
+        border-radius: 5px;
+
 }
 .scroll-indicator span {
     color: #ffffff; /* Reemplaza var(--text-light) */
