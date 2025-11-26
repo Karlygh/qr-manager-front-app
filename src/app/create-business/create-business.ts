@@ -1,10 +1,12 @@
+// create-business.ts
+
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { BusinessService } from '../services/business.service'; 
 import { CommonModule } from '@angular/common'; 
-import { Observable } from 'rxjs'; // 👈 Importación requerida para el casting
+import { Observable } from 'rxjs'; 
+import { Router } from '@angular/router'; 
 
-// 🛑 1. INTERFAZ PARA TIPAR LA RESPUESTA DE LA API
 interface BusinessCreationResponse {
   id: number;
 }
@@ -12,18 +14,21 @@ interface BusinessCreationResponse {
 @Component({
   selector: 'app-create-business',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule], 
-  templateUrl: './create-business.html',
+  imports: [ReactiveFormsModule, CommonModule,], 
+  templateUrl: './create-business.html', 
   styleUrls: ['./create-business.css'] 
 })
 export class CreateBusiness implements OnInit {
 
   businessForm!: FormGroup; 
   selectedFile: File | null = null; 
+  businessCreated = false;
+  createdBusinessId!: number;
 
   constructor(
     private businessService: BusinessService,
     private fb: FormBuilder,
+    private router: Router 
   ) {}
 
   ngOnInit(): void {
@@ -67,12 +72,16 @@ export class CreateBusiness implements OnInit {
       formData.append('imageLogo', this.selectedFile, this.selectedFile.name); 
     }
 
-    // 🛑 2. APLICAMOS EL CASTING EXPLÍCITO 'as'
-    // Forzamos a TypeScript a tratar el Observable como Observable<BusinessCreationResponse>
     (this.businessService.createBusiness(formData) as Observable<BusinessCreationResponse>).subscribe({
-      next: (res) => { // El error de tipo en 'res' desaparece
+      next: (res) => { 
         console.log('Negocio creado con éxito:', res);
-        alert('¡Negocio creado correctamente! ID: ' + res.id); 
+
+        this.businessCreated = true;
+        this.createdBusinessId = res.id;
+
+        setTimeout(() => {
+          this.router.navigate(['/negocio', this.createdBusinessId]); 
+        }, 2500);
       },
       error: (err) => {
         let errorMessage = 'Error desconocido al crear el negocio.';

@@ -1,3 +1,5 @@
+// app.routes.ts
+
 import { Routes } from '@angular/router';
 
 // 1. IMPORTACIONES DE PÁGINAS (Usando la clase exacta y la ruta .component)
@@ -9,6 +11,9 @@ import { Contacto } from './pages/contacto/contacto';
 import error404PageComponent from './pages/error/error404-page.component';
 import { Login } from './login/login';
 import { CreateBusiness } from './create-business/create-business';
+// 👈 IMPORTACIÓN CLAVE: El nuevo y correcto componente de detalles
+import { DetallesNegocioComponent } from './detalles-negocio/detalles-negocio'; 
+import { PanelControlBuisiness } from './panel-control-buisiness/panel-control-buisiness';
 
 
 export const routes: Routes = [
@@ -20,7 +25,14 @@ export const routes: Routes = [
   { path: 'contacto', component: Contacto }, 
   { path: 'login',component: Login},
   { path: 'crear-negocio', component: CreateBusiness},
-  
+  { 
+    // La clave es el ':id' para el parámetro
+    path: 'negocio/:id', 
+    // 🛑 ASIGNACIÓN CORREGIDA: Apunta al componente de Detalles
+    component: DetallesNegocioComponent,
+  },
+{ path: 'panel-control-buisiness', component: PanelControlBuisiness }
+,
   
 
   // REDIRECCIÓN Y ERROR

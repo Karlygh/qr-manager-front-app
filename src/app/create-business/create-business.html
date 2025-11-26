@@ -79,7 +79,6 @@
           </div>
         </fieldset>
 
-
         <div class="col-12 mt-4">
           <button type="submit" [disabled]="businessForm.invalid" class="btn btn-success btn-lg w-100 shadow-sm transition-hover">
             <i class="bi bi-rocket-takeoff me-2"></i> Crear y Acceder al Sistema
@@ -88,5 +87,19 @@
 
       </form>
     </div>
+  </div>
+</div>
+
+
+<!-- ✅ MODAL PROFESIONAL -->
+<div *ngIf="businessCreated" class="success-overlay">
+  <div class="success-modal animate-pop">
+    <div class="icon-circle">
+      <i class="bi bi-patch-check-fill"></i>
+    </div>
+    <h3>¡Negocio creado con éxito!</h3>
+    <p>Estamos preparando tu panel de control.<br>
+       Serás redirigido en unos segundos...</p>
+    <div class="loader"></div>
   </div>
 </div>

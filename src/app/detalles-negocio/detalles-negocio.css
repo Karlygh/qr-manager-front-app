@@ -1,0 +1,137 @@
+.negocio-card {
+  border-radius: 20px;
+  background: #c9f2d1;
+  border: none;
+  max-width: 900px;
+  margin: auto;
+}
+
+/* CABECERA */
+.negocio-header {
+  background: #b7eac0;
+  border-bottom: 2px solid #7bbf82;
+  padding: 1.5rem;
+}
+
+.negocio-header h3 {
+  margin: 0;
+  color: #063f01;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+}
+
+/* ID bonito */
+.id-badge {
+  display: inline-block;
+  margin-top: 6px;
+  background: #063f01;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+
+/* NOMBRE PRINCIPAL */
+.business-name {
+  text-align: center;
+  font-size: 2rem;
+  color: #063f01;
+  margin: 20px 0;
+}
+
+/* BLOQUES DE INFORMACIÓN */
+.info-block {
+  margin-bottom: 15px;
+}
+
+/* Etiquetas */
+.label {
+  display: block;
+  font-size: 0.9rem;
+  color: #063f01;
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+/* Valores */
+.value {
+  font-size: 1.05rem;
+  color: #1f1f1f;
+  background: #d1fad0;
+  padding: 8px 12px;
+  border-radius: 10px;
+}
+
+/* Dirección más destacada */
+.address {
+  font-weight: 600;
+}
+
+/* Separador */
+.divider {
+  height: 2px;
+  background: #7bbf82;
+  margin: 20px 0;
+  border-radius: 2px;
+}
+
+/* Sección */
+.section-title {
+  color: #063f01;
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+
+/* Texto apagado */
+.muted {
+  color: #6c757d;
+}
+
+/* Nota */
+.footer-note {
+  font-size: 0.85rem;
+  text-align: center;
+  color: #4c664d;
+}
+
+/* Hover */
+.negocio-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transition: 0.3s ease;
+}
+.btn-panel {
+  background: #063f01;
+  color: #fff;
+  padding: 10px 22px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.btn-panel:hover {
+  background: #0a5c02;
+  transform: translateY(-2px);
+}
+/* Animación de llamada de atención */
+.btn-panel {
+  animation: pulseMove 2s infinite;
+}
+
+@keyframes pulseMove {
+  0% {
+    transform: translateY(0);
+    box-shadow: 0 0 0 0 rgba(6, 63, 1, 0.5);
+  }
+  50% {
+    transform: translateY(-4px);
+    box-shadow: 0 0 0 10px rgba(6, 63, 1, 0);
+  }
+  100% {
+    transform: translateY(0);
+    box-shadow: 0 0 0 0 rgba(6, 63, 1, 0);
+  }
+}
