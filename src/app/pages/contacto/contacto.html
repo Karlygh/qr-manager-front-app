@@ -1,1 +1,134 @@
-<p>contacto works!</p>
+<section class="contact-page">
+  <div class="overlay">
+    <div class="container py-5">
+
+      <div class="row justify-content-center text-center animate-fade-in color-fondo mb-5">
+        <div class="col-12 col-md-10">
+          <h1 >Contacta con Nosotros</h1>
+          <p class="lead texto-hero">
+            En QR-Manager nos importa tu experiencia. 
+            Si tienes dudas, sugerencias o necesitas información sobre nuestros servicios, 
+            envíanos un mensaje. Te responderemos lo antes posible en un plazo máximo de 24/48.Garantizando atención profesional y cercana.
+          </p>
+        </div>
+      </div>
+
+      <div class="row justify-content-center mt-5">
+        
+        <div class="col-12 col-md-4 mb-5 mb-md-0">
+          <div class="card p-4 h-100 shadow-lg border-0 bg-light">
+            <h3 class="fw-bold mb-4 ">Datos Directos</h3>
+            
+            <div class="d-flex align-items-start mb-4">
+              <i class="bi bi-geo-alt-fill me-3 fs-4 text-primary-cc"></i>
+              <div>
+                <p class="mb-1 fw-bold">Ubicación</p>
+                <p class="small text-muted">
+                  Oficina en  11130,Chiclana de la Frontera, Cádiz.
+                </p>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-start mb-4">
+              <i class="bi bi-envelope-fill me-3 fs-4 text-primary-cc"></i>
+              <div>
+                <p class="mb-1 fw-bold">Email de Soporte</p>
+                <a href="mailto:soporte@cleancoderscadiz.com" class="text-decoration-none text-muted">soporte@cleancoderscadiz.com</a>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-start mb-4">
+              <i class="bi bi-telephone-fill me-3 fs-4 text-primary-cc"></i>
+              <div>
+                <p class="mb-1 fw-bold">Teléfono de Oficina</p>
+                <a href="tel:+34123456789" class="text-decoration-none text-muted">+34 123 456 789</a>
+              </div>
+            </div>
+
+            <hr>
+            
+            <h4 class="fw-bold mb-3 ">Horario</h4>
+            <ul class="list-unstyled small text-muted">
+              <li>Lunes - Viernes: **9:00 - 18:00**</li>
+              <li>Findes de semana  y Festivos: **Cerrado**</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="col-12 col-md-8">
+          <form #form="ngForm" (ngSubmit)="enviarFormulario(form)" novalidate class="contact-form p-4 p-md-5 shadow-lg border-0 rounded-3 bg-white">
+            <h3 class="fw-bold text-center mb-4 text-primary-cc fondo">Envíanos tu Mensaje</h3>
+            
+            <div class="form-group mb-3">
+              <label for="nombre">Nombre</label>
+              <input type="text" id="nombre" name="nombre" [(ngModel)]="nombre" 
+                #nombreInput="ngModel" required minlength="3"
+                [ngClass]="{'valid-input': nombreInput.valid && nombreInput.touched, 'invalid-input': nombreInput.invalid && nombreInput.touched}" 
+                class="form-control" placeholder="Tu nombre...">
+              <div class="text-danger small mt-1" *ngIf="nombreInput.invalid && nombreInput.touched">
+                Introduce tu nombre (mínimo 3 caracteres).
+              </div>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="email">Email *</label>
+              <input type="email" id="email" name="email" [(ngModel)]="email"
+                #emailInput="ngModel" required email
+                [ngClass]="{'valid-input': emailInput.valid && emailInput.touched, 'invalid-input': emailInput.invalid && emailInput.touched}"
+                class="form-control" placeholder="tucorreo@ejemplo.com">
+              <div class="text-danger small mt-1" *ngIf="emailInput.invalid && emailInput.touched">
+                Introduce un correo válido.
+              </div>
+            </div>
+
+            <div class="form-group mb-4">
+              <label for="mensaje">Mensaje</label>
+              <textarea id="mensaje" name="mensaje" [(ngModel)]="mensaje" rows="6"
+                #mensajeInput="ngModel" required minlength="10"
+                [ngClass]="{'valid-input': mensajeInput.valid && mensajeInput.touched, 'invalid-input': mensajeInput.invalid && mensajeInput.touched}"
+                class="form-control" placeholder="Escribe tu mensaje aquí..."></textarea>
+              <div class="text-danger small mt-1" *ngIf="mensajeInput.invalid && mensajeInput.touched">
+                El mensaje debe tener al menos 10 caracteres.
+              </div>
+            </div>
+
+           <button type="submit" [disabled]="form.invalid" class="btn btn-contact w-100 animate-pulse color-boton">
+              <i class="bi bi-send-fill me-2 color-boton text"></i> Enviar Mensaje
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="row justify-content-center mt-5 pt-5">
+        <div class="col-12">
+         <h2 class="text-center fw-bold mb-4">📍 Dónde Encontrarnos</h2>
+          <div class="map-container rounded-3 shadow-lg overflow-hidden">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d102927.81744654876!2d-6.208139598282367!3d36.41727788102324!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd0dd546b5a3424d%3A0x6b490f8457223f0a!2sChiclana%20de%20la%20Frontera%2C%20C%C3%A1diz!5e0!3m2!1ses!2ses!4v1703612500000!5m2!1ses!2ses" 
+              width="100%" 
+              height="400" 
+              style="border:0;" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <div *ngIf="showSuccessModal" class="success-overlay">
+    <div class="success-modal animate-pop">
+      <div class="icon-circle">
+        <i class="bi bi-check-lg"></i>
+      </div>
+      <h3>¡Mensaje Enviado!</h3>
+      <p>Gracias, hemos recibido tu consulta. <br>
+         Te responderemos lo antes posible.</p>
+      <button (click)="closeSuccessModal()" class="btn btn-contact mt-3">Entendido</button>
+    </div>
+  </div>
+
+</section>

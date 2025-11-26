@@ -1,0 +1,233 @@
+/* ESTILOS FORMULARIO */
+.form-control {
+  border-radius: 12px;
+  padding: 12px;
+  transition: all 0.3s ease;
+}
+
+h1{
+    letter-spacing: 2px;
+    color:#063f01;
+}
+
+.color-fondo {
+  background-color: #6aa486;
+  padding: 10px;
+  border-radius: 15px;
+
+}
+/* INPUTS VÁLIDOS */
+.valid-input {
+  border: 2px solid #0a5c02;
+  background-color: #d1fad0;
+}
+
+/* INPUTS INVÁLIDOS */
+.invalid-input {
+  border: 2px solid #d9534f;
+  background-color: #f8d7da;
+}
+
+/* BOTÓN */
+.btn-contact {
+  background-color: #6aa486 !important;
+  color: #0c562c;
+  font-weight: 600;
+  padding: 14px;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  border: none;
+  letter-spacing: 2px;
+}
+
+.btn-contact:hover {
+  background: #0a5c02;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(6, 63, 1, 0.4);
+}
+
+/* ANIMACIÓN PULSO BOTÓN */
+.animate-pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(6, 63, 1, 0.4); }
+  50% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(6, 63, 1, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(6, 63, 1, 0); }
+}
+
+/* TEXTOS */
+.contact-description a {
+  color: #063f01;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.contact-description a:hover {
+  color: #0a5c02;
+  text-decoration: underline;
+}
+
+/* ANIMACIONES SUAVES */
+.animate-fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s forwards;
+}
+
+.animate-fade-in-delay {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s forwards 0.2s;
+}
+
+@keyframes fadeInUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 576px) {
+  .form-control {
+    padding: 10px;
+  }
+
+  .btn-contact {
+    padding: 12px;
+  }
+}
+/* contacto.css (CÓDIGO AÑADIDO AL FINAL) */
+
+/* -------------------- MODAL DE ÉXITO -------------------- */
+
+.success-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050; /* Mayor que el contenido normal */
+}
+
+.success-modal {
+    background: #fff;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 90%;
+}
+
+.icon-circle {
+    width: 80px;
+    height: 80px;
+    background: #0a5c02; /* Color de éxito */
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 40px;
+    box-shadow: 0 0 0 0 rgba(10, 92, 2, 0.4);
+    animation: success-pulse 1.5s infinite;
+}
+.texto-hero{
+    color:#2a4936
+}
+
+.success-modal h3 {
+    color: #063f01;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+h3{
+  color:#063f01
+}
+
+
+h4{
+  color:#063f01
+}
+.success-modal p {
+    color:#063f01;
+    margin-bottom: 20px;
+}
+
+/* Animación de entrada */
+.animate-pop {
+    animation: popIn 0.3s ease-out forwards;
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Animación de pulso para el círculo */
+@keyframes success-pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(10, 92, 2, 0.4); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(10, 92, 2, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(10, 92, 2, 0); }
+}
+/* Color primario personalizado (usando tu verde oscuro) para iconos/énfasis */
+.text-primary-cc {
+    color: #063f01 !important;
+}
+
+/* Contenedor del formulario, lo hacemos flotar sobre el fondo */
+.contact-form {
+    border: 1px solid #eee;
+}
+
+/* Contenedor del mapa */
+.map-container {
+    height: 400px;
+    /* Para que el iframe o mapa ocupe todo el espacio y las esquinas redondeadas se apliquen */
+}
+
+.map-container iframe {
+    /* Aseguramos que el iframe llene el contenedor */
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+/* CONTACTO.CSS: Modificar el selector .info-text */
+
+.info-text,
+.info-text a {
+    color: #6c757d !important;
+    text-decoration: none;
+    
+    /* 🔑 Solución al desbordamiento en móviles */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+.info-text a:hover {
+    text-decoration: underline;
+}
+/* CONTACTO.CSS: FIX DE DESBORDAMIENTO EN MÓVILES */
+
+.text-muted,
+.text-muted a,
+.card p.small {
+    color: #6c757d !important;
+    
+    /* 🔑 ESTAS SON LAS LÍNEAS QUE ARREGLAN EL DESBORDAMIENTO */
+    overflow-wrap: break-word; 
+    word-break: break-all;    
+}
+.text-muted a:hover {
+    text-decoration: underline;
+}
