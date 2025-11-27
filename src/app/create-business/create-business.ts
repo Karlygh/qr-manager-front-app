@@ -14,7 +14,7 @@ interface BusinessCreationResponse {
 @Component({
   selector: 'app-create-business',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule,], 
+  imports: [ReactiveFormsModule, CommonModule], 
   templateUrl: './create-business.html', 
   styleUrls: ['./create-business.css'] 
 })

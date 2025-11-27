@@ -68,15 +68,16 @@
   }
 
   .highlight-subtitle {
-    color: #0d6eff;
+    color: #265433;
     letter-spacing: 0.05em;
     transition: all 0.3s ease;
-    background-color:#9cbae7;
+    background-color:#b7f1c7;
+    padding: 3px;
     
   }
 
   .highlight-subtitle:hover {
-    color: #ffdb4d;
+    font-size: 0.9rem;
     text-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
   }
 
@@ -116,3 +117,15 @@
       margin-top: 1.5rem;
     }
   }
+  @media (max-width: 767px) {
+  .phone {
+    border-width: 0;
+    box-shadow: none;
+  }
+
+}
+@media (min-width: 992px) {
+  .pc-move {
+    transform: translateX(-30px);
+  }
+}

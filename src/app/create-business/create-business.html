@@ -5,13 +5,14 @@
       <header class="text-center mb-5">
         <h2 class="display-5 fw-bold text-primary">🚀 ¡Crea tu Espacio de Gestión!</h2>
         <p class="lead text-muted">Para desbloquear todas las funcionalidades de control de clientes, inventario y operaciones, necesitamos la información fundamental de tu negocio.</p>
-         <div class="alert alert-light border-start border-5 border-primary text-primary text-start mt-4 p-3" role="alert">
-        <i class="bi bi-info-circle-fill me-2 text-primary"></i> 
-        <small class="text-primary">Al registrar tu negocio, iniciarás la configuración inicial de tu Panel de Control. Podrás acceder para empezar con tu negocio. Los datos son 100% confidenciales.</small>
-</div>
+        
       </header>
 
       <form [formGroup]="businessForm" (submit)="onSubmit()" class="form-panel p-4 p-md-5 shadow-lg border-0 rounded-3 row g-4">
+          <div class="alert alert-light border-start border-5 border-primary text-primary text-start mt-4 p-3" role="alert">
+        <i class="bi bi-info-circle-fill me-2 text-primary"></i> 
+        <small class="text-primary">Al registrar tu negocio, iniciarás la configuración inicial de tu Panel de Control. Podrás acceder para empezar con tu negocio. Los datos son 100% confidenciales.</small>
+</div>
         
         <fieldset class="col-12 mb-4 border-bottom pb-4">
             <legend class="fw-bold mb-3 text-secondary">1. Identidad de Marca</legend>

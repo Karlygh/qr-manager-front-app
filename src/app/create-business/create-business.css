@@ -29,18 +29,18 @@
 /* 2. Panel del Formulario (Look & Feel) */
 .form-panel {
     background-color: white;
-    /* Sombra suave y ligeramente verdosa para levantar el panel */
+    
     box-shadow: 0 10px 30px rgba(106, 164, 134, 0.2); 
-    border-radius: 18px; /* Bordes más suaves */
+    border-radius: 18px; 
     border: 1px solid #e0e0e0; 
-    padding: 3rem !important; /* Más espacio interno */
+    padding: 3rem !important; 
 }
 
 /* Títulos de Sección (Fieldset/Legend) */
 legend {
     font-size: 1.4rem; 
-    color: #105f34 !important; /* Verde Oscuro para las leyendas */
-    border-bottom: 2px solid #6aa486; /* Línea con Verde Oliva */
+    color: #105f34 !important; 
+    border-bottom: 2px solid #6aa486; 
     padding-bottom: 8px;
     margin-bottom: 20px !important;
     font-weight: 700;
@@ -65,15 +65,15 @@ legend {
 /* REQUERIDO: Placeholder más pequeño y discreto */
 .form-control::placeholder {
     color: #999;
-    font-size: 0.85rem; /* ¡Texto de placeholder más pequeño! */
+    font-size: 0.85rem; 
     font-style: italic;
 }
 
 /* Foco de Input (Azul Brillante para Feedback) */
 .form-control:focus {
-    border-color: #0d6eff; /* Azul Detalle */
+    border-color: #0d6eff; 
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 255, 0.3); 
-    background-color: #fafff8; /* Fondo muy ligero para resaltar el foco */
+    background-color: #fafff8; 
 }
 
 /* Input Inválido */
@@ -92,7 +92,7 @@ legend {
 }
 
 .logo-upload-box:hover {
-    border-color: #105f34 !important; /* Verde Oscuro en hover */
+    border-color: #105f34 !important; 
 }
 
 /* 4. Efectos del Botón de Envío */
@@ -104,7 +104,7 @@ legend {
 .btn-success:hover {
     background-color: #0c4d2b; 
     border-color: #0c4d2b;
-    transform: translateY(-4px); /* Efecto de "levantamiento" */
+    transform: translateY(-4px); 
     /* Sombra para el botón */
     box-shadow: 0 10px 20px rgba(16, 95, 52, 0.5); 
 }
