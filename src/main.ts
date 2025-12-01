@@ -8,6 +8,7 @@ import { provideHttpClient } from '@angular/common/http'; // <-- nuevo
 bootstrapApplication(App, { 
   providers: [
     provideRouter(routes),
-    provideHttpClient() // <-- agregado
+    provideHttpClient(), // <-- agregado
+    
   ]
 }).catch(err => console.error(err));

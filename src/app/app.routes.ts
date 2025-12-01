@@ -14,6 +14,8 @@ import { CreateBusiness } from './create-business/create-business';
 // 👈 IMPORTACIÓN CLAVE: El nuevo y correcto componente de detalles
 import { DetallesNegocioComponent } from './detalles-negocio/detalles-negocio'; 
 import { PanelControlBuisiness } from './panel-control-buisiness/panel-control-buisiness';
+import { RegristoLogin } from './login/regristo-login/regristo-login';
+import { RecoveryPassword } from './login/recovery-password/recovery-password';
 
 
 export const routes: Routes = [
@@ -33,6 +35,12 @@ export const routes: Routes = [
   },
 { path: 'panel-control-buisiness', component: PanelControlBuisiness }
 ,
+{ path: 'registro', component: RegristoLogin },
+{ path: 'recuperar-contraseña', component:RecoveryPassword},
+{ 
+        path: 'negocio/:businessId', 
+        component: PanelControlBuisiness 
+    },
   
 
   // REDIRECCIÓN Y ERROR
