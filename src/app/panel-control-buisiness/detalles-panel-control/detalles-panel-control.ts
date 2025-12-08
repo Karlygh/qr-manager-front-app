@@ -6,12 +6,12 @@ import { BusinessService } from '../../services/business.service';
 import { Business } from '../../models/business.model';
 import { KitchenScheduleService, KitchenHour } from '../../services/kitchen-schedule.service';
 import { OpeningScheduleService, OpeningHour } from '../../services/opening-schedule.service';
-import { EditarHorarioAperturaNegocio } from '../../editar-horario/editar-horario-apertura-negocio/editar-horario-apertura-negocio';
+import { EditarRedesComponent } from '../../editar-redes/editar-redes';
 
 @Component({
   selector: 'app-detalles-panel-control',
   standalone: true,
-  imports: [RouterModule, CommonModule, FormsModule, RouterLink,],
+  imports: [RouterModule, CommonModule, FormsModule, RouterLink,EditarRedesComponent],
   templateUrl: './detalles-panel-control.html',
   styleUrl: './detalles-panel-control.css'
 })
@@ -21,6 +21,7 @@ export class DetallesPanelControl implements OnInit {
   businessData: Business | null = null;
   kitchenHours: KitchenHour[] = [];
   openingHours: OpeningHour[] = [];
+  wifiData: any = null;
   isLoading: boolean = true;
   error: string | null = null;
   showModal: boolean = false;
@@ -69,6 +70,7 @@ export class DetallesPanelControl implements OnInit {
         this.businessData = data;
         this.loadKitchenHours(Number(id));
         this.loadOpeningHours(Number(id));
+        this.loadWifiData(String(id));
         this.isLoading = false;
       },
       error: (err) => {
@@ -102,6 +104,17 @@ export class DetallesPanelControl implements OnInit {
       },
       error: () => {
         this.openingHours = [];
+      }
+    });
+  }
+
+  loadWifiData(businessId: string): void {
+    this.businessService.getWifiByBusinessId(businessId).subscribe({
+      next: (wifi) => {
+        this.wifiData = wifi;
+      },
+      error: () => {
+        this.wifiData = null;
       }
     });
   }

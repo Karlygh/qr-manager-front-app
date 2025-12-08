@@ -66,6 +66,7 @@ export class EditarWifi implements OnInit {
     
     this.businessService.getWifiByBusinessId(this.businessId).subscribe({
       next: (wifiData) => {
+        console.log('WiFi data loaded:', wifiData);
         this.wifiData = wifiData;
         this.wifiForm = {
           name: wifiData.name || '',
@@ -114,7 +115,7 @@ export class EditarWifi implements OnInit {
       });
     } else {
       // Crear nuevo WiFi
-      this.businessService.createWifi(this.businessId, wifiData).subscribe({
+      this.businessService.createWifi(wifiData).subscribe({
         next: (newWifi) => {
           this.wifiData = newWifi;
           this.isSaving = false;
@@ -140,16 +141,26 @@ export class EditarWifi implements OnInit {
   confirmDelete(): void {
     if (!this.businessId || !this.wifiData) return;
     
+    console.log('Deleting WiFi:', { businessId: this.businessId, wifiId: this.wifiData.id });
+    console.log('Full wifiData:', this.wifiData);
+    
     this.businessService.deleteWifi(this.businessId, this.wifiData.id).subscribe({
-      next: () => {
+      next: (response) => {
+        console.log('Delete response:', response);
         this.wifiData = null;
         this.wifiForm = { name: '', password: '' };
         this.showCreateForm = false;
         this.closeDeleteModal();
+        this.router.navigate(['/panel-control-buisiness', this.businessId]);
       },
       error: (err) => {
         console.error('Error deleting WiFi:', err);
-        this.error = 'Error al eliminar la configuración WiFi';
+        console.error('Error status:', err.status);
+        console.error('Error body:', err.error);
+        
+        // El backend tiene un bug y no puede eliminar el WiFi
+        this.error = 'Error del servidor: No se pudo eliminar la configuración WiFi. Contacta al administrador del sistema.';
+        console.error('Backend error: El endpoint DELETE no funciona correctamente');
         this.closeDeleteModal();
       }
     });

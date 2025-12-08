@@ -79,7 +79,7 @@ export class EditarInstalaciones implements OnInit {
 
   addFacility(facilityName?: string): void {
     const name = facilityName || this.newFacilityName.trim();
-    if (!name) return;
+    if (!name || !this.businessId) return;
     
     // Evitar duplicados
     if (this.businessData?.facilities?.some(f => f.name.toLowerCase() === name.toLowerCase())) {
@@ -94,20 +94,29 @@ export class EditarInstalaciones implements OnInit {
     }
     
     this.error = null;
+    this.isSaving = true;
 
-    // Añadir solo localmente
-    if (this.businessData) {
-      if (!this.businessData.facilities) {
-        this.businessData.facilities = [];
+    // Crear inmediatamente en el backend
+    this.businessService.createFacility({
+      businessId: parseInt(this.businessId),
+      name: name
+    }).subscribe({
+      next: (newFacility) => {
+        if (this.businessData) {
+          if (!this.businessData.facilities) {
+            this.businessData.facilities = [];
+          }
+          this.businessData.facilities.push(newFacility);
+        }
+        this.newFacilityName = '';
+        this.isSaving = false;
+      },
+      error: (err) => {
+        console.error('Error creating facility:', err);
+        this.error = 'Error al crear la instalación';
+        this.isSaving = false;
       }
-      const newFacility = {
-        id: Date.now(), // ID temporal
-        name: name,
-        businessId: parseInt(this.businessId || '0')
-      };
-      this.businessData.facilities.push(newFacility);
-    }
-    this.newFacilityName = '';
+    });
   }
   
   openDeleteModal(facility: any): void {
@@ -177,62 +186,9 @@ export class EditarInstalaciones implements OnInit {
   }
   
   saveChanges(): void {
-    if (!this.businessId || !this.businessData) return;
-    
-    this.isSaving = true;
-    this.error = null;
-
-    // Debug: ver todas las instalaciones y sus IDs
-    console.log('All facilities:', this.businessData.facilities);
-    this.businessData.facilities?.forEach(f => {
-      console.log(`Facility: ${f.name}, ID: ${f.id}, Type: ${typeof f.id}`);
-    });
-    
-    // Solo crear las instalaciones nuevas (con ID temporal)
-    const newFacilities = this.businessData.facilities?.filter(f => f.id > 9999999999999) || [];
-    console.log('New facilities to create:', newFacilities);
-    
-    if (newFacilities.length === 0) {
-      console.log('No new facilities to create');
-      this.isSaving = false;
+    if (this.businessId) {
       this.router.navigate(['/panel-control-buisiness', this.businessId]);
-      return;
     }
-
-    const facilityPromises = newFacilities.map(facility => 
-      this.businessService.createFacility({
-        businessId: parseInt(this.businessId || '0'),
-        name: facility.name
-      })
-    );
-
-    if (facilityPromises.length === 0) {
-      this.isSaving = false;
-      this.router.navigate(['/panel-control-buisiness', this.businessId]);
-      return;
-    }
-
-    // Ejecutar todas las promesas de instalaciones
-    Promise.all(facilityPromises).then((results: any[]) => {
-      console.log('Facilities created successfully:', results);
-      
-      // Actualizar las instalaciones locales con los IDs reales del backend
-      results.forEach((result, index) => {
-        if (this.businessData && this.businessData.facilities) {
-          const facilityIndex = this.businessData.facilities.findIndex(f => f.name === newFacilities[index].name);
-          if (facilityIndex !== -1) {
-            this.businessData.facilities[facilityIndex] = result;
-          }
-        }
-      });
-      
-      this.isSaving = false;
-      this.router.navigate(['/panel-control-buisiness', this.businessId]);
-    }).catch(err => {
-      console.error('Error saving facilities:', err);
-      this.error = 'Error al guardar las instalaciones: ' + (err.error?.message || err.message);
-      this.isSaving = false;
-    });
   }
 
   goBack(): void {

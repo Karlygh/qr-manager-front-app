@@ -168,15 +168,26 @@
                     </a>
                 </div>
                 
-                <h3 class="fw-bold mt-5 mb-3 color-secondary border-bottom pb-2">🔗 Redes Sociales</h3>
-                <div class="d-flex flex-wrap gap-3">
-                    <span *ngIf="businessData.socialNetworks.length === 0" class="text-muted small">No hay redes sociales configuradas.</span>
-                    <a *ngFor="let social of businessData.socialNetworks" [href]="social.url" target="_blank" class="btn custom-btn-outline-secondary btn-sm">
+            <h3 class="fw-bold mt-5 mb-3 color-secondary border-bottom pb-2">
+                🔗 Redes Sociales
+            </h3>
+            <div class="d-flex flex-wrap gap-3 align-items-center">
+                
+                <a *ngIf="businessData && businessData.id" [routerLink]="['/panel', businessData.id, 'editar-redes']" class="btn btn-sm custom-btn-secondary me-3">
+                    <i class="bi bi-gear me-1"></i> Administrar Redes
+                </a>
+
+                <ng-container *ngIf="businessData && businessData.socialNetworks">
+                    <span *ngIf="businessData.socialNetworks.length === 0" class="text-muted small">
+                        No hay redes sociales configuradas.
+                    </span>
+                    <a *ngFor="let social of businessData.socialNetworks" [href]="social.url" target="_blank"
+                        class="btn custom-btn-outline-secondary btn-sm">
                         <i class="bi bi-link-45deg me-1"></i> {{ social.name }}
                     </a>
-                </div>
-
-            </ng-container>
+                </ng-container>
+            </div>
+                        </ng-container>
 
         </div>
     </div>
