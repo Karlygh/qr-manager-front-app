@@ -1,0 +1,182 @@
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            
+            <div *ngIf="isLoading" class="text-center p-5">
+                <div class="spinner-border color-primary" role="status"></div>
+                <p class="mt-3">Cargando datos de tu panel...</p>
+            </div>
+
+            <div *ngIf="error && !isLoading" class="alert custom-alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong>Error al cargar:</strong> {{ error }}
+            </div>
+
+            <ng-container *ngIf="businessData && !isLoading">
+                
+                <header class="business-header mb-5 border-bottom pb-4 d-flex align-items-center">
+                    <img [src]="'http://localhost:8080' + businessData.imageLogo" 
+                         alt="Logo de {{ businessData.name }}" 
+                         class="img-thumbnail me-4 shadow-sm business-logo" 
+                         style="width: 100px; height: 100px; object-fit: cover;">
+                    <div>
+                        <h1 class="display-6 fw-bold color-success">{{ businessData.name }}</h1>
+                        <p class="lead ">{{ businessData.description }}</p>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge custom-badge">ID de Negocio: {{ businessData.id }}</span>
+                            <button class="btn custom-btn-edit" (click)="editBusinessInfo()">
+                                ✏️ Editar Información
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
+                <h3 class="fw-bold mb-3 color-secondary border-bottom pb-2 text-center section-title" style="font-size: 2rem;">📋 ¿Qué quieres hacer hoy?</h3>
+                
+                <div class="row g-4">
+                    
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm custom-card border-primary-start">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <div>
+                                    <h5 class="card-title color-primary"><i class="bi bi-telephone-fill me-2 fondo"></i>Contacto</h5>
+                                    <ul class="list-unstyled small mt-3">
+                                        <li><strong>Email:</strong> {{ businessData.email }}</li>
+                                        <li><strong>Teléfono:</strong> {{ businessData.phoneNumber || 'No especificado' }}</li>
+                                        <li><strong>Dirección:</strong> {{ businessData.address || 'No especificada' }}</li>
+                                    </ul>
+                                </div>
+                                <a [routerLink]="['/editar-contacto']" class="btn btn-sm custom-btn-secondary mt-3">
+                                    <i class="bi bi-pencil-square me-1"></i> Ver/Editar Contacto
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm custom-card border-warning-start">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <div>
+                                    <h5 class="card-title color-warning"><i class="bi bi-wifi me-2"></i>Detalles Wi-Fi</h5>
+                                    <ul class="list-unstyled small mt-3" *ngIf="businessData.wifi">
+                                        <li><strong>Red:</strong> <code class="custom-code">{{ businessData.wifi.name }}</code></li>
+                                        <li><strong>Contraseña:</strong> <code class="custom-code">{{ businessData.wifi.password }}</code></li>
+                                    </ul>
+                                    <p *ngIf="!businessData.wifi" class="text-muted small">Wi-Fi no configurado.</p>
+                                </div>
+                                 <a [routerLink]="['/editar-wifi']" class="btn btn-sm custom-btn-secondary mt-3">
+                                    <i class="bi bi-pencil-square me-1"></i> Ver/Editar Wifi
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 col-lg-4">
+                        <div class="card h-100 shadow-sm custom-card border-success-start">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <div>
+                                    <h5 class="card-title color-success"><i class="bi bi-gear-fill me-2"></i>Instalaciones</h5>
+                                    <div class="mt-3">
+                                        <span *ngIf="businessData.facilities.length === 0" class="text-muted small">No hay instalaciones registradas.</span>
+                                        <span *ngFor="let facility of businessData.facilities" class="badge custom-badge-info me-2 mb-1">
+                                            {{ facility.name }}
+                                        </span>
+                                    </div>
+                                </div>
+                                 <a [routerLink]="['/editar-instalaciones']" class="btn btn-sm custom-btn-secondary mt-3">
+                                    <i class="bi bi-pencil-square me-1"></i> Ver/Editar Instalaciones
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm custom-card border-danger-start">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <div>
+                                    <h5 class="card-title color-info"><i class="bi bi-menu-button-wide me-2"></i>Menú/Carta</h5>
+                                    <ul class="list-unstyled small mt-3">
+                                        <li><strong>Platos:</strong> 0 registrados</li>
+                                        <li><strong>Categorías:</strong> 0 creadas</li>
+                                    </ul>
+                                </div>
+                                <a [routerLink]="['/editar-menu']" class="btn btn-sm custom-btn-secondary mt-3">
+                                    <i class="bi bi-pencil-square me-1"></i> Ver/Editar Menú
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="fw-bold mt-5 mb-3 color-secondary border-bottom pb-2">📅 Horarios de Apertura</h3>
+                <table class="table table-striped table-hover small custom-table">
+                    <thead>
+                        <tr class="custom-table-dark">
+                            <th>Día</th>
+                            <th>Apertura</th>
+                            <th>Cierre</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let hour of businessData.openingHours">
+                            <td>{{ hour.day | titlecase }}</td> 
+                            <td>{{ hour.openingTime }}</td>
+                            <td>{{ hour.closingTime }}</td>
+                            <td>
+                                <span class="badge" [ngClass]="hour.status ? 'custom-badge-success' : 'custom-badge-danger'">
+                                    {{ hour.status ? 'Abierto' : 'Cerrado' }}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="text-center mt-3">
+                    <a [routerLink]="['/editar-horario']" class="btn btn-sm custom-btn-secondary">
+                        <i class="bi bi-pencil-square me-1"></i> Ver/Editar Horarios
+                    </a>
+                </div>
+                
+                <h3 class="fw-bold mt-5 mb-3 color-secondary border-bottom pb-2">🔗 Redes Sociales</h3>
+                <div class="d-flex flex-wrap gap-3">
+                    <span *ngIf="businessData.socialNetworks.length === 0" class="text-muted small">No hay redes sociales configuradas.</span>
+                    <a *ngFor="let social of businessData.socialNetworks" [href]="social.url" target="_blank" class="btn custom-btn-outline-secondary btn-sm">
+                        <i class="bi bi-link-45deg me-1"></i> {{ social.name }}
+                    </a>
+                </div>
+
+            </ng-container>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal" *ngIf="showModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Editar Información</h5>
+                <button type="button" (click)="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label>Nombre del Negocio</label>
+                    <input type="text" class="form-control" [(ngModel)]="editForm.name">
+                </div>
+                <div class="mb-3">
+                    <label>Descripción</label>
+                    <textarea class="form-control" rows="3" [(ngModel)]="editForm.description"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" (click)="closeModal()">Cancelar</button>
+                <button type="button" (click)="saveChanges()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-backdrop" *ngIf="showModal" (click)="closeModal()"></div>

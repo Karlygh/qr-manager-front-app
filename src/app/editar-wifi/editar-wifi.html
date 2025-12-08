@@ -1,0 +1,140 @@
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            
+            <div *ngIf="isLoading" class="text-center p-5">
+                <div class="spinner-border color-primary" role="status"></div>
+                <p class="mt-3">Cargando configuración WiFi...</p>
+            </div>
+
+            <div *ngIf="error && !isLoading" class="alert custom-alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong>Error:</strong> {{ error }}
+            </div>
+
+            <ng-container *ngIf="businessData && !isLoading">
+                
+                <header class="business-header mb-5 d-flex align-items-center">
+                    <img [src]="'http://localhost:8080' + businessData.imageLogo" 
+                         alt="Logo de {{ businessData.name }}" 
+                         class="img-thumbnail me-4 shadow-sm business-logo" 
+                         style="width: 80px; height: 80px; object-fit: cover;">
+                    <div>
+                        <h1 class="display-6 fw-bold">📶 Configurar WiFi</h1>
+                        <p class="lead">{{ businessData.name }}</p>
+                    </div>
+                </header>
+
+                <div class="card shadow-sm custom-card">
+                    <div class="card-body p-4">
+                        <h5 class="card-title color-primary mb-4">
+                            <i class="bi bi-wifi me-2"></i>Configuración de Red WiFi
+                        </h5>
+                        
+                        <div *ngIf="!wifiData" class="text-center py-4">
+                            <i class="bi bi-wifi-off display-1 text-muted"></i>
+                            <p class="text-muted mt-3">No hay configuración WiFi registrada.</p>
+                            <p class="text-muted">Configura la primera red WiFi para tus clientes.</p>
+                        </div>
+
+                        <form *ngIf="wifiData || showCreateForm" (ngSubmit)="saveWifi()">
+                            <div class="mb-3">
+                                <label for="wifiName" class="form-label fw-bold">Nombre de la Red WiFi *</label>
+                                <input type="text" 
+                                       id="wifiName"
+                                       class="form-control" 
+                                       [(ngModel)]="wifiForm.name" 
+                                       name="wifiName"
+                                       placeholder="Ej: CafeWiFi_Gratis"
+                                       [disabled]="isSaving"
+                                       required
+                                       minlength="3"
+                                       maxlength="32">
+                                <small class="form-text text-muted">Este es el nombre que verán tus clientes en la lista de redes WiFi</small>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="wifiPassword" class="form-label fw-bold">Contraseña *</label>
+                                <div class="input-group">
+                                    <input [type]="showPassword ? 'text' : 'password'" 
+                                           id="wifiPassword"
+                                           class="form-control" 
+                                           [(ngModel)]="wifiForm.password" 
+                                           name="wifiPassword"
+                                           placeholder="Contraseña de la red WiFi"
+                                           [disabled]="isSaving"
+                                           required
+                                           minlength="8"
+                                           maxlength="63">
+                                    <button class="btn btn-outline-secondary" 
+                                            type="button" 
+                                            (click)="togglePasswordVisibility()">
+                                        <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                                    </button>
+                                </div>
+                                <small class="form-text text-muted">Mínimo 8 caracteres. Usa una contraseña segura.</small>
+                            </div>
+                            
+                            <div class="d-flex gap-3">
+                                <button type="button" 
+                                        class="btn btn-secondary" 
+                                        (click)="goBack()"
+                                        [disabled]="isSaving">
+                                    <i class="bi bi-arrow-left me-1"></i> Volver al Panel
+                                </button>
+                                
+                                <button type="submit" 
+                                        class="btn custom-btn-secondary"
+                                        [disabled]="isSaving || !wifiForm.name || !wifiForm.password">
+                                    <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2"></span>
+                                    <i *ngIf="!isSaving" class="bi bi-check-lg me-1"></i>
+                                    {{ isSaving ? 'Guardando...' : (wifiData ? 'Actualizar WiFi' : 'Crear WiFi') }}
+                                </button>
+                                
+                                <button *ngIf="wifiData" 
+                                        type="button" 
+                                        class="btn btn-danger"
+                                        (click)="openDeleteModal()"
+                                        [disabled]="isSaving">
+                                    <i class="bi bi-trash me-1"></i> Eliminar WiFi
+                                </button>
+                            </div>
+                        </form>
+
+                        <div *ngIf="!wifiData && !showCreateForm" class="text-center">
+                            <button type="button" 
+                                    class="btn custom-btn-secondary"
+                                    (click)="showCreateForm = true">
+                                <i class="bi bi-plus-lg me-1"></i> Configurar WiFi
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </ng-container>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmación para Eliminar -->
+<div class="modal" *ngIf="showDeleteModal">
+    <div class="modal-backdrop" (click)="closeDeleteModal()"></div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>⚠️ Confirmar Eliminación</h5>
+                <button type="button" (click)="closeDeleteModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que quieres eliminar la configuración WiFi <strong>"{{ wifiData?.name }}"</strong>?</p>
+                <p class="text-muted small">Tus clientes ya no podrán ver esta información de WiFi.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeDeleteModal()">Cancelar</button>
+                <button type="button" class="btn btn-danger" (click)="confirmDelete()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>

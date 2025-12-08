@@ -1,0 +1,252 @@
+<div class="menu-manager">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-content">
+      <button class="back-btn" (click)="goBack()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <h1>Gestión de Menú</h1>
+      <button class="save-btn" (click)="saveChanges()" [disabled]="isSaving">
+        <i class="bi bi-check-lg"></i>
+        {{ isSaving ? 'Guardando...' : 'Guardar' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Search and Add Section -->
+  <div class="search-section">
+    <div class="search-bar">
+      <i class="bi bi-search"></i>
+      <input type="text" placeholder="Buscar productos..." [(ngModel)]="searchTerm">
+      <button *ngIf="searchTerm" class="clear-search" (click)="clearSearch()">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+    <button class="add-product-btn" (click)="openAddProductModal()">
+      <i class="bi bi-plus-lg"></i>
+      Añadir Producto
+    </button>
+  </div>
+
+  <!-- Categories Section -->
+  <div class="categories-section">
+    <div class="categories-header">
+      <h2>Categorías</h2>
+      <button class="add-category-btn" (click)="openAddCategoryModal()">
+        <i class="bi bi-plus"></i>
+        Nueva Categoría
+      </button>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="category-tabs">
+      <button 
+        *ngFor="let category of categories" 
+        class="category-tab"
+        [class.active]="selectedCategory === category.id"
+        (click)="selectCategory(category.id)">
+        <i [class]="category.icon"></i>
+        {{ category.name }}
+        <span class="product-count">({{ getProductCountByCategory(category.id) }})</span>
+        <button class="delete-category" (click)="openDeleteCategoryModal(category); $event.stopPropagation()">
+          <i class="bi bi-trash"></i>
+        </button>
+      </button>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="products-grid" *ngIf="selectedCategory">
+      <div class="product-card" *ngFor="let product of getFilteredProducts()">
+        <div class="product-image">
+          <img [src]="product.image || 'assets/default-food.jpg'" [alt]="product.name">
+          <div class="product-actions">
+            <button class="edit-btn" (click)="openEditProductModal(product)">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="delete-btn" (click)="openDeleteProductModal(product)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+        <div class="product-info">
+          <h3>{{ product.name }}</h3>
+          <p class="product-description">{{ product.description }}</p>
+          <div class="product-price">
+            <span class="price">{{ product.price | currency:'EUR':'symbol':'1.2-2' }}</span>
+            <div class="product-status">
+              <label class="switch">
+                <input type="checkbox" [(ngModel)]="product.available" (change)="toggleProductAvailability(product)">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="getFilteredProducts().length === 0">
+        <i class="bi bi-basket"></i>
+        <h3>No hay productos en esta categoría</h3>
+        <p>Añade tu primer producto para comenzar</p>
+        <button class="add-first-product" (click)="openAddProductModal()">
+          <i class="bi bi-plus"></i>
+          Añadir Producto
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Product Modal -->
+<div class="modal-overlay" *ngIf="showProductModal" (click)="closeProductModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ isEditingProduct ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
+      <button class="close-btn" (click)="closeProductModal()">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form (ngSubmit)="saveProduct()" #productForm="ngForm">
+        <div class="form-group">
+          <label>Nombre del producto *</label>
+          <input type="text" [(ngModel)]="currentProduct.name" name="name" required>
+        </div>
+        
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea [(ngModel)]="currentProduct.description" name="description" rows="3"></textarea>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Precio *</label>
+            <input type="number" [(ngModel)]="currentProduct.price" name="price" step="0.01" min="0" required>
+          </div>
+          
+          <div class="form-group">
+            <label>Categoría *</label>
+            <select [(ngModel)]="currentProduct.categoryId" name="categoryId" required>
+              <option value="">Seleccionar categoría</option>
+              <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Imagen del producto</label>
+          <div class="image-upload">
+            <input type="file" (change)="onImageSelected($event)" accept="image/*" #fileInput>
+            <div class="image-preview" *ngIf="currentProduct.image">
+              <img [src]="currentProduct.image" alt="Preview">
+              <button type="button" class="remove-image" (click)="removeImage()">
+                <i class="bi bi-x"></i>
+              </button>
+            </div>
+            <div class="upload-placeholder" *ngIf="!currentProduct.image" (click)="fileInput.click()">
+              <i class="bi bi-cloud-upload"></i>
+              <span>Subir imagen</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="currentProduct.available" name="available">
+            <span class="checkmark"></span>
+            Producto disponible
+          </label>
+        </div>
+        
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn" (click)="closeProductModal()">Cancelar</button>
+          <button type="submit" class="save-btn" [disabled]="!productForm.valid">{{ isEditingProduct ? 'Actualizar' : 'Crear' }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Add Category Modal -->
+<div class="modal-overlay" *ngIf="showCategoryModal" (click)="closeCategoryModal()">
+  <div class="modal small" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Nueva Categoría</h2>
+      <button class="close-btn" (click)="closeCategoryModal()">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form (ngSubmit)="saveCategory()" #categoryForm="ngForm">
+        <div class="form-group">
+          <label>Nombre de la categoría *</label>
+          <input type="text" [(ngModel)]="newCategory.name" name="name" required>
+        </div>
+        
+        <div class="form-group">
+          <label>Icono</label>
+          <div class="icon-selector">
+            <button type="button" 
+              *ngFor="let icon of availableIcons" 
+              class="icon-option"
+              [class.selected]="newCategory.icon === icon"
+              (click)="selectCategoryIcon(icon)">
+              <i [class]="icon"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn" (click)="closeCategoryModal()">Cancelar</button>
+          <button type="submit" class="save-btn" [disabled]="!categoryForm.valid">Crear Categoría</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Product Modal -->
+<div class="modal-overlay" *ngIf="showDeleteProductModal" (click)="closeDeleteProductModal()">
+  <div class="modal small" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Eliminar Producto</h2>
+      <button class="close-btn" (click)="closeDeleteProductModal()">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="delete-confirmation">
+        <i class="bi bi-exclamation-triangle"></i>
+        <p>¿Estás seguro de que quieres eliminar <strong>{{ productToDelete?.name }}</strong>?</p>
+        <p class="warning">Esta acción no se puede deshacer.</p>
+      </div>
+      <div class="modal-actions">
+        <button class="cancel-btn" (click)="closeDeleteProductModal()">Cancelar</button>
+        <button class="delete-btn" (click)="confirmDeleteProduct()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Category Modal -->
+<div class="modal-overlay" *ngIf="showDeleteCategoryModal" (click)="closeDeleteCategoryModal()">
+  <div class="modal small" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Eliminar Categoría</h2>
+      <button class="close-btn" (click)="closeDeleteCategoryModal()">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="delete-confirmation">
+        <i class="bi bi-exclamation-triangle"></i>
+        <p>¿Estás seguro de que quieres eliminar la categoría <strong>{{ categoryToDelete?.name }}</strong>?</p>
+        <p class="warning">Todos los productos de esta categoría también serán eliminados.</p>
+      </div>
+      <div class="modal-actions">
+        <button class="cancel-btn" (click)="closeDeleteCategoryModal()">Cancelar</button>
+        <button class="delete-btn" (click)="confirmDeleteCategory()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
