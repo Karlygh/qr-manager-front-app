@@ -27,7 +27,6 @@ export class DetallesNegocioComponent implements OnInit {
   // ❌ Eliminamos el constructor (o lo dejamos vacío si solo inyecta)
 
   ngOnInit(): void {
-    // El resto de la lógica permanece igual, usando las propiedades inyectadas
     this.route.paramMap.subscribe(params => {
       this.negocioId = params.get('id'); 
       if (this.negocioId) {

@@ -108,8 +108,8 @@
                     </div>
                 </div>
 
-                <h3 class="fw-bold mt-5 mb-3 color-secondary border-bottom pb-2">📅 Horarios de Apertura</h3>
-                <table class="table table-striped table-hover small custom-table">
+                <h3 class="fw-bold mt-5 mb-3 color-secondary border-bottom pb-2">🏢 Horarios de Apertura del Negocio</h3>
+                <table class="table table-striped table-hover small custom-table" *ngIf="openingHours.length > 0">
                     <thead>
                         <tr class="custom-table-dark">
                             <th>Día</th>
@@ -119,8 +119,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let hour of businessData.openingHours">
-                            <td>{{ hour.day | titlecase }}</td> 
+                        <tr *ngFor="let hour of openingHours">
+                            <td>{{ getDayName(hour.day) }}</td> 
                             <td>{{ hour.openingTime }}</td>
                             <td>{{ hour.closingTime }}</td>
                             <td>
@@ -131,6 +131,37 @@
                         </tr>
                     </tbody>
                 </table>
+                <p *ngIf="openingHours.length === 0" class="text-muted small">No hay horarios de apertura configurados.</p>
+                <div class="text-center mt-3">
+                    <a [routerLink]="['/editar-campos-horario-apertura']" class="btn btn-sm custom-btn-secondary">
+                        <i class="bi bi-pencil-square me-1"></i> Ver/Editar Horarios de Apertura
+                    </a>
+                </div>
+
+                <h3 class="fw-bold mt-5 mb-3 color-secondary border-bottom pb-2">📅 Horarios de Cocina</h3>
+                <table class="table table-striped table-hover small custom-table" *ngIf="kitchenHours.length > 0">
+                    <thead>
+                        <tr class="custom-table-dark">
+                            <th>Día</th>
+                            <th>Apertura</th>
+                            <th>Cierre</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let hour of kitchenHours">
+                            <td>{{ getDayName(hour.day) }}</td> 
+                            <td>{{ hour.openingTime }}</td>
+                            <td>{{ hour.closingTime }}</td>
+                            <td>
+                                <span class="badge" [ngClass]="hour.status ? 'custom-badge-success' : 'custom-badge-danger'">
+                                    {{ hour.status ? 'Abierto' : 'Cerrado' }}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p *ngIf="kitchenHours.length === 0" class="text-muted small">No hay horarios de cocina configurados.</p>
                 <div class="text-center mt-3">
                     <a [routerLink]="['/editar-horario']" class="btn btn-sm custom-btn-secondary">
                         <i class="bi bi-pencil-square me-1"></i> Ver/Editar Horarios

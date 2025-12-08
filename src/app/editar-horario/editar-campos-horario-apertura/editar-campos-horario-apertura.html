@@ -1,8 +1,9 @@
 <div class="kitchen-schedule-container">
-  <h2>Horarios de Cocina</h2>
-<p class="schedule-instructions">Para modificar los horarios, seleccione la hora de apertura y cierre para cada día. Los cambios se guardarán automáticamente al hacer clic en "Guardar Todos". Use el botón "Resetear" para volver a los  valores predeterminados.</p>
+  <h2>Horarios de Apertura del Negocio</h2>
+   <p class="schedule-instructions">Para modificar los horarios, seleccione la hora de apertura y cierre para cada día. Los cambios se guardarán automáticamente al hacer clic en "Guardar Todos". Use el botón "Resetear" para volver a los valores predeterminados.</p>
+  
   <div class="schedule-grid">
-    <div class="schedule-item" *ngFor="let schedule of kitchenHours; let i = index">
+    <div class="schedule-item" *ngFor="let schedule of openingHours; let i = index">
       <div class="day-header">
         <h3>{{ getDayName(schedule.day) }}</h3>
       </div>
@@ -34,13 +35,13 @@
     <button 
       (click)="saveAllSchedules()" 
       [disabled]="loading"
-      class="btn-save">
+      class="btn btn-save">
       {{ loading ? 'Guardando...' : 'Guardar Todos' }}
     </button>
     
     <button 
       (click)="deleteAllSchedules()"
-      class="btn-delete-all">
+      class="btn btn-delete-all">
       Resetear
     </button>
   </div>

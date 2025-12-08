@@ -15,6 +15,7 @@ import { EditarContacto } from './editar-contacto/editar-contacto';
 import { EditarWifi } from './editar-wifi/editar-wifi';
 import { EditarInstalaciones } from './editar-instalaciones/editar-instalaciones';
 import { EditarHorario } from './editar-horario/editar-horario';
+import { EditarCamposHorarioApertura } from './editar-horario/editar-campos-horario-apertura/editar-campos-horario-apertura';
 import { EditarMenu } from './editar-menu/editar-menu';
 
 export const routes: Routes = [
@@ -33,6 +34,7 @@ export const routes: Routes = [
   { path: 'editar-wifi', component:EditarWifi},
   { path: 'editar-instalaciones', component: EditarInstalaciones},
   { path: 'editar-horario', component: EditarHorario},
+  { path: 'editar-campos-horario-apertura', component: EditarCamposHorarioApertura},
   { path: 'editar-menu', component: EditarMenu},
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: error404PageComponent }

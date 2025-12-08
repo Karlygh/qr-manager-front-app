@@ -28,6 +28,10 @@ export class KitchenScheduleService {
     return this.http.post<KitchenHour[]>(`${this.apiUrl}/all/${businessId}`, kitchenHours);
   }
 
+  getKitchenHoursByBusiness(businessId: number): Observable<KitchenHour[]> {
+    return this.http.get<KitchenHour[]>(`${this.apiUrl}/${businessId}`);
+  }
+
   deleteAllKitchenHours(businessId: number): Observable<void> {
     console.log('Making DELETE request to:', `${this.apiUrl}/all/${businessId}`);
     return this.http.delete<void>(`${this.apiUrl}/all/${businessId}`);

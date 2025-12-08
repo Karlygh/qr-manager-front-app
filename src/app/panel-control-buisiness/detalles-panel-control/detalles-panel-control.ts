@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink, RouterModule } from '@angular/router';
-import { CommonModule, TitleCasePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BusinessService } from '../../services/business.service';
 import { Business } from '../../models/business.model';
+import { KitchenScheduleService, KitchenHour } from '../../services/kitchen-schedule.service';
+import { OpeningScheduleService, OpeningHour } from '../../services/opening-schedule.service';
+import { EditarHorarioAperturaNegocio } from '../../editar-horario/editar-horario-apertura-negocio/editar-horario-apertura-negocio';
 
 @Component({
   selector: 'app-detalles-panel-control',
   standalone: true,
-  imports: [RouterModule, CommonModule, TitleCasePipe, FormsModule,RouterLink],
+  imports: [RouterModule, CommonModule, FormsModule, RouterLink,],
   templateUrl: './detalles-panel-control.html',
   styleUrl: './detalles-panel-control.css'
 })
@@ -16,6 +19,8 @@ export class DetallesPanelControl implements OnInit {
 
   businessId: string | null = null;
   businessData: Business | null = null;
+  kitchenHours: KitchenHour[] = [];
+  openingHours: OpeningHour[] = [];
   isLoading: boolean = true;
   error: string | null = null;
   showModal: boolean = false;
@@ -37,7 +42,9 @@ export class DetallesPanelControl implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private businessService: BusinessService
+    private businessService: BusinessService,
+    private kitchenScheduleService: KitchenScheduleService,
+    private openingScheduleService: OpeningScheduleService
   ) { }
 
   ngOnInit(): void {
@@ -60,6 +67,8 @@ export class DetallesPanelControl implements OnInit {
     this.businessService.getBusinessById(id).subscribe({
       next: (data: Business) => {
         this.businessData = data;
+        this.loadKitchenHours(Number(id));
+        this.loadOpeningHours(Number(id));
         this.isLoading = false;
       },
       error: (err) => {
@@ -71,6 +80,28 @@ export class DetallesPanelControl implements OnInit {
         this.isLoading = false;
         console.error('Error de la API al obtener negocio:', err);
         this.checkAvailableBusinesses();
+      }
+    });
+  }
+
+  loadKitchenHours(businessId: number): void {
+    this.kitchenScheduleService.getKitchenHoursByBusiness(businessId).subscribe({
+      next: (hours) => {
+        this.kitchenHours = hours || [];
+      },
+      error: () => {
+        this.kitchenHours = [];
+      }
+    });
+  }
+
+  loadOpeningHours(businessId: number): void {
+    this.openingScheduleService.getOpeningHoursByBusiness(businessId).subscribe({
+      next: (hours) => {
+        this.openingHours = hours || [];
+      },
+      error: () => {
+        this.openingHours = [];
       }
     });
   }
@@ -135,5 +166,18 @@ export class DetallesPanelControl implements OnInit {
         }
       });
     }
+  }
+
+  getDayName(day: string): string {
+    const dayNames: { [key: string]: string } = {
+      'monday': 'Lunes',
+      'tuesday': 'Martes',
+      'wednesday': 'Miércoles',
+      'thursday': 'Jueves',
+      'friday': 'Viernes',
+      'saturday': 'Sábado',
+      'sunday': 'Domingo'
+    };
+    return dayNames[day] || day;
   }
 }

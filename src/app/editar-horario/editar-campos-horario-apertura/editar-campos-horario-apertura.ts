@@ -1,35 +1,35 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { KitchenScheduleService, KitchenHour } from '../services/kitchen-schedule.service';
+import { OpeningScheduleService, OpeningHour } from '../../services/opening-schedule.service';
 
 @Component({
-  selector: 'app-editar-horario',
+  selector: 'app-editar-campos-horario-apertura',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
-  templateUrl: './editar-horario.html',
-  styleUrl: './editar-horario.css'
+  templateUrl: './editar-campos-horario-apertura.html',
+  styleUrl: './editar-campos-horario-apertura.css'
 })
-export class EditarHorario implements OnInit {
-  @Input() businessId: number = 1;
-
+export class EditarCamposHorarioApertura implements OnInit {
+  businessId: number = 1;
   days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-  kitchenHours: KitchenHour[] = [];
+  openingHours: OpeningHour[] = [];
   loading = false;
 
-  constructor(private kitchenScheduleService: KitchenScheduleService, private router: Router) {}
+  constructor(private openingScheduleService: OpeningScheduleService, private router: Router) {}
 
   ngOnInit() {
+    this.businessId = Number(localStorage.getItem('currentBusinessId')) || 1;
     this.loadSchedule();
   }
 
   loadSchedule() {
-    this.kitchenScheduleService.getKitchenHoursByBusiness(this.businessId)
+    this.openingScheduleService.getOpeningHoursByBusiness(this.businessId)
       .subscribe({
         next: (hours) => {
           if (hours && hours.length > 0) {
-            this.kitchenHours = hours;
+            this.openingHours = hours;
           } else {
             this.initializeSchedule();
           }
@@ -41,29 +41,29 @@ export class EditarHorario implements OnInit {
   }
 
   initializeSchedule() {
-    this.kitchenHours = this.days.map(day => ({
+    this.openingHours = this.days.map(day => ({
       businessId: this.businessId,
       day,
-      openingTime: '09:00:00',
-      closingTime: '22:00:00'
+      openingTime: '08:00:00',
+      closingTime: '22:00:00',
+      status: true
     }));
   }
 
   saveAllSchedules() {
     this.loading = true;
-    
-    const hasExistingSchedules = this.kitchenHours.some(hour => hour.id);
+    const hasExistingSchedules = this.openingHours.some(hour => hour.id);
     
     if (hasExistingSchedules) {
-      // Actualizar horarios existentes usando PATCH
-      const updatePromises = this.kitchenHours.map(hour => {
+      const updatePromises = this.openingHours.map(hour => {
         const normalized = {
           businessId: this.businessId,
           day: hour.day,
           openingTime: hour.openingTime.length === 5 ? hour.openingTime + ':00' : hour.openingTime,
-          closingTime: hour.closingTime.length === 5 ? hour.closingTime + ':00' : hour.closingTime
+          closingTime: hour.closingTime.length === 5 ? hour.closingTime + ':00' : hour.closingTime,
+          status: hour.status
         };
-        return this.kitchenScheduleService.updateKitchenHour(hour.id!, normalized).toPromise();
+        return this.openingScheduleService.updateOpeningHour(hour.id!, normalized).toPromise();
       });
       
       Promise.all(updatePromises)
@@ -76,18 +76,18 @@ export class EditarHorario implements OnInit {
           this.loading = false;
         });
     } else {
-      // Crear nuevos horarios usando POST
-      const normalizedHours = this.kitchenHours.map(hour => ({
+      const normalizedHours = this.openingHours.map(hour => ({
         businessId: this.businessId,
         day: hour.day,
         openingTime: hour.openingTime.length === 5 ? hour.openingTime + ':00' : hour.openingTime,
-        closingTime: hour.closingTime.length === 5 ? hour.closingTime + ':00' : hour.closingTime
+        closingTime: hour.closingTime.length === 5 ? hour.closingTime + ':00' : hour.closingTime,
+        status: hour.status
       }));
       
-      this.kitchenScheduleService.saveAllKitchenHours(this.businessId, normalizedHours)
+      this.openingScheduleService.saveAllOpeningHours(this.businessId, normalizedHours)
         .subscribe({
           next: (response) => {
-            this.kitchenHours = response;
+            this.openingHours = response;
             this.loading = false;
             this.router.navigate(['/panel-control-buisiness', this.businessId]);
           },
@@ -100,26 +100,24 @@ export class EditarHorario implements OnInit {
   }
 
   onTimeChange(index: number) {
-    const schedule = this.kitchenHours[index];
+    const schedule = this.openingHours[index];
     if (schedule.id) {
       const normalized = {
         businessId: this.businessId,
         day: schedule.day,
         openingTime: schedule.openingTime.length === 5 ? schedule.openingTime + ':00' : schedule.openingTime,
-        closingTime: schedule.closingTime.length === 5 ? schedule.closingTime + ':00' : schedule.closingTime
+        closingTime: schedule.closingTime.length === 5 ? schedule.closingTime + ':00' : schedule.closingTime,
+        status: schedule.status
       };
-      this.kitchenScheduleService.updateKitchenHour(schedule.id, normalized)
+      this.openingScheduleService.updateOpeningHour(schedule.id, normalized)
         .subscribe();
     }
   }
 
   deleteAllSchedules() {
-    console.log('Deleting all schedules for businessId:', this.businessId);
-    
-    this.kitchenScheduleService.deleteAllKitchenHours(this.businessId)
+    this.openingScheduleService.deleteAllOpeningHours(this.businessId)
       .subscribe({
         next: () => {
-          console.log('Delete successful');
           this.initializeSchedule();
         },
         error: (error) => {
