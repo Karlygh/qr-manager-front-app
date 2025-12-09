@@ -208,3 +208,15 @@
     margin-bottom: 6px; /* En lugar de 8px */
   }
 }
+.benefits-list .benefit-title {
+    color: #2ecc71; 
+    font-size: 1rem; 
+    font-weight: 700; 
+    margin-right: 5px;
+}
+
+.benefits-list h5 { 
+    font-size: 0.85rem;
+    line-height: 1.7;
+    margin-bottom: 0.75rem ;
+}
