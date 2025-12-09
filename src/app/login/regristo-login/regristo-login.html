@@ -1,1 +1,204 @@
-<h1>Regristor works</h1>
+<div class="registro-container">
+  <div class="registro-card">
+    <h2>Crear Cuenta</h2>
+    <p>Regístrate para acceder a tu panel de control</p>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="registro-form">
+      <!-- Error message -->
+      <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Row 1: Email and Password -->
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="email" class="form-label">Email *</label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="form-control"
+            [class.is-invalid]="getFieldError('email')"
+            placeholder="tu@email.com"
+          />
+          <div class="invalid-feedback" *ngIf="getFieldError('email')">
+            {{ getFieldError('email') }}
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="password" class="form-label">Contraseña *</label>
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            class="form-control"
+            [class.is-invalid]="getFieldError('password')"
+            placeholder="Mínimo 8 caracteres"
+          />
+          <div class="invalid-feedback" *ngIf="getFieldError('password')">
+            {{ getFieldError('password') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: First Name and Last Name -->
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="firstName" class="form-label">Nombre *</label>
+          <input
+            type="text"
+            id="firstName"
+            formControlName="firstName"
+            class="form-control"
+            [class.is-invalid]="getFieldError('firstName')"
+            placeholder="Tu nombre"
+          />
+          <div class="invalid-feedback" *ngIf="getFieldError('firstName')">
+            {{ getFieldError('firstName') }}
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="lastName" class="form-label">Primer Apellido *</label>
+          <input
+            type="text"
+            id="lastName"
+            formControlName="lastName"
+            class="form-control"
+            [class.is-invalid]="getFieldError('lastName')"
+            placeholder="Primer Apellido"
+          />
+          <div class="invalid-feedback" *ngIf="getFieldError('lastName')">
+            {{ getFieldError('lastName') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3: Second Last Name and Phone -->
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="secondLastName" class="form-label">Segundo Apellido *</label>
+          <input
+            type="text"
+            id="secondLastName"
+            formControlName="secondLastName"
+            class="form-control"
+            [class.is-invalid]="getFieldError('secondLastName')"
+            placeholder="Segundo Apellido"
+          />
+          <div class="invalid-feedback" *ngIf="getFieldError('secondLastName')">
+            {{ getFieldError('secondLastName') }}
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="phone" class="form-label">Teléfono *</label>
+          <input
+            type="tel"
+            id="phone"
+            formControlName="phone"
+            class="form-control"
+            [class.is-invalid]="getFieldError('phone')"
+            placeholder="+34 600 123 456"
+          />
+          <div class="invalid-feedback" *ngIf="getFieldError('phone')">
+            {{ getFieldError('phone') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 4: Postal Code and Address -->
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="postalCode" class="form-label">Código Postal *</label>
+          <input
+            type="text"
+            id="postalCode"
+            formControlName="postalCode"
+            class="form-control"
+            [class.is-invalid]="getFieldError('postalCode')"
+            placeholder="28001"
+          />
+          <div class="invalid-feedback" *ngIf="getFieldError('postalCode')">
+            {{ getFieldError('postalCode') }}
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="address" class="form-label">Dirección *</label>
+          <input
+            type="text"
+            id="address"
+            formControlName="address"
+            class="form-control"
+            [class.is-invalid]="getFieldError('address')"
+            placeholder="Calle Gran Via,44"
+          />
+          <div class="invalid-feedback" *ngIf="getFieldError('address')">
+            {{ getFieldError('address') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 5: City and Country -->
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="city" class="form-label">Ciudad *</label>
+          <input
+            type="text"
+            id="city"
+            formControlName="city"
+            class="form-control"
+            [class.is-invalid]="getFieldError('city')"
+            placeholder="Madrid"
+          />
+          <div class="invalid-feedback" *ngIf="getFieldError('city')">
+            {{ getFieldError('city') }}
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="country" class="form-label">País *</label>
+          <input
+            type="text"
+            id="country"
+            formControlName="country"
+            class="form-control"
+            [class.is-invalid]="getFieldError('country')"
+            placeholder="España"
+          />
+          <div class="invalid-feedback" *ngIf="getFieldError('country')">
+            {{ getFieldError('country') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 6: Locality -->
+      <div class="mb-3">
+        <label for="locality" class="form-label">Localidad *</label>
+        <input
+          type="text"
+          id="locality"
+          formControlName="locality"
+          class="form-control"
+          [class.is-invalid]="getFieldError('locality')"
+          placeholder="Municipio"
+        />
+        <div class="invalid-feedback" *ngIf="getFieldError('locality')">
+          {{ getFieldError('locality') }}
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn-registro" [disabled]="isLoading || registerForm.invalid">
+        <span *ngIf="isLoading">Registrando...</span>
+        <span *ngIf="!isLoading">Crear Cuenta</span>
+      </button>
+    </form>
+
+    <div class="login-link">
+      <p>¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
+    </div>
+  </div>
+</div>

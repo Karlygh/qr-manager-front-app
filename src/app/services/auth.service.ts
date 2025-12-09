@@ -15,6 +15,22 @@ export class AuthService {
   login(credentials: { email: string; password: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, credentials);
   }
+
+  register(userData: {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    secondLastName: string;
+    postalCode: string;
+    address: string;
+    city: string;
+    country: string;
+    locality: string;
+    phone?: string;
+  }): Observable<any> {
+    return this.http.post('http://localhost:8080/api/v1/auth-manager/auth/register', userData);
+  }
   
   logout(): void {
     localStorage.removeItem(this.tokenKey);

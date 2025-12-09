@@ -1,60 +1,66 @@
-<div class="container mt-4">
-    <h2 class="mb-4">Administrar Redes Sociales</h2>
+<div class="container app-social-manager">
+    <h2 class="page-title">Administrar Redes Sociales</h2>
     
-    <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-    <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
-    <div *ngIf="isLoading" class="text-center p-5">
-        <div class="spinner-border text-primary" role="status">
+    <p class="explanation-text">
+        Aquí puedes configurar las redes sociales de tu negocio. Estos enlaces serán visibles para tus clientes en el pie de página y en la sección de contacto. Asegúrate de que las URLs estén completas y activas.
+    </p>
+
+    <div *ngIf="errorMessage" class="app-alert alert-danger">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="app-alert alert-success">{{ successMessage }}</div>
+    
+    <div *ngIf="isLoading" class="text-center loading-state">
+        <div class="spinner-border" role="status">
             <span class="visually-hidden">Cargando...</span>
         </div>
     </div>
 
     <ng-container *ngIf="!isLoading">
-        <div class="card p-3 mb-4 shadow-sm">
+        <div class="card add-network-card">
             <h5 class="card-title">Añadir Nueva Red</h5>
             <form (ngSubmit)="addNetwork()" class="row g-3">
                 <div class="col-md-4">
-                    <input type="text" [(ngModel)]="newNetwork.name" name="name" class="form-control" placeholder="Nombre (ej: Instagram)" required>
+                    <input type="text" [(ngModel)]="newNetwork.name" name="name" class="form-control custom-input" placeholder="Nombre (ej: Instagram)" required>
                 </div>
                 <div class="col-md-6">
-                    <input type="url" [(ngModel)]="newNetwork.url" name="url" class="form-control" placeholder="URL completa (ej: https://...)" required>
+                    <input type="url" [(ngModel)]="newNetwork.url" name="url" class="form-control custom-input" placeholder="URL completa (ej: https://www.ejemplo.com/)" required>
                 </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100" [disabled]="!newNetwork.name || !newNetwork.url">
+                
+                <div class="col-md-2 btn-col-wrapper">
+                    <button type="submit" class="btn btn-primary primary-btn" [disabled]="!newNetwork.name || !newNetwork.url">
                         <i class="bi bi-plus-circle-fill"></i> Añadir
                     </button>
                 </div>
             </form>
         </div>
 
-        <div class="card p-3 shadow-sm">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="card-title mb-0">Redes Configuradas ({{ socialNetworks.length }})</h5>
+        <div class="card network-list-card">
+            <div class="list-header">
+                <h5 class="card-title">Redes Configuradas ({{ socialNetworks.length }})</h5>
                 
-                <button (click)="toggleEditing()" class="btn btn-sm" [ngClass]="{'btn-success': isEditing, 'btn-outline-primary': !isEditing}">
+                <button (click)="toggleEditing()" class="btn btn-edit" [ngClass]="{'btn-save': isEditing, 'btn-modify': !isEditing}">
                     <i class="bi" [ngClass]="{'bi-save': isEditing, 'bi-pencil': !isEditing}"></i> 
                     {{ isEditing ? 'Guardar Cambios' : 'Modificar Lista' }}
                 </button>
             </div>
 
-            <div *ngIf="socialNetworks.length === 0" class="text-muted small">
+            <div *ngIf="socialNetworks.length === 0" class="empty-list-message">
                 Aún no hay redes sociales configuradas para este negocio.
             </div>
 
-            <ul *ngIf="socialNetworks.length > 0" class="list-group list-group-flush">
-                <li *ngFor="let network of socialNetworks" class="list-group-item d-flex align-items-center">
+            <ul *ngIf="socialNetworks.length > 0" class="network-list">
+                <li *ngFor="let network of socialNetworks" class="list-item">
                     
-                    <span class="fw-bold me-3 text-truncate" style="min-width: 100px;">
+                    <span class="network-name-display" style="min-width: 120px;">
                         {{ network.name }}
                     </span>
                     
-                    <input *ngIf="isEditing" type="url" [(ngModel)]="network.url" [ngModelOptions]="{standalone: true}" class="form-control form-control-sm me-3 flex-grow-1">
+                    <input *ngIf="isEditing" type="url" [(ngModel)]="network.url" [ngModelOptions]="{standalone: true}" class="form-control editing-input flex-grow-1">
                     
-                    <a *ngIf="!isEditing" [href]="network.url" target="_blank" class="text-primary text-truncate flex-grow-1 me-3 small">
+                    <a *ngIf="!isEditing" [href]="network.url" target="_blank" class="network-url-display flex-grow-1">
                         {{ network.url }}
                     </a>
 
-                    <button *ngIf="isEditing && network.id" (click)="deleteNetwork(network.id)" class="btn btn-outline-danger btn-sm ms-2" title="Eliminar">
+                    <button *ngIf="isEditing && network.id" (click)="deleteNetwork(network.id)" class="btn delete-btn" title="Eliminar">
                         <i class="bi bi-trash"></i>
                     </button>
                 </li>

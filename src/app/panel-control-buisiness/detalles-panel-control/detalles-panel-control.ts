@@ -6,12 +6,11 @@ import { BusinessService } from '../../services/business.service';
 import { Business } from '../../models/business.model';
 import { KitchenScheduleService, KitchenHour } from '../../services/kitchen-schedule.service';
 import { OpeningScheduleService, OpeningHour } from '../../services/opening-schedule.service';
-import { EditarRedesComponent } from '../../editar-redes/editar-redes';
 
 @Component({
   selector: 'app-detalles-panel-control',
   standalone: true,
-  imports: [RouterModule, CommonModule, FormsModule, RouterLink,EditarRedesComponent],
+  imports: [RouterModule, CommonModule, FormsModule, RouterLink,],
   templateUrl: './detalles-panel-control.html',
   styleUrl: './detalles-panel-control.css'
 })

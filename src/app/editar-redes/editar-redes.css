@@ -1,0 +1,188 @@
+.btn-col-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center; 
+}
+.primary-btn {
+    width: auto ; 
+}
+
+
+.page-title {
+    color: var(--text-dark);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--add-btn-color);
+}
+.explanation-text {
+    color: var(--text-muted);
+    background-color: #fffde7;
+    border-left: 5px solid #ffeb3b; 
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0.25rem;
+    line-height: 1.5;
+}
+
+.app-alert {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+}
+.alert-danger {
+    color: #c62828;
+    background-color: #ffcdd2;
+    border-color: #e57373;
+}
+.alert-success {
+    color: #388e3c;
+    background-color: #c8e6c9;
+    border-color: #81c784;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-subtle);
+}
+.card-title {
+    color: var(--text-dark);
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.custom-input, .editing-input {
+    border: 1px solid #ced4da;
+    border-radius: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    transition: border-color 0.2s;
+}
+.custom-input:focus, .editing-input:focus {
+    border-color: var(--add-btn-color);
+    box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
+}
+
+.btn {
+    font-weight: 600;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+.btn:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+.btn:disabled {
+    opacity: 0.6;
+    transform: none;
+    box-shadow: none;
+}
+
+/* 1. BOTÓN AÑADIR (primary-btn) - Estilo Verde Empresarial Sólido */
+.primary-btn {
+    background-color: var(--add-btn-color);
+    border: 1px solid var(--add-btn-color);
+    color: #fff;
+}
+.primary-btn:hover:not(:disabled) {
+    background-color: #1b5e20;
+    border-color: #1b5e20;
+}
+
+/* 2. BOTONES MODIFICAR/GUARDAR (btn-modify, btn-save) */
+
+/* Estilo por defecto: Modificar Lista (Púrpura 'Ghost' / Outline) */
+.btn-modify {
+    background-color: transparent;
+    border: 2px solid var(--modify-btn-color);
+    color: var(--modify-btn-color);
+}
+.btn-modify:hover {
+    background-color: var(--modify-btn-color);
+    border-color: var(--modify-btn-color);
+    color: #fff;
+}
+
+/* Estilo de Edición: Guardar Cambios (Verde Sólido) */
+.btn-save {
+    background-color: var(--save-btn-color);
+    border: 1px solid var(--save-btn-color);
+    color: #fff;
+}
+.btn-save:hover {
+    background-color: #388e3c;
+    border-color: #388e3c;
+}
+
+/* 3. Botón de Eliminar (Peligro) */
+.delete-btn {
+    background-color: var(--danger-color);
+    border: 1px solid var(--danger-color);
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+    color: #fff;
+}
+.delete-btn:hover {
+    background-color: #b71c1c;
+    border-color: #b71c1c;
+}
+
+/* --- Lista de Redes --- */
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+.network-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.list-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+.list-item:last-child {
+    border-bottom: none;
+}
+
+.network-name-display {
+    font-weight: 700;
+    color: var(--text-dark);
+    flex-shrink: 0;
+}
+.network-url-display {
+    color: var(--accent-color);
+    text-decoration: none;
+    padding: 0 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.network-url-display:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+.empty-list-message {
+    color: var(--text-muted);
+    padding: 1rem 0;
+    text-align: center;
+    font-style: italic;
+}
+
+.spinner-border {
+    color: var(--add-btn-color) ;
+}
