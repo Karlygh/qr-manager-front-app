@@ -18,6 +18,7 @@ import { EditarHorario } from './editar-horario/editar-horario';
 import { EditarCamposHorarioApertura } from './editar-horario/editar-campos-horario-apertura/editar-campos-horario-apertura';
 import { EditarMenu } from './editar-menu/editar-menu';
 import { EditarRedesComponent } from './editar-redes/editar-redes';
+import { CrearProducto } from './crear-producto/crear-producto';
 
 
 export const routes: Routes = [
@@ -39,6 +40,7 @@ export const routes: Routes = [
   { path: 'editar-campos-horario-apertura', component: EditarCamposHorarioApertura},
   { path: 'editar-menu', component: EditarMenu},
   { path: 'panel/:businessId/editar-redes', component:EditarRedesComponent},
+  { path: 'crear-producto',component:CrearProducto },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: error404PageComponent }
 ];

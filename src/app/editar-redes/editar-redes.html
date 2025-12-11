@@ -16,7 +16,7 @@
 
     <ng-container *ngIf="!isLoading">
         <div class="card add-network-card">
-            <h5 class="card-title">Añadir Nueva Red</h5>
+            <h5 class="card-title text-white">Añadir Nueva Red</h5>
             <form (ngSubmit)="addNetwork()" class="row g-3">
                 <div class="col-md-4">
                     <input type="text" [(ngModel)]="newNetwork.name" name="name" class="form-control custom-input" placeholder="Nombre (ej: Instagram)" required>
@@ -35,7 +35,7 @@
 
         <div class="card network-list-card">
             <div class="list-header">
-                <h5 class="card-title">Redes Configuradas ({{ socialNetworks.length }})</h5>
+                <h5 class="card-title text-white">Redes Configuradas ({{ socialNetworks.length }})</h5>
                 
                 <div class="header-buttons">
                     <button *ngIf="isEditing" 

@@ -1,0 +1,96 @@
+<div class="stepper-container">
+  <!-- Progress Bar -->
+  <div class="progress-bar">
+    <div class="step" [class.active]="currentStep >= 1" [class.completed]="currentStep > 1">1</div>
+    <div class="line" [class.completed]="currentStep > 1"></div>
+    <div class="step" [class.active]="currentStep >= 2" [class.completed]="currentStep > 2">2</div>
+    <div class="line" [class.completed]="currentStep > 2"></div>
+    <div class="step" [class.active]="currentStep >= 3" [class.completed]="currentStep > 3">3</div>
+    <div class="line" [class.completed]="currentStep > 3"></div>
+    <div class="step" [class.active]="currentStep >= 4">4</div>
+  </div>
+
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    
+    <!-- Step 1: Welcome Question -->
+    <div *ngIf="currentStep === 1" class="step-content">
+      <div class="welcome-card">
+        <div class="icon">🍽️</div>
+        <h2>¿Quieres crear un producto para tu carta?</h2>
+        <p>Te ayudaremos a agregar un nuevo producto a tu menú de forma sencilla y rápida.</p>
+        <button type="button" class="btn-primary" (click)="nextStep()">¡Sí, empezar!</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Category Selection -->
+    <div *ngIf="currentStep === 2" class="step-content">
+      <h2>Selecciona una Categoría</h2>
+      <p class="step-description">Elige la categoría que mejor describa tu producto</p>
+      <div class="category-grid">
+        <div 
+          *ngFor="let category of categories" 
+          class="category-card"
+          [class.selected]="productForm.get('categoryId')?.value == category.id"
+          (click)="productForm.patchValue({categoryId: category.id})">
+          <div class="category-icon">📂</div>
+          <h3>{{category.name}}</h3>
+        </div>
+      </div>
+      <div class="button-group">
+        <button type="button" class="btn-secondary" (click)="prevStep()">Anterior</button>
+        <button type="button" class="btn-primary" [disabled]="!canProceed()" (click)="nextStep()">Siguiente</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Product Details -->
+    <div *ngIf="currentStep === 3" class="step-content">
+      <h2>Detalles del Producto</h2>
+      <p class="step-description">Completa la información básica de tu producto</p>
+      <div class="form-group">
+        <label>Nombre del producto</label>
+        <input formControlName="name" placeholder="Ej: Pizza Margherita">
+      </div>
+      <div class="form-group">
+        <label>Descripción</label>
+        <textarea formControlName="description" placeholder="Describe los ingredientes y características del producto"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Precio (€)</label>
+        <input type="number" formControlName="price" placeholder="0.00" step="0.01">
+      </div>
+      <div class="button-group">
+        <button type="button" class="btn-secondary" (click)="prevStep()">Anterior</button>
+        <button type="button" class="btn-primary" (click)="nextStep()">Siguiente</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Image Upload -->
+    <div *ngIf="currentStep === 4" class="step-content">
+      <h2>Imagen del Producto</h2>
+      <p class="step-description">Agrega una imagen atractiva de tu producto</p>
+      <div class="upload-area" [class.has-image]="selectedImage">
+        <div *ngIf="!selectedImage" class="upload-placeholder">
+          <div class="upload-icon">📷</div>
+          <p>Haz clic para seleccionar una imagen</p>
+          <small>JPG, PNG o GIF (máx. 5MB)</small>
+        </div>
+        <div *ngIf="selectedImage" class="image-preview">
+          <p>✅ Imagen seleccionada: {{selectedImage.name}}</p>
+        </div>
+        <input type="file" (change)="onImageSelected($event)" accept="image/*">
+      </div>
+      <div class="button-group">
+        <button type="button" class="btn-secondary" (click)="prevStep()" *ngIf="!isLoading && !productCreated">Anterior</button>
+        <button type="submit" class="btn-success" [disabled]="!productForm.valid || isLoading" *ngIf="!productCreated">
+          {{isLoading ? 'Creando...' : 'Crear Producto'}}
+        </button>
+        <div *ngIf="productCreated" class="success-message">
+          <p>✅ Has integrado un nuevo producto a tu carta</p>
+          <button type="button" class="btn-primary" (click)="createNewProduct()">Crear Nuevo Producto</button>
+          <button type="button" class="btn-secondary" (click)="goToDashboard()">Volver a Panel de Control</button>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
