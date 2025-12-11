@@ -46,18 +46,23 @@
 }
 
 .registration-link {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(18, 79, 9, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.5);
     padding: 5px 15px;
     transition: background-color 0.3s;
+    color:#388E3C;
+        padding: 5px;
+
+
 }
 
 .registration-link:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color:#388E3C;
 }
 
 .registration-link a {
-    color: #ffffff !important;
+    color: #d2ffd2 ;
+    padding: 5px;
 }
 
 .benefits-list h5 {

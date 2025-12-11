@@ -8,6 +8,7 @@ export interface ProductRequest {
   image?: File;
   description?: string;
   label?: string;
+  status?: boolean;
   categoryId?: number;
   subcategoryId?: number;
   allergenIds?: number[];

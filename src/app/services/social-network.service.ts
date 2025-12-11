@@ -15,7 +15,7 @@ export interface SocialNetwork {
 })
 export class SocialNetworkService {
   // Asegúrate de que esta URL base sea correcta
-  private apiUrl = '/api/v1/social-network'; 
+  private apiUrl = 'http://91.107.235.58:8081/api/v1/social-network'; 
 
   constructor(private http: HttpClient) { }
 

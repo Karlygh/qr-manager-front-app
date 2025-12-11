@@ -1,0 +1,268 @@
+openapi: 3.0.3
+info:
+  title: Media Manager API
+  description: API for managing images and sending emails for restaurant QR menu businesses.
+  contact:
+    email: soporte@cleancodercadiz.com
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8083/api/v1
+    description: Local development server
+
+tags:
+  - name: Image
+    description: Endpoints for image management
+  - name: Email
+    description: Endpoints for sending automatic response emails
+
+paths:
+  /email/contact:
+    post:
+      tags:
+        - Email
+      summary: Send an automatic contact response email
+      description: Sends a contact email from a restaurant owner or interested business to the platform administrator with an automatic response email.
+      operationId: sendContactEmail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactRequest'
+      responses:
+        '200':
+          description: Email sent successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailResponse'
+        '400':
+          description: Invalid input.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Email could not be sent.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /email/support:
+    post:
+      tags:
+        - Email
+      summary: Send an automatic support response email
+      description: Sends a support request email from a restaurant owner or interested business to the platform administrator with an automatic response email.
+      operationId: sendSupportEmail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupportRequest'
+      responses:
+        '200':
+          description: Support email sent successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailResponse'
+        '400':
+          description: Invalid input.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Email could not be sent.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /image:
+    post:
+      tags:
+        - Image
+      summary: Save an image file
+      description: Receives an image file and stores it in the image service.
+      operationId: saveImage
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ImageRequest'
+      responses:
+        '200':
+          description: Image saved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageResponse'
+        '400':
+          description: Invalid image data or missing file.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error while saving the image.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - Image
+      summary: Delete an image by its URL
+      description: Deletes a previously uploaded image using its public URL.
+      operationId: deleteImageByUrl
+      parameters:
+        - name: imageUrl
+          in: query
+          required: true
+          schema:
+            type: string
+            format: string
+          description: The public URL of the image to delete.
+      responses:
+        '204':
+          description: Image deleted successfully.
+        '400':
+          description: Invalid or missing image URL.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Image not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error while deleting the image.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    ImageRequest:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+          description: Image file to upload.
+      required:
+        - file
+
+    ImageResponse:
+      type: object
+      properties:
+        imageUrl:
+          type: string
+          example: "https://cdn.myapp.com/images/a8c4d21e-9e84-4f9f-937b-993cd1a6f5bb.png"
+
+    DeleteImageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Image deleted successfully.
+
+    ContactRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the restaurant owner or contact person.
+          example: Maria Lopez
+        businessName:
+          type: string
+          description: Name of the restaurant or business.
+          example: La Cocina de Maria
+        email:
+          type: string
+          format: email
+          description: Contact email address.
+          example: maria@lacocina.com
+        phoneNumber:
+          type: string
+          description: Contact phone number.
+          example: "+34 611 222 333"
+        message:
+          type: string
+          description: Message or inquiry content.
+          example: I’d like to know more about your QR menu plans.
+      required:
+        - name
+        - businessName
+        - email
+        - message
+
+    SupportRequest:
+      type: object
+      properties:
+        businessId:
+          type: string
+          description: Unique identifier of the restaurant or account.
+          example: 123e4567-e89b-12d3-a456-426614174000
+        email:
+          type: string
+          format: email
+          description: Contact email for support follow-up.
+          example: support@lacocina.com
+        issueType:
+          type: string
+          description: Type of support issue.
+          enum: [TECHNICAL, BILLING, OTHER]
+          example: TECHNICAL
+        message:
+          type: string
+          description: Description of the problem or question.
+          example: Our QR menu is not loading correctly when scanned.
+      required:
+        - email
+        - issueType
+        - message
+
+    EmailResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Email sent successfully.
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code indicating the error type.
+        message:
+          type: string
+          example: Email could not be sent due to server error.
+        details:
+          type: string
+          example: SMTP connection failed or credentials invalid.

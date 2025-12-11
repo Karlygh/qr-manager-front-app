@@ -1,0 +1,250 @@
+<div class="container-stepper">
+  <div class="header-stepper">
+    <h2>Crear Nuevo Producto</h2>
+
+    <div class="modal-overlay" *ngIf="showCategoryManagement" (click)="onBackdropClick($event)">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="categoryModalTitle">
+        <div class="modal-header">
+          <h3 id="categoryModalTitle">Gestión de Categorías</h3>
+          <button type="button" class="modal-close" (click)="closeCategoryModal()" aria-label="Cerrar">×</button>
+        </div>
+
+        <div class="modal-body">
+          <div *ngIf="isLoadingCategories" class="hint">Cargando categorías...</div>
+          
+          <!-- Mensajes específicos del modal -->
+          <div *ngIf="categorySuccessMessage" class="success-message">{{ categorySuccessMessage }}</div>
+          <div *ngIf="categoryErrorMessage" class="error-message">{{ categoryErrorMessage }}</div>
+          
+          <!-- Mensaje general solo si no hay mensajes específicos del modal -->
+          <div *ngIf="errorMessage && !isLoadingCategories && !categoryErrorMessage" class="error">{{ errorMessage }}</div>
+
+          <div class="categories-list">
+            <div class="category-item" *ngFor="let category of categories">
+              <div>
+                <span>{{ category.name }}</span>
+                <small class="hint" *ngIf="category.subCategories && category.subCategories.length > 0">
+                  ({{ category.subCategories.length }} subcategorías)
+                </small>
+              </div>
+              <div class="category-actions">
+                <button type="button" class="btn-edit" (click)="manageSubcategories(category)">Subcategorías</button>
+                <button type="button" class="btn-edit" (click)="editCategory(category)">Editar</button>
+                <button type="button" class="btn-delete" [disabled]="isDeletingCategoryId === category.id" (click)="deleteCategory(category.id)">
+                  {{ isDeletingCategoryId === category.id ? 'Eliminando...' : 'Eliminar' }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn-category" (click)="createNewCategory()" *ngIf="!isEditingCategory && !isCreatingCategory">Nueva Categoría</button>
+
+          <div class="category-form" *ngIf="isEditingCategory || isCreatingCategory">
+            <h4>{{ isEditingCategory ? 'Editar Categoría' : 'Crear Nueva Categoría' }}</h4>
+            <form [formGroup]="categoryForm" (ngSubmit)="onCategorySubmit()">
+              <div class="form-group">
+                <label for="categoryName">Nombre de la Categoría:</label>
+                <input type="text" id="categoryName" formControlName="name" class="form-control" placeholder="Ej: Bebidas">
+                <div *ngIf="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched" class="error">
+                  Nombre es requerido y no puede exceder 50 caracteres.
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="categoryImage">Imagen de la Categoría:</label>
+                <input type="file" id="categoryImage" (change)="onCategoryFileChange($event)" accept="image/*" class="form-control input-file">
+                <div *ngIf="categoryForm.get('image')?.invalid && categoryForm.get('image')?.touched" class="error">
+                  Imagen es requerida.
+                </div>
+              </div>
+
+              <div class="modal-actions">
+                <button type="button" class="btn-prev" (click)="cancelCategoryEdit()">Cancelar</button>
+                <button type="submit" [disabled]="categoryForm.invalid || isSubmittingCategory" class="btn-submit">
+                  {{ isSubmittingCategory ? 'Guardando...' : 'Guardar Cambios' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Gestión de Subcategorías -->
+    <div class="modal-overlay" *ngIf="isManagingSubcategories" (click)="onBackdropClick($event)">
+      <div class="modal" role="dialog" aria-modal="true">
+        <div class="modal-header">
+          <h3>Subcategorías de: {{ selectedCategoryForSubcategories?.name }}</h3>
+          <button type="button" class="modal-close" (click)="closeSubcategoryManagement()">×</button>
+        </div>
+
+        <div class="modal-body">
+          <div *ngIf="categorySuccessMessage" class="success-message">{{ categorySuccessMessage }}</div>
+          <div *ngIf="categoryErrorMessage" class="error-message">{{ categoryErrorMessage }}</div>
+
+          <div class="categories-list">
+            <div class="category-item" *ngFor="let subcategory of selectedCategoryForSubcategories?.subCategories">
+              <span>{{ subcategory.name }}</span>
+              <div class="category-actions">
+                <button type="button" class="btn-edit" (click)="editSubcategory(subcategory)">Editar</button>
+                <button type="button" class="btn-delete" [disabled]="isDeletingSubcategoryId === subcategory.id" (click)="deleteSubcategory(subcategory.id)">
+                  {{ isDeletingSubcategoryId === subcategory.id ? 'Eliminando...' : 'Eliminar' }}
+                </button>
+              </div>
+            </div>
+            <div *ngIf="selectedCategoryForSubcategories?.subCategories?.length === 0" class="hint">
+              No hay subcategorías en esta categoría.
+            </div>
+          </div>
+
+          <button type="button" class="btn-category" (click)="createNewSubcategory()">
+            Nueva Subcategoría
+          </button>
+
+          <div class="category-form" *ngIf="isEditingSubcategory || isCreatingSubcategory">
+            <h4>{{ isEditingSubcategory ? 'Editar Subcategoría' : 'Crear Nueva Subcategoría' }}</h4>
+            <form [formGroup]="subcategoryForm" (ngSubmit)="onSubcategorySubmit()">
+              <div class="form-group">
+                <label for="subcategoryName">Nombre de la Subcategoría:</label>
+                <input type="text" id="subcategoryName" formControlName="name" class="form-control" placeholder="Ej: Bebidas Frías">
+                <div *ngIf="subcategoryForm.get('name')?.invalid && subcategoryForm.get('name')?.touched" class="error">
+                  Nombre es requerido y no puede exceder 50 caracteres.
+                </div>
+              </div>
+
+              <div class="modal-actions">
+                <button type="button" class="btn-prev" (click)="cancelSubcategoryEdit()">Cancelar</button>
+                <button type="submit" [disabled]="subcategoryForm.invalid" class="btn-submit">
+                  {{ isEditingSubcategory ? 'Actualizar' : 'Crear' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-bar" *ngIf="!showCategoryManagement">
+      <div class="progress-fill" [style.width.%]="(currentStep / totalSteps) * 100"></div>
+    </div>
+    <p class="step-counter" *ngIf="!showCategoryManagement">Paso {{ currentStep }} de {{ totalSteps }}: **{{ stepTitle }}**</p>
+
+    <button type="button" class="btn-category" (click)="toggleCategoryManagement()">Gestionar Categorías</button>
+  </div>
+
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form-stepper">
+
+    <div class="step-card" *ngIf="currentStep === 1">
+      <div class="form-group">
+        <label for="categoryId">Categoría:</label>
+        <select id="categoryId" formControlName="categoryId" class="form-control">
+          <option [ngValue]="null" disabled>Seleccione una categoría</option>
+          <option *ngFor="let category of categories" [ngValue]="category.id">
+            {{ category.name }}
+          </option>
+        </select>
+        <div *ngIf="productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched" class="error">
+          La categoría es requerida.
+        </div>
+        <div *ngIf="categories.length === 0 && !errorMessage" class="error">
+          Cargando categorías...
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="subcategoryId">Subcategoría:</label>
+        <select id="subcategoryId" formControlName="subcategoryId" class="form-control">
+          <option [ngValue]="null" disabled>
+            {{ productForm.get('categoryId')?.value ? (availableSubCategories.length > 0 ? 'Seleccione una subcategoría...' : 'No hay subcategorías para esta categoría.') : 'Seleccione una Categoría primero' }}
+          </option>
+          <option *ngFor="let subcategory of availableSubCategories" [ngValue]="subcategory.id">
+            {{ subcategory.name }}
+          </option>
+        </select>
+        <div *ngIf="productForm.get('subcategoryId')?.invalid && productForm.get('subcategoryId')?.touched" class="error">
+          La subcategoría es requerida.
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="description">Descripción (Opcional):</label>
+        <textarea id="description" formControlName="description" rows="3" class="form-control" placeholder="Describa brevemente el producto (máx. 500 caracteres)."></textarea>
+        <div *ngIf="productForm.get('description')?.invalid && productForm.get('description')?.touched" class="error">
+          Descripción no puede exceder 500 caracteres.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="label">Etiqueta (Opcional):</label>
+        <input type="text" id="label" formControlName="label" class="form-control" placeholder="Ej: Nuevo / Vegano / Promoción (Opcional)">
+        <div *ngIf="productForm.get('label')?.invalid && productForm.get('label')?.touched" class="error">
+          Etiqueta no puede exceder 30 caracteres.
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card" *ngIf="currentStep === 2">
+      <div class="form-group">
+        <label for="name">Nombre del Producto:</label>
+        <input type="text" id="name" formControlName="name" class="form-control" placeholder="Ej: Hamburguesa Clásica / Café Latte">
+        <div *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched" class="error">
+          Nombre es requerido y no puede exceder 100 caracteres.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="price">Precio:</label>
+        <input type="number" id="price" formControlName="price" step="0.01" class="form-control" placeholder="Ej: 8.99">
+        <div *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched" class="error">
+          Precio es requerido y debe ser mayor o igual a 0.
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" formControlName="status">
+          Producto disponible
+        </label>
+      </div>
+    </div>
+
+    <div class="step-card" *ngIf="currentStep === 3">
+      <div class="form-group">
+        <label for="image">Imagen del Producto:</label>
+        <input type="file" id="image" (change)="onFileChange($event)" accept="image/*" class="form-control input-file">
+        <div *ngIf="productForm.get('image')?.invalid && productForm.get('image')?.touched" class="error">
+          Imagen es requerida.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="allergenIds">IDs de Alérgenos (Opcional):</label>
+        <input type="text" id="allergenIds" formControlName="allergenIds" class="form-control" placeholder="Ej: 1,2,3 (IDs de alérgenos separados por coma)">
+        <small class="hint">Los IDs de alérgenos deben coincidir con los registrados en el sistema.</small>
+      </div>
+    </div>
+
+    <div class="navigation-controls">
+      <button type="button" class="btn-prev" (click)="prevStep()" *ngIf="currentStep > 1">
+        ← Anterior
+      </button>
+
+      <button type="button" class="btn-next" (click)="nextStep()" 
+              [disabled]="!isCurrentStepValid()" *ngIf="currentStep < totalSteps">
+        Siguiente →
+      </button>
+
+      <button type="submit" [disabled]="isSubmitting || productForm.invalid" class="btn-submit" *ngIf="currentStep === totalSteps">
+        {{ isSubmitting ? 'Creando...' : 'Crear Producto' }}
+      </button>
+    </div>
+  </form>
+
+  <div *ngIf="successMessage" class="success-message">
+    {{ successMessage }}
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+</div>

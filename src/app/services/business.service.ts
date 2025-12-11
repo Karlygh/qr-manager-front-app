@@ -55,10 +55,6 @@ export class BusinessService {
   }
 
   deleteWifi(businessId: string, wifiId: number): Observable<any> {
-    // BUG DEL BACKEND: El endpoint DELETE devuelve 400 en lugar de 204
-    // El backend no puede encontrar el WiFi por businessId cuando intenta eliminarlo
-    // Documentación esperada: 204 (éxito) o 500 (error)
-    // Comportamiento actual: 400 "Error, no wifi could be retrieved by businessId"
     const url = `http://91.107.235.58:8081/api/v1/business/${businessId}/wifi/${wifiId}`;
     console.log('DELETE WiFi URL:', url);
     console.log('DELETE WiFi params:', { businessId, wifiId });
