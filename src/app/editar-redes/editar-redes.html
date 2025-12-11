@@ -37,10 +37,20 @@
             <div class="list-header">
                 <h5 class="card-title">Redes Configuradas ({{ socialNetworks.length }})</h5>
                 
-                <button (click)="toggleEditing()" class="btn btn-edit" [ngClass]="{'btn-save': isEditing, 'btn-modify': !isEditing}">
-                    <i class="bi" [ngClass]="{'bi-save': isEditing, 'bi-pencil': !isEditing}"></i> 
-                    {{ isEditing ? 'Guardar Cambios' : 'Modificar Lista' }}
-                </button>
+                <div class="header-buttons">
+                    <button *ngIf="isEditing" 
+                            (click)="cancelEditing()" 
+                            class="btn btn-cancel me-2">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </button>
+                    
+                    <button (click)="toggleEditing()" 
+                            class="btn btn-edit" 
+                            [ngClass]="{'btn-save': isEditing, 'btn-modify': !isEditing}">
+                        <i class="bi" [ngClass]="{'bi-save': isEditing, 'bi-pencil': !isEditing}"></i> 
+                        {{ isEditing ? 'Guardar Cambios' : 'Modificar Lista' }}
+                    </button>
+                </div>
             </div>
 
             <div *ngIf="socialNetworks.length === 0" class="empty-list-message">
@@ -48,23 +58,53 @@
             </div>
 
             <ul *ngIf="socialNetworks.length > 0" class="network-list">
-                <li *ngFor="let network of socialNetworks" class="list-item">
+                <li *ngFor="let network of socialNetworks" 
+                    class="list-item"
+                    [ngClass]="{'marked-for-deletion': isMarkedForDeletion(network.id)}">
                     
                     <span class="network-name-display" style="min-width: 120px;">
                         {{ network.name }}
                     </span>
                     
-                    <input *ngIf="isEditing" type="url" [(ngModel)]="network.url" [ngModelOptions]="{standalone: true}" class="form-control editing-input flex-grow-1">
+                    <input *ngIf="isEditing && !isMarkedForDeletion(network.id)" 
+                           type="url" 
+                           [(ngModel)]="network.url" 
+                           [ngModelOptions]="{standalone: true}" 
+                           class="form-control editing-input flex-grow-1">
                     
-                    <a *ngIf="!isEditing" [href]="network.url" target="_blank" class="network-url-display flex-grow-1">
+                    <span *ngIf="isEditing && isMarkedForDeletion(network.id)"
+                          class="deleted-url-display flex-grow-1">
+                        {{ network.url }} <span class="deletion-badge">(Se eliminará)</span>
+                    </span>
+                    
+                    <a *ngIf="!isEditing" 
+                       [href]="network.url" 
+                       target="_blank" 
+                       class="network-url-display flex-grow-1">
                         {{ network.url }}
                     </a>
 
-                    <button *ngIf="isEditing && network.id" (click)="deleteNetwork(network.id)" class="btn delete-btn" title="Eliminar">
-                        <i class="bi bi-trash"></i>
+                    <button *ngIf="isEditing && network.id && !isMarkedForDeletion(network.id)" 
+                            (click)="markForDeletion(network.id)" 
+                            class="btn delete-btn" 
+                            title="Marcar para eliminar">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </button>
+
+                    <button *ngIf="isEditing && network.id && isMarkedForDeletion(network.id)" 
+                            (click)="cancelDeletion(network.id)" 
+                            class="btn undo-btn" 
+                            title="Cancelar eliminación">
+                        <i class="bi bi-arrow-counterclockwise"></i> Deshacer
                     </button>
                 </li>
             </ul>
+        </div>
+        
+        <div class="text-center">
+            <a [routerLink]="['/panel-control-buisiness', businessId]" class="btn btn-secondary back-btn">
+                <i class="bi bi-arrow-left-circle"></i> Volver al Panel de Control
+            </a>
         </div>
     </ng-container>
 </div>
