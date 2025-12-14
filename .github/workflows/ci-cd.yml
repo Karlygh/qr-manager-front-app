@@ -28,6 +28,7 @@ jobs:
 
       - name: Build & Push imagen Docker
         run: |
-          IMAGE_NAME=$(echo "ghcr.io/${{ github.repository }}/qr-front-app:latest" | tr '[:upper:]' '[:lower:]')
+          IMAGE_NAME=ghcr.io/clean-coders-cadiz/qr-front-app:latest
+          echo "Building image: $IMAGE_NAME"
           docker build -t $IMAGE_NAME .
           docker push $IMAGE_NAME
