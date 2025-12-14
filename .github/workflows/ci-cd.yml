@@ -1,0 +1,33 @@
+name: CI/CD Angular
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Instalar dependencias y build
+        run: |
+          npm ci
+          npm run build --prod
+
+      - name: Login GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build & Push imagen Docker
+        run: |
+          IMAGE_NAME=$(echo "ghcr.io/${{ github.repository }}/qr-front-app:latest" | tr '[:upper:]' '[:lower:]')
+          docker build -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
