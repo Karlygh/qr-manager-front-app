@@ -7,7 +7,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d/
 
 # Copiamos SOLO el browser
-COPY dist/qr-manager-front/browser/ /usr/share/nginx/html/
+COPY dist/qr-manager-front-app/browser/ /usr/share/nginx/html/
 
 # Renombrar index.csr.html a index.html
 RUN mv /usr/share/nginx/html/index.csr.html /usr/share/nginx/html/index.html
