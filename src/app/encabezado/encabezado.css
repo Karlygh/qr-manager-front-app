@@ -182,6 +182,10 @@
         height: 500px;
         margin-top: 50px;
     }
+    a{
+        display: flex;
+        justify-content: center;
+    }
 }
 @media (min-width: 1200px) {
   .hero-section {

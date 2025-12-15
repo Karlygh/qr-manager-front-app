@@ -1,9 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-light shadow-sm py-3 sticky-top custom-navbar">
   <div class="container-fluid d-flex justify-content-between align-items-center">
     
-    <a class="navbar-brand d-flex align-items-center fw-bold fs-4 rounded" routerLink="/home">
-    <img src="../../../assets/mockup/QR-Managerverdeconfondo.png" alt="Logo" class="me-2 rounded">    <span class="brand-text d-none d-sm-inline-block">QR-Manager</span>
-</a>
+    <a class="navbar-brand d-flex align-items-center fw-bold fs-4 rounded" routerLink="/home" (click)="closeMenu()">
+      <img src="../../../assets/mockup/QR-Managerverdeconfondo.png" alt="Logo" class="me-2 rounded">
+      <span class="brand-text d-none d-sm-inline-block">QR-Manager</span>
+    </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,26 +14,27 @@
     <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item mx-2">
-          <a class="nav-link" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a>
+          <a class="nav-link" routerLink="/home" routerLinkActive="active" 
+             [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Inicio</a>
         </li>
         <li class="nav-item mx-2">
-          <a class="nav-link" routerLink="/carta-digital" routerLinkActive="active">Carta Digital</a>
+          <a class="nav-link" routerLink="/carta-digital" routerLinkActive="active" (click)="closeMenu()">Carta Digital</a>
         </li>
         <li class="nav-item mx-2">
-          <a class="nav-link" routerLink="/tu-restaurante" routerLinkActive="active">Tu Restaurante</a>
+          <a class="nav-link" routerLink="/tu-restaurante" routerLinkActive="active" (click)="closeMenu()">Tu Restaurante</a>
         </li>
         <li class="nav-item mx-2">
-          <a class="nav-link" routerLink="/precios" routerLinkActive="active">Precios</a>
+          <a class="nav-link" routerLink="/precios" routerLinkActive="active" (click)="closeMenu()">Precios</a>
         </li>
         <li class="nav-item mx-2">
-          <a class="nav-link" routerLink="/contacto" routerLinkActive="active">Contacto</a>
+          <a class="nav-link" routerLink="/contacto" routerLinkActive="active" (click)="closeMenu()">Contacto</a>
         </li>
       </ul>
 
-    <div class="d-flex justify-content-center justify-content-lg-start ms-lg-3 mt-3 mt-lg-0">
-  <a routerLink="/crear-negocio" class="btn btn-primary px-4 rounded-pill me-2">Comienza gratis</a>
-  <a routerLink="/login" class="custom-button">Iniciar sesión</a>
-</div>
+      <div class="d-flex justify-content-center justify-content-lg-start ms-lg-3 mt-3 mt-lg-0">
+        <a routerLink="/crear-negocio" class="btn btn-primary px-4 rounded-pill me-2" (click)="closeMenu()">Comienza gratis</a>
+        <a routerLink="/login" class="custom-button" (click)="closeMenu()">Iniciar sesión</a>
+      </div>
 
     </div>
   </div>
