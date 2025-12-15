@@ -1,8 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 // 👈 IMPORTA TU NAVBAR AQUI (Ejemplo de ruta)
 import { NavbarComponent } from './shared/components/navbar/navbar.component'; 
 import { FooterComponent } from './shared/components/footer/footer.component';
+import { CommonModule } from '@angular/common';
+import { LayoutService } from './services/layout.service';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +12,7 @@ import { FooterComponent } from './shared/components/footer/footer.component';
   standalone: true, 
   imports: [
     RouterOutlet,
+    CommonModule,
   
     NavbarComponent,
     FooterComponent,
@@ -19,5 +22,8 @@ import { FooterComponent } from './shared/components/footer/footer.component';
 })
 // 🔑 CLAVE: La clase se llama App
 export class App {
-  protected readonly title = signal('qr-manager-front');
+  protected readonly title = signal('qr-manager-front');
+  
+  // 👇 NUEVO: Inyectar el servicio (protected para usarlo en el template)
+  protected readonly layoutService = inject(LayoutService);
 }

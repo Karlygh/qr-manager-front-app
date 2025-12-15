@@ -1,0 +1,583 @@
+<div class="stepper-container">
+  <!-- Notificación global -->
+  <div *ngIf="notificationMessage" 
+       class="global-notification"
+       [ngClass]="'notification-' + notificationMessage.type">
+    <span class="notification-icon">
+      <ng-container [ngSwitch]="notificationMessage.type">
+        <span *ngSwitchCase="'success'">✅</span>
+        <span *ngSwitchCase="'error'">❌</span>
+        <span *ngSwitchCase="'warning'">⚠️</span>
+        <span *ngSwitchCase="'info'">ℹ️</span>
+      </ng-container>
+    </span>
+    <span class="notification-text">{{ notificationMessage.text }}</span>
+  </div>
+
+  <!-- Error de API -->
+  <div *ngIf="hasApiError" class="api-error-banner">
+    <div class="error-icon">🔌</div>
+    <div class="error-content">
+      <h3>Error de conexión</h3>
+      <p>No se pudo conectar con el servidor. Verifica tu conexión e intenta nuevamente.</p>
+      <button type="button" class="btn-retry" (click)="loadInitialData()">
+        🔄 Reintentar
+      </button>
+    </div>
+  </div>
+
+  <div class="stepper-layout">
+    <!-- Main Content -->
+    <div class="main-content">
+      <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    
+        <!-- Step 1: Welcome -->
+        <div *ngIf="currentStep === 1" class="step-content">
+          <div class="welcome-card">
+            <div class="icon">🍽️</div>
+            <h2>¿Quieres crear un producto para tu carta?</h2>
+            <p>Te ayudaremos a agregar un nuevo producto a tu menú de forma sencilla y rápida.</p>
+            <button type="button" 
+                    class="btn-primary" 
+                    (click)="nextStep()"
+                    [disabled]="hasApiError">
+              ¡Sí, empezar!
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Category Management - NUEVA IMPLEMENTACIÓN CON CRUD -->
+        <div *ngIf="currentStep === 2" class="step-content">
+          
+          <!-- Header -->
+          <div class="step3-header">
+            <div class="header-icon">📂</div>
+            <h2>Gestiona tus Categorías</h2>
+            <p class="header-description">
+              Las categorías te ayudan a organizar tu menú de forma clara y profesional.<br>
+              <strong>Por ejemplo:</strong> "Entrantes", "Platos Principales", "Postres", "Bebidas".<br>
+              <em>Selecciona una categoría existente o crea una nueva.</em>
+            </p>
+          </div>
+
+          <!-- Notificación -->
+          <div *ngIf="categoryNotification" class="step3-notification" [ngClass]="'notif-' + categoryNotification.type">
+            <span class="notif-icon">{{ categoryNotification.icon }}</span>
+            <span class="notif-text">{{ categoryNotification.message }}</span>
+          </div>
+
+          <!-- Loading -->
+          <div *ngIf="isLoading" class="step3-loading">
+            <div class="spinner"></div>
+            <p>Procesando...</p>
+          </div>
+
+          <!-- Contenido Principal -->
+          <div *ngIf="!isLoading" class="step3-content">
+
+            <!-- SECCIÓN 1: Categoría Seleccionada -->
+            <div class="step3-section selected-section" *ngIf="selectedCategoryId">
+              <div class="section-title">
+                <span class="title-icon">✅</span>
+                <h3>Categoría Asignada al Producto</h3>
+              </div>
+
+              <div class="selected-subcategory">
+                <div class="selected-info">
+                  <span class="selected-icon">📂</span>
+                  <span class="selected-name">{{ getSelectedCategoryName() }}</span>
+                </div>
+                <button type="button" 
+                        class="btn-remove-selection" 
+                        (click)="removeCategorySelection()"
+                        title="Quitar categoría">
+                  ❌ Quitar
+                </button>
+              </div>
+            </div>
+
+            <!-- SECCIÓN 2: Lista de Categorías Disponibles -->
+            <div class="step3-section">
+              <div class="section-title">
+                <span class="title-icon">📋</span>
+                <h3>Categorías Disponibles</h3>
+                <p class="section-subtitle">Selecciona una para asignarla al producto, o créala si no existe</p>
+              </div>
+
+              <!-- Sin categorías -->
+              <div *ngIf="categories.length === 0 && !hasApiError" class="no-items">
+                <div class="no-items-icon">📂</div>
+                <p>Aún no hay categorías creadas.</p>
+                <p class="no-items-hint">Crea una nueva usando el botón de abajo.</p>
+              </div>
+
+              <!-- Lista de categorías -->
+              <div *ngIf="categories.length > 0" class="subcategories-list">
+                <div *ngFor="let category of categories" 
+                     class="subcategory-item"
+                     [class.item-selected]="selectedCategoryId === category.id">
+                  <div class="item-info" (click)="selectCategory(category)">
+                    <span class="item-icon">📂</span>
+                    <span class="item-name">{{ category.name }}</span>
+                    <span class="item-badge" *ngIf="selectedCategoryId === category.id">Seleccionada</span>
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" 
+                            class="btn-icon-action btn-edit" 
+                            (click)="startEditCategory(category)"
+                            title="Editar">
+                      ✏️
+                    </button>
+                    <button type="button" 
+                            class="btn-icon-action btn-delete" 
+                            (click)="confirmDeleteCategory(category.id)"
+                            title="Eliminar">
+                      🗑️
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECCIÓN 3: Crear/Editar Categoría -->
+            <div class="step3-section">
+              <div class="section-title">
+                <span class="title-icon">{{ showCategoryForm ? (isEditingCategory ? '✏️' : '➕') : '📝' }}</span>
+                <h3>{{ showCategoryForm ? (isEditingCategory ? 'Editar Categoría' : 'Crear Nueva Categoría') : 'Gestión de Categorías' }}</h3>
+              </div>
+
+              <!-- Botón para mostrar formulario -->
+              <button 
+                type="button" 
+                class="btn-show-form" 
+                (click)="toggleCategoryForm()"
+                *ngIf="!showCategoryForm">
+                <span class="btn-icon">➕</span>
+                <span class="btn-text">Crear Nueva Categoría</span>
+              </button>
+
+              <!-- Formulario de creación/edición -->
+              <div class="form-card" *ngIf="showCategoryForm">
+                <div class="form-header">
+                  <span class="form-icon">{{ isEditingCategory ? '✏️' : '✨' }}</span>
+                  <span class="form-title">{{ isEditingCategory ? 'Modificar categoría existente' : 'Agregar una nueva categoría' }}</span>
+                </div>
+
+                <div class="form-body">
+                  <div class="form-group-inline">
+                    <label for="categoryName" class="form-label">
+                      <span class="label-icon">📂</span>
+                      Nombre de la categoría
+                    </label>
+                    <input 
+                      type="text" 
+                      id="categoryName"
+                      class="form-input"
+                      [(ngModel)]="categoryFormName"
+                      [ngModelOptions]="{standalone: true}"
+                      (blur)="categoryFormTouched = true"
+                      placeholder="Ej: Bebidas, Postres, Entrantes..."
+                      maxlength="100"
+                      [class.input-error]="!categoryFormName.trim() && categoryFormTouched">
+                    <small class="input-hint">Máximo 100 caracteres</small>
+                    <div *ngIf="!categoryFormName.trim() && categoryFormTouched" class="form-error">
+                      ⚠️ El nombre es obligatorio
+                    </div>
+                  </div>
+
+                  <div class="form-actions">
+                    <button 
+                      type="button" 
+                      class="btn-form-cancel" 
+                      (click)="cancelCategoryForm()">
+                      <span class="btn-icon">❌</span>
+                      Cancelar
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn-form-submit" 
+                      (click)="submitCategoryForm()"
+                      [disabled]="!categoryFormName.trim()">
+                      <span class="btn-icon">{{ isEditingCategory ? '💾' : '✅' }}</span>
+                      {{ isEditingCategory ? 'Actualizar' : 'Crear' }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Navigation -->
+          <div class="step3-navigation">
+            <button type="button" class="btn-nav btn-prev" (click)="prevStep()">
+              <span class="btn-nav-icon">⬅️</span>
+              <span class="btn-nav-text">Anterior</span>
+            </button>
+            <button type="button" 
+                    class="btn-nav btn-next" 
+                    (click)="nextStep()"
+                    [disabled]="!selectedCategoryId">
+              <span class="btn-nav-text">Siguiente</span>
+              <span class="btn-nav-icon">➡️</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Step 3: Subcategory Management - FLUJO CORREGIDO -->
+        <div *ngIf="currentStep === 3" class="step-content">
+          
+          <!-- Header -->
+          <div class="step3-header">
+            <div class="header-icon">🏷️</div>
+            <h2>Organiza tu Menú con Subcategorías</h2>
+            <p class="header-description">
+              Las subcategorías te ayudan a organizar mejor tus productos dentro de cada categoría principal.<br>
+              <strong>Por ejemplo:</strong> En "Bebidas" puedes tener "Calientes", "Frías", "Alcohólicas".<br>
+              <em>Este paso es completamente opcional.</em>
+            </p>
+          </div>
+
+          <!-- Notificación -->
+          <div *ngIf="subcategoryNotification" class="step3-notification" [ngClass]="'notif-' + subcategoryNotification.type">
+            <span class="notif-icon">{{ subcategoryNotification.icon }}</span>
+            <span class="notif-text">{{ subcategoryNotification.message }}</span>
+          </div>
+
+          <!-- Loading -->
+          <div *ngIf="isLoading" class="step3-loading">
+            <div class="spinner"></div>
+            <p>Procesando...</p>
+          </div>
+
+          <!-- Contenido Principal -->
+          <div *ngIf="!isLoading" class="step3-content">
+
+            <!-- SECCIÓN 1: Subcategoría Seleccionada -->
+            <div class="step3-section selected-section" *ngIf="selectedSubcategoryId">
+              <div class="section-title">
+                <span class="title-icon">✅</span>
+                <h3>Subcategoría Asignada al Producto</h3>
+              </div>
+
+              <div class="selected-subcategory">
+                <div class="selected-info">
+                  <span class="selected-icon">🏷️</span>
+                  <span class="selected-name">{{ getSelectedSubcategoryName() }}</span>
+                </div>
+                <button type="button" 
+                        class="btn-remove-selection" 
+                        (click)="removeSubcategorySelection()"
+                        title="Quitar subcategoría">
+                  ❌ Quitar
+                </button>
+              </div>
+            </div>
+
+            <!-- SECCIÓN 2: Lista de Subcategorías Disponibles -->
+            <div class="step3-section">
+              <div class="section-title">
+                <span class="title-icon">📋</span>
+                <h3>Subcategorías Disponibles</h3>
+                <p class="section-subtitle">Selecciona una para asignarla al producto, o créala si no existe</p>
+              </div>
+
+              <!-- Sin subcategorías -->
+              <div *ngIf="subcategories.length === 0" class="no-items">
+                <div class="no-items-icon">📂</div>
+                <p>Aún no hay subcategorías en esta categoría.</p>
+                <p class="no-items-hint">Crea una nueva usando el botón de abajo.</p>
+              </div>
+
+              <!-- Lista de subcategorías -->
+              <div *ngIf="subcategories.length > 0" class="subcategories-list">
+                <div *ngFor="let sub of subcategories" 
+                     class="subcategory-item"
+                     [class.item-selected]="selectedSubcategoryId === sub.id">
+                  <div class="item-info" (click)="selectSubcategory(sub)">
+                    <span class="item-icon">🏷️</span>
+                    <span class="item-name">{{ sub.name }}</span>
+                    <span class="item-badge" *ngIf="selectedSubcategoryId === sub.id">Seleccionada</span>
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" 
+                            class="btn-icon-action btn-edit" 
+                            (click)="startEditSubcategory(sub)"
+                            title="Editar">
+                      ✏️
+                    </button>
+                    <button type="button" 
+                            class="btn-icon-action btn-delete" 
+                            (click)="confirmDeleteSubcategory(sub.id)"
+                            title="Eliminar">
+                      🗑️
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECCIÓN 3: Crear/Editar Subcategoría -->
+            <div class="step3-section">
+              <div class="section-title">
+                <span class="title-icon">{{ showSubcategoryForm ? (isEditingSubcategory ? '✏️' : '➕') : '📝' }}</span>
+                <h3>{{ showSubcategoryForm ? (isEditingSubcategory ? 'Editar Subcategoría' : 'Crear Nueva Subcategoría') : 'Gestión de Subcategorías' }}</h3>
+              </div>
+
+              <!-- Botón para mostrar formulario -->
+              <button 
+                type="button" 
+                class="btn-show-form" 
+                (click)="toggleSubcategoryForm()"
+                *ngIf="!showSubcategoryForm">
+                <span class="btn-icon">➕</span>
+                <span class="btn-text">Crear Nueva Subcategoría</span>
+              </button>
+
+              <!-- Formulario de creación/edición -->
+              <div class="form-card" *ngIf="showSubcategoryForm">
+                <div class="form-header">
+                  <span class="form-icon">{{ isEditingSubcategory ? '✏️' : '✨' }}</span>
+                  <span class="form-title">{{ isEditingSubcategory ? 'Modificar subcategoría existente' : 'Agregar una nueva subcategoría' }}</span>
+                </div>
+
+                <div class="form-body">
+                  <div class="form-group-inline">
+                    <label for="subcategoryName" class="form-label">
+                      <span class="label-icon">🏷️</span>
+                      Nombre de la subcategoría
+                    </label>
+                    <input 
+                      type="text" 
+                      id="subcategoryName"
+                      class="form-input"
+                      [(ngModel)]="subcategoryFormName"
+                      [ngModelOptions]="{standalone: true}"
+                      (blur)="subcategoryFormTouched = true"
+                      placeholder="Ej: Calientes, Frías, Sin alcohol..."
+                      maxlength="100"
+                      [class.input-error]="!subcategoryFormName.trim() && subcategoryFormTouched">
+                    <small class="input-hint">Máximo 100 caracteres</small>
+                    <div *ngIf="!subcategoryFormName.trim() && subcategoryFormTouched" class="form-error">
+                      ⚠️ El nombre es obligatorio
+                    </div>
+                  </div>
+
+                  <div class="form-actions">
+                    <button 
+                      type="button" 
+                      class="btn-form-cancel" 
+                      (click)="cancelSubcategoryForm()">
+                      <span class="btn-icon">❌</span>
+                      Cancelar
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn-form-submit" 
+                      (click)="submitSubcategoryForm()"
+                      [disabled]="!subcategoryFormName.trim()">
+                      <span class="btn-icon">{{ isEditingSubcategory ? '💾' : '✅' }}</span>
+                      {{ isEditingSubcategory ? 'Actualizar' : 'Crear' }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Navigation -->
+          <div class="step3-navigation">
+            <button type="button" class="btn-nav btn-prev" (click)="prevStep()">
+              <span class="btn-nav-icon">⬅️</span>
+              <span class="btn-nav-text">Anterior</span>
+            </button>
+            <button type="button" class="btn-nav btn-next" (click)="nextStep()">
+              <span class="btn-nav-text">Siguiente</span>
+              <span class="btn-nav-icon">➡️</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Step 4: Product Details -->
+        <div *ngIf="currentStep === 4" class="step-content">
+          <h2>Detalles del Producto</h2>
+          <p class="step-description">Completa la información básica de tu producto</p>
+          
+          <div class="form-group">
+            <label for="productName">Nombre del producto *</label>
+            <input 
+              id="productName"
+              type="text"
+              formControlName="name" 
+              placeholder="Ej: Pizza Margherita"
+              maxlength="100"
+              [class.input-error]="formControls['name'].invalid && formControls['name'].touched">
+            <small class="input-hint">Máximo 100 caracteres</small>
+            <div *ngIf="formControls['name'].invalid && formControls['name'].touched" class="field-error">
+              <span *ngIf="formControls['name'].errors?.['required']">El nombre es requerido</span>
+              <span *ngIf="formControls['name'].errors?.['maxlength']">El nombre no debe exceder 100 caracteres</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="productDescription">Descripción *</label>
+            <textarea 
+              id="productDescription"
+              formControlName="description" 
+              placeholder="Describe los ingredientes y características del producto"
+              maxlength="500"
+              rows="4"
+              [class.input-error]="formControls['description'].invalid && formControls['description'].touched"></textarea>
+            <small class="input-hint">Máximo 500 caracteres</small>
+            <div *ngIf="formControls['description'].invalid && formControls['description'].touched" class="field-error">
+              <span *ngIf="formControls['description'].errors?.['required']">La descripción es requerida</span>
+              <span *ngIf="formControls['description'].errors?.['maxlength']">La descripción no debe exceder 500 caracteres</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="productPrice">Precio (€) *</label>
+            <input 
+              id="productPrice"
+              type="number" 
+              formControlName="price" 
+              placeholder="0.00" 
+              step="0.01"
+              min="0"
+              [class.input-error]="formControls['price'].invalid && formControls['price'].touched">
+            <small class="input-hint">Ingresa el precio en euros</small>
+            <div *ngIf="formControls['price'].invalid && formControls['price'].touched" class="field-error">
+              <span *ngIf="formControls['price'].errors?.['required']">El precio es requerido</span>
+              <span *ngIf="formControls['price'].errors?.['min']">El precio debe ser mayor o igual a 0</span>
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button type="button" class="btn-secondary" (click)="prevStep()">
+              Anterior
+            </button>
+            <button type="button" 
+                    class="btn-primary" 
+                    [disabled]="!canProceed()"
+                    (click)="nextStep()">
+              Siguiente
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 5: Image Upload -->
+        <div *ngIf="currentStep === 5" class="step-content">
+          <h2>Imagen del Producto</h2>
+          <p class="step-description">Agrega una imagen atractiva de tu producto (opcional)</p>
+          
+          <div class="upload-area" [class.has-image]="selectedImage">
+            <div *ngIf="!selectedImage && !selectedImagePreview" class="upload-placeholder">
+              <div class="upload-icon">📷</div>
+              <p>Haz clic para seleccionar una imagen</p>
+              <small>JPG, PNG o GIF (máx. 5MB)</small>
+            </div>
+            
+            <div *ngIf="selectedImage || selectedImagePreview" class="image-preview">
+              <img *ngIf="selectedImagePreview" 
+                   [src]="selectedImagePreview" 
+                   alt="Vista previa"
+                   class="preview-image">
+              <p class="image-name">✅ {{ selectedImage?.name }}</p>
+              <button type="button" 
+                      class="btn-remove-image" 
+                      (click)="selectedImage = null; selectedImagePreview = null">
+                🗑️ Eliminar imagen
+              </button>
+            </div>
+            
+            <input 
+              type="file" 
+              (change)="onImageSelected($event)" 
+              accept="image/*"
+              #fileInput>
+          </div>
+
+          <div class="button-group">
+            <button type="button" 
+                    class="btn-secondary" 
+                    (click)="prevStep()" 
+                    *ngIf="!isLoading && !productCreated">
+              Anterior
+            </button>
+            <button type="submit" 
+                    class="btn-success" 
+                    [disabled]="!productForm.valid || isLoading" 
+                    *ngIf="!productCreated">
+              <span *ngIf="!isLoading">Crear Producto</span>
+              <span *ngIf="isLoading">
+                <span class="spinner-small"></span> Creando...
+              </span>
+            </button>
+            
+            <!-- Success State -->
+            <div *ngIf="productCreated" class="success-message">
+              <div class="success-icon">🎉</div>
+              <h3>¡Producto Creado Exitosamente!</h3>
+              <p>Has integrado un nuevo producto a tu carta</p>
+              <div class="success-actions">
+                <button type="button" class="btn-primary" (click)="createNewProduct()">
+                  ➕ Crear Nuevo Producto
+                </button>
+                <button type="button" class="btn-secondary" (click)="goToDashboard()">
+                  🏠 Volver a Panel de Control
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+    
+    <!-- Progress Bar -->
+    <div class="progress-sidebar">
+      <div class="progress-bar">
+        <div class="step" 
+             [class.active]="currentStep >= 1" 
+             [class.completed]="currentStep > 1"
+             [attr.aria-label]="'Paso 1: Bienvenida'">
+          1
+        </div>
+        <div class="line" [class.completed]="currentStep > 1"></div>
+        
+        <div class="step" 
+             [class.active]="currentStep >= 2" 
+             [class.completed]="currentStep > 2"
+             [attr.aria-label]="'Paso 2: Categoría'">
+          2
+        </div>
+        <div class="line" [class.completed]="currentStep > 2"></div>
+        
+        <div class="step" 
+             [class.active]="currentStep >= 3" 
+             [class.completed]="currentStep > 3"
+             [attr.aria-label]="'Paso 3: Subcategoría'">
+          3
+        </div>
+        <div class="line" [class.completed]="currentStep > 3"></div>
+        
+        <div class="step" 
+             [class.active]="currentStep >= 4" 
+             [class.completed]="currentStep > 4"
+             [attr.aria-label]="'Paso 4: Detalles'">
+          4
+        </div>
+        <div class="line" [class.completed]="currentStep > 4"></div>
+        
+        <div class="step" 
+             [class.active]="currentStep >= 5"
+             [attr.aria-label]="'Paso 5: Imagen'">
+          5
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

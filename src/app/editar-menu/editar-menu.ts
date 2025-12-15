@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { CrearProducto } from '../crear-producto/crear-producto';
 
 interface Category {
   id: number;
@@ -22,7 +23,7 @@ interface Product {
 @Component({
   selector: 'app-editar-menu',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, CrearProducto],
   templateUrl: './editar-menu.html',
   styleUrl: './editar-menu.css'
 })
