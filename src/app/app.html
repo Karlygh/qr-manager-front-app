@@ -1,4 +1,5 @@
-<app-navbar></app-navbar>
+<!-- Usa el signal directamente con () -->
+<app-navbar *ngIf="layoutService.showNavbar()"></app-navbar>
 
 <main>
   <router-outlet></router-outlet>

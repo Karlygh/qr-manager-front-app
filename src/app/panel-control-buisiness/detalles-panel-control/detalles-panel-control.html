@@ -71,7 +71,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12 col-lg-4">
+                    <div class="col-md-6 col-lg-4">
                         <div class="card h-100 shadow-sm custom-card border-success-start">
                             <div class="card-body d-flex flex-column justify-content-between">
                                 <div>
@@ -87,10 +87,10 @@
                                     <i class="bi bi-pencil-square me-1"></i> Ver/Editar Instalaciones
                                 </a>
                             </div>
-                        </div>
                     </div>
+                </div>
 
-                    <div class="col-md-6 col-lg-4">
+                   <div class="col-md-6 col-lg-4">
                         <div class="card h-100 shadow-sm custom-card border-danger-start">
                             <div class="card-body d-flex flex-column justify-content-between">
                                 <div>
@@ -102,6 +102,20 @@
                                 </div>
                                 <a [routerLink]="['/editar-menu']" class="btn btn-sm custom-btn-secondary mt-3">
                                     <i class="bi bi-pencil-square me-1"></i> Ver/Editar Menú
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm custom-card border-info-start">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <div>
+                                    <h5 class="card-title color-info"><i class="bi bi-eye me-2"></i>Carta Principal</h5>
+                                    <p class="text-muted small mt-3">Vista previa de la carta como la verían tus clientes.</p>
+                                </div>
+                                <a [routerLink]="['/carta-principal']" class="btn btn-sm custom-btn-secondary mt-3">
+                                    <i class="bi bi-eye me-1"></i> Ver Carta Principal
                                 </a>
                             </div>
                         </div>

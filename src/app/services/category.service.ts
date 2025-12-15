@@ -8,6 +8,8 @@ export interface Category {
   businessId: number;
 }
 
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,4 +20,29 @@ export class CategoryService {
   getAllCategoriesByBusinessId(businessId: number): Observable<Category[]> {
     return this.http.get<Category[]>(`${this.apiUrl}/all/${businessId}`);
   }
+
+  /**
+ * Crear una nueva categoría
+ */
+createCategory(businessId: number, name: string, image?: File): Observable<Category> {
+  const formData = new FormData();
+  formData.append('name', name);
+  if (image) {
+    formData.append('image', image);
+  }
+  return this.http.post<Category>(`${this.apiUrl}/${businessId}`, formData);
+}
+
+
+updateCategoryById(id: number, name: string, image?: File): Observable<Category> {
+  const formData = new FormData();
+  formData.append('name', name);
+  if (image) {
+    formData.append('image', image);
+  }
+  return this.http.patch<Category>(`${this.apiUrl}/${id}`, formData);
+}
+  deleteCategoryById(id: number): Observable<void> {
+  return this.http.delete<void>(`${this.apiUrl}/${id}`);
+}
 }

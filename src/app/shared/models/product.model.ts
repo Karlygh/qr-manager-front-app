@@ -21,6 +21,7 @@ export interface ProductResponse {
   image?: string;
   description?: string;
   label?: string;
+  status?: boolean;  
   categoryId?: number;
   subCategoryId?: number;
   allergens?: AllergenResponse[];

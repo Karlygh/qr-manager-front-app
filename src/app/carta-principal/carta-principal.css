@@ -1,0 +1,516 @@
+
+/* ============================================
+   LOADING SPINNER
+   ============================================ */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 2rem;
+}
+
+.loading-container p {
+  margin-top: 1rem;
+  color: #666;
+  font-size: 1rem;
+}
+
+/* ============================================
+   NAVBAR PRINCIPAL
+   ============================================ */
+.navbar {
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 0.75rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand i {
+  font-size: 1.5rem;
+  color: #3498db;
+}
+
+/* ============================================
+   CATEGORY NAVIGATION - STICKY CON SCROLL HORIZONTAL
+   ============================================ */
+.category-nav {
+  background-color: #fff;
+  border-bottom: 2px solid #e9ecef;
+  padding: 0.75rem 0;
+  position: sticky;
+  top: 56px; /* Altura del navbar */
+  z-index: 1020;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.category-nav .container {
+  padding: 0 1rem;
+}
+
+/* Scroll horizontal para categorías en móvil */
+.category-nav .nav {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE y Edge */
+  gap: 0.5rem;
+  padding-bottom: 0.25rem;
+}
+
+/* Ocultar scrollbar en Chrome, Safari y Opera */
+.category-nav .nav::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-pills .nav-link {
+  color: #495057;
+  font-weight: 500;
+  border-radius: 25px;
+  padding: 0.5rem 1.25rem;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-pills .nav-link:hover {
+  background-color: #e9ecef;
+  color: #212529;
+  transform: translateY(-2px);
+}
+
+.nav-pills .nav-link.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.nav-pills .nav-link .badge {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 10px;
+}
+
+/* ============================================
+   CONTAINER Y SECCIONES
+   ============================================ */
+.container {
+  max-width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin: 0 auto;
+}
+
+.category-section {
+  padding: 1.5rem 0 2rem 0;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.category-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  color: #2c3e50;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid #667eea;
+  display: inline-block;
+}
+
+/* ============================================
+   PRODUCT CARDS - OPTIMIZADO PARA MÓVIL
+   ============================================ */
+.row {
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+}
+
+.row > [class*='col-'] {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.product-card {
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 1rem;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  background: #fff;
+}
+
+.product-card:active {
+  transform: scale(0.98);
+}
+
+@media (min-width: 768px) {
+  .product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.product-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.product-label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+}
+
+.product-label .badge {
+  font-size: 0.75rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+.product-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-price {
+  font-size: 1.4rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.product-description {
+  color: #6c757d;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   MODAL - OPTIMIZADO PARA MÓVIL
+   ============================================ */
+.modal-content {
+  border: none;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  padding: 1.25rem;
+}
+
+.modal-title {
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.btn-close {
+  filter: brightness(0) invert(1);
+  opacity: 1;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.product-detail-image {
+  max-height: 250px;
+  object-fit: cover;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.modal-body h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-body h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.modal-body h5 i {
+  margin-right: 0.5rem;
+  color: #667eea;
+}
+
+.detail-price {
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 1rem 0 !important;
+}
+
+.allergens {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+  padding: 1rem;
+  border-radius: 12px;
+  border-left: 4px solid #ffc107;
+  margin-top: 1rem;
+}
+
+.allergens h5 {
+  color: #856404;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.allergens .badge {
+  font-size: 0.85rem;
+  padding: 0.5rem 0.75rem;
+  margin: 0.25rem;
+  font-weight: 500;
+}
+
+/* ============================================
+   ESTADOS VACÍOS Y ERRORES
+   ============================================ */
+.text-center.py-5 {
+  padding: 3rem 1.5rem !important;
+}
+
+.text-center i.fs-1 {
+  font-size: 3rem !important;
+  opacity: 0.5;
+}
+
+.alert {
+  border-radius: 12px;
+  border: none;
+  padding: 1.25rem;
+  margin: 1rem;
+}
+
+.alert-danger {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  color: #fff;
+}
+
+.alert-success {
+  background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+  color: #fff;
+}
+
+.alert .btn {
+  border: 2px solid #fff;
+  color: #fff;
+  font-weight: 600;
+}
+
+.alert .btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   RESPONSIVE - TABLETS
+   ============================================ */
+@media (min-width: 576px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .product-card img {
+    height: 200px;
+  }
+
+  .category-title {
+    font-size: 2rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.4rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .category-nav {
+    top: 60px;
+  }
+
+  .category-nav .nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-x: visible;
+  }
+
+  .nav-pills .nav-link {
+    font-size: 1rem;
+    padding: 0.6rem 1.5rem;
+  }
+
+  .product-card img {
+    height: 220px;
+  }
+
+  .category-section {
+    padding: 2rem 0 2.5rem 0;
+  }
+
+  .modal-dialog {
+    max-width: 600px;
+  }
+
+  .product-detail-image {
+    max-height: 350px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - DESKTOP
+   ============================================ */
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+
+  .category-nav {
+    top: 64px;
+  }
+
+  .product-card img {
+    height: 240px;
+  }
+
+  .category-title {
+    font-size: 2.25rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+
+  .product-card img {
+    height: 260px;
+  }
+}
+
+/* ============================================
+   MEJORAS DE ACCESIBILIDAD Y UX MÓVIL
+   ============================================ */
+
+/* Área táctil más grande en móvil */
+@media (max-width: 767px) {
+  .nav-pills .nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .product-card {
+    min-height: 280px;
+  }
+}
+
+/* Animaciones suaves */
+.tab-pane {
+  animation: fadeIn 0.4s ease-in;
+}
+
+/* Scroll suave */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus visible para accesibilidad */
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Optimización de rendimiento */
+.product-card img {
+  will-change: transform;
+}
+
+/* Mejora de rendimiento en animaciones */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
