@@ -307,14 +307,54 @@ footer {
 h2.titulo-uno {
   color: #104226; 
   letter-spacing: 3px;
-    font-size: 1.5rem;
-
+  font-size: 1.2rem;
 }
 h2.titulo-dos {
   color: #cce5d6; 
   letter-spacing: 3px;
-    font-size: 1.5rem;
+  font-size: 1.2rem;
+}
 
+/* OPTIMIZACIÓN PARA NITRO V15 (1920x1080) */
+@media (min-width: 1200px) and (max-width: 1919px) {
+  .price {
+    font-size: 1.5rem;
+  }
+
+  .price-card {
+    padding: 1rem;
+  }
+  
+  .pricing-faq .accordion-button {
+    font-size: 1.1rem;
+  }
+  
+  .guarantees {
+    padding-top: 2rem !important;
+    padding-bottom: 6rem !important;
+    font-size: 1rem;
+  }
+  
+  h2.titulo-uno, h2.titulo-dos {
+    font-size: 1rem;
+  }
+  
+  .titulo-planes {
+    font-size: 1.1rem;
+  }
+  
+  .landing-prices {
+    padding-top: 2rem ;
+    padding-bottom: 2rem ;
+  }
+  
+  .price-card h3 {
+    font-size: 1.3rem;
+  }
+  
+  .price-card ul li {
+    font-size: 0.9rem;
+  }
 }
 /* ======================
    FIX RESPONSIVE OVERFLOW

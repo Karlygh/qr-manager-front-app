@@ -51,7 +51,7 @@
                             <div class="mb-3">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <label for="description" class="form-label fw-bold mb-0">Descripción</label>
-                                    <span class="text-muted small">Breve descripción de tu negocio ( Ej: Bar de copas )</span>
+                                    <span class="text-muted small ms-2">Breve descripción de tu negocio ( Ej: Bar de copas )</span>
                                 </div>
                                 <textarea id="description"
                                           class="form-control" 
@@ -73,6 +73,7 @@
                                        id="email"
                                        class="form-control" 
                                        formControlName="email"
+                                       autocomplete="off"
                                        [class.is-invalid]="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
                                 <div *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched" class="invalid-feedback">
                                     <small *ngIf="contactForm.get('email')?.errors?.['required']">El email es obligatorio</small>
@@ -83,7 +84,7 @@
                             <div class="mb-3">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <label for="phoneNumber" class="form-label fw-bold mb-0">Teléfono</label>
-                                    <span class="text-muted small">Número de contacto</span>
+                                    <span class="text-muted small ms-mobile">Número de contacto</span>
                                 </div>
                                 <input type="tel" 
                                        id="phoneNumber"
@@ -100,7 +101,7 @@
                             <div class="mb-3">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <label for="address" class="form-label fw-bold mb-0">Dirección</label>
-                                    <span class="text-muted small">Dirección física del establecimiento</span>
+                                    <span class="text-muted small ms-5 ">Dirección física del establecimiento</span>
                                 </div>
                                 <textarea id="address"
                                           class="form-control" 
