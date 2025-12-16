@@ -337,7 +337,7 @@
 }
 
 /* DESKTOP / LAPTOP (≥ 992px) - MÁXIMO */
-/* Tu resolución 1168x1200 entra aquí */
+
 @media (min-width: 992px) {
   .hero-title {
     font-size: 3rem;  /* MÁXIMO - No crece más */
@@ -348,7 +348,7 @@
   }
   
 .hero-description {
-    font-size: 1.75rem;
+    font-size: 1.7rem;
   }
   
   .hero-stats .stat-number {
@@ -378,7 +378,7 @@
   }
   
   .hero-description {
-    font-size: 1.38rem;
+    font-size: 1.2rem;
     margin-top: 0.8rem;
     margin-bottom: 1.5rem;
   }

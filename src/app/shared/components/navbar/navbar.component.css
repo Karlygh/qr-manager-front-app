@@ -106,3 +106,7 @@
 .navbar-collapse {
     width: 100%;
 }
+.navbar-logo {
+  width: 80px;  /* Ajusta el tamaño que quieras */
+  height: 50px;
+}
