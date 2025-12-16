@@ -44,7 +44,7 @@ export const routes: Routes = [
   { path: 'panel/:businessId/editar-redes', component:EditarRedesComponent},
   { path: 'crear-producto',component:CrearProducto },
   { path: 'carta-principal', component:CartaPrincipalComponent },
-  { path: 'google-reseñas', component:GoogleOpiniones },
+  { path: 'google-reseñas/:businessId', component:GoogleOpiniones },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: error404PageComponent }
 ];

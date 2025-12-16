@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, RouterLink, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,6 +7,7 @@ import { Business } from '../../models/business.model';
 import { KitchenScheduleService, KitchenHour } from '../../services/kitchen-schedule.service';
 import { OpeningScheduleService, OpeningHour } from '../../services/opening-schedule.service';
 
+
 @Component({
   selector: 'app-detalles-panel-control',
   standalone: true,
@@ -14,13 +15,14 @@ import { OpeningScheduleService, OpeningHour } from '../../services/opening-sche
   templateUrl: './detalles-panel-control.html',
   styleUrl: './detalles-panel-control.css'
 })
-export class DetallesPanelControl implements OnInit {
+export class DetallesPanelControl implements OnInit, AfterViewInit {
 
   businessId: string | null = null;
   businessData: Business | null = null;
   kitchenHours: KitchenHour[] = [];
   openingHours: OpeningHour[] = [];
   wifiData: any = null;
+
   isLoading: boolean = true;
   error: string | null = null;
   showModal: boolean = false;
@@ -44,7 +46,8 @@ export class DetallesPanelControl implements OnInit {
     private route: ActivatedRoute,
     private businessService: BusinessService,
     private kitchenScheduleService: KitchenScheduleService,
-    private openingScheduleService: OpeningScheduleService
+    private openingScheduleService: OpeningScheduleService,
+
   ) { }
 
   ngOnInit(): void {
@@ -60,6 +63,15 @@ export class DetallesPanelControl implements OnInit {
     });
   }
 
+  ngAfterViewInit(): void {
+    // Recargar datos cuando se regresa a la página
+    window.addEventListener('visibilitychange', () => {
+      if (!document.hidden && this.businessId) {
+        this.loadBusinessDetails(this.businessId);
+      }
+    });
+  }
+
   loadBusinessDetails(id: string | number): void {
     this.isLoading = true;
     this.error = null;
@@ -70,6 +82,7 @@ export class DetallesPanelControl implements OnInit {
         this.loadKitchenHours(Number(id));
         this.loadOpeningHours(Number(id));
         this.loadWifiData(String(id));
+
         this.isLoading = false;
       },
       error: (err) => {
@@ -177,6 +190,20 @@ export class DetallesPanelControl implements OnInit {
           this.error = 'Error al actualizar el negocio';
         }
       });
+    }
+  }
+
+  hasGoogleReviews(): boolean {
+    return this.businessData?.socialNetworks?.some(network => network.name === 'Google') || false;
+  }
+
+  getGoogleLinksCount(): number {
+    return this.businessData?.socialNetworks?.filter(n => n.name === 'Google').length || 0;
+  }
+
+  refreshBusinessData(): void {
+    if (this.businessId) {
+      this.loadBusinessDetails(this.businessId);
     }
   }
 

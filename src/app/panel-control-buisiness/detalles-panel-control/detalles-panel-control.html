@@ -124,14 +124,29 @@
     </div>
 
     <div class="col-md-6 col-lg-4">
-        <div class="card h-100 shadow-sm custom-card border-info-start">
+        <div class="card h-100 shadow-sm custom-card" [ngClass]="hasGoogleReviews() ? 'border-primary-start bg-light-blue' : 'border-info-start'">
             <div class="card-body d-flex flex-column justify-content-between">
                 <div>
-                    <h5 class="card-title color-info"><i class="bi bi-google me-2"></i>Google Reseñas</h5>
-                    <p class="text-muted small mt-3">Gestiona y visualiza las reseñas de Google de tu restaurante.</p>
+                    <h5 class="card-title" [ngClass]="hasGoogleReviews() ? 'color-primary' : 'color-info'">
+                        <i class="bi" [ngClass]="hasGoogleReviews() ? 'bi-google text-primary' : 'bi-google'" class="me-2"></i>Google Reseñas
+                        <span *ngIf="hasGoogleReviews()" class="badge bg-success ms-2 small">
+                            <i class="bi bi-check-circle-fill me-1"></i>Configurado
+                        </span>
+                    </h5>
+                    <p class="text-muted small mt-3" *ngIf="!hasGoogleReviews()">Gestiona y visualiza las reseñas de Google de tu restaurante.</p>
+                    <div *ngIf="hasGoogleReviews()" class="mt-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                            <span class="text-success small fw-bold">Google vinculado correctamente</span>
+                        </div>
+                        <p class="text-muted small mb-0">
+                            <i class="bi bi-link-45deg me-1"></i>{{ getGoogleLinksCount() }} enlace(s) activo(s)
+                        </p>
+                    </div>
                 </div>
-                <a [routerLink]="['/google-reseñas']" class="btn btn-sm custom-btn-secondary mt-3">
-                    <i class="bi bi-pencil-square me-1"></i> Ver/Editar Google
+                <a [routerLink]="['/google-reseñas', businessData.id]" class="btn btn-sm mt-3" [ngClass]="hasGoogleReviews() ? 'btn-primary' : 'custom-btn-secondary'">
+                    <i class="bi me-1" [ngClass]="hasGoogleReviews() ? 'bi-gear' : 'bi-pencil-square'"></i> 
+                    {{ hasGoogleReviews() ? 'Gestionar Google' : 'Ver/Editar Google' }}
                 </a>
             </div>
         </div>
