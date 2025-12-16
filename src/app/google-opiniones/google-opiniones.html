@@ -1,1 +1,135 @@
-<p>google-opiniones works!</p>
+<div class="container app-google-reviews">
+    <h2 class="page-title">Gestionar Google Reseñas</h2>
+    
+    <p class="explanation-text">
+        Aquí puedes configurar los enlaces de Google Reseñas de tu negocio. Estos enlaces permitirán a tus clientes acceder directamente a las reseñas de Google de tu establecimiento. Asegúrate de que las URLs estén completas y activas.
+    </p>
+
+    <div *ngIf="errorMessage" class="app-alert alert-danger">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="app-alert alert-success">{{ successMessage }}</div>
+    
+    <div *ngIf="isLoading" class="text-center loading-state">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+    </div>
+
+    <ng-container *ngIf="!isLoading">
+        <div class="card add-review-card">
+            <h5 class="card-title">Añadir Enlace de Google Reseñas</h5>
+            <form (ngSubmit)="addReview()" class="row g-3">
+                <div class="col-md-10">
+                    <input 
+                        type="url" 
+                        [(ngModel)]="newReview.url" 
+                        name="url" 
+                        class="form-control custom-input" 
+                        placeholder="URL completa de Google Reseñas (ej: https://g.page/r/...)" 
+                        maxlength="255"
+                        required>
+                    <small class="form-text text-muted mt-1 d-block">
+                        💡 Puedes encontrar tu enlace en Google Maps → Tu negocio → Compartir → Copiar enlace
+                        <span class="float-end" [ngClass]="{'text-danger': newReview.url.length > 255}">
+                            {{ newReview.url.length }}/255 caracteres
+                        </span>
+                    </small>
+                </div>
+                
+                <div class="col-md-2 btn-col-wrapper">
+                    <button 
+                        type="submit" 
+                        class="btn btn-primary primary-btn" 
+                        [disabled]="!newReview.url">
+                        <i class="bi bi-plus-circle-fill"></i> Añadir
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card review-list-card">
+            <div class="list-header">
+                <h5 class="card-title">Enlaces Configurados ({{ googleReviews.length }})</h5>
+                
+                <div class="header-buttons">
+                    <button 
+                        *ngIf="isEditing" 
+                        (click)="cancelEditing()" 
+                        class="btn btn-cancel me-2">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </button>
+                    
+                    <button 
+                        (click)="toggleEditing()" 
+                        class="btn btn-edit" 
+                        [ngClass]="{'btn-save': isEditing, 'btn-modify': !isEditing}">
+                        <i class="bi" [ngClass]="{'bi-save': isEditing, 'bi-pencil': !isEditing}"></i> 
+                        {{ isEditing ? 'Guardar Cambios' : 'Modificar Lista' }}
+                    </button>
+                </div>
+            </div>
+
+            <div *ngIf="googleReviews.length === 0" class="empty-list-message">
+                <i class="bi bi-info-circle me-2"></i>
+                Aún no hay enlaces de Google Reseñas configurados para este negocio.
+            </div>
+
+            <ul *ngIf="googleReviews.length > 0" class="review-list">
+                <li *ngFor="let review of googleReviews; let i = index" 
+                    class="list-item"
+                    [ngClass]="{'marked-for-deletion': isMarkedForDeletion(review.id)}">
+                    
+                    <span class="review-label">
+                        <i class="bi bi-google me-2"></i>
+                        Enlace #{{ i + 1 }}
+                    </span>
+                    
+                    <input 
+                        *ngIf="isEditing && !isMarkedForDeletion(review.id)" 
+                        type="url" 
+                        [(ngModel)]="review.url" 
+                        [ngModelOptions]="{standalone: true}" 
+                        class="form-control editing-input flex-grow-1"
+                        placeholder="URL de Google Reseñas">
+                    
+                    <span 
+                        *ngIf="isEditing && isMarkedForDeletion(review.id)"
+                        class="deleted-url-display flex-grow-1">
+                        {{ review.url }} <span class="deletion-badge">(Se eliminará)</span>
+                    </span>
+                    
+                    <a 
+                        *ngIf="!isEditing" 
+                        [href]="review.url" 
+                        target="_blank" 
+                        class="review-url-display flex-grow-1"
+                        title="Abrir en nueva pestaña">
+                        <i class="bi bi-box-arrow-up-right me-1"></i>
+                        {{ review.url }}
+                    </a>
+
+                    <button 
+                        *ngIf="isEditing && review.id && !isMarkedForDeletion(review.id)" 
+                        (click)="markForDeletion(review.id)" 
+                        class="btn delete-btn" 
+                        title="Marcar para eliminar">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </button>
+
+                    <button 
+                        *ngIf="isEditing && review.id && isMarkedForDeletion(review.id)" 
+                        (click)="cancelDeletion(review.id)" 
+                        class="btn undo-btn" 
+                        title="Cancelar eliminación">
+                        <i class="bi bi-arrow-counterclockwise"></i> Deshacer
+                    </button>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="text-center">
+            <a [routerLink]="['/panel-control-buisiness', businessId]" class="btn btn-secondary back-btn">
+                <i class="bi bi-arrow-left-circle"></i> Volver al Panel de Control
+            </a>
+        </div>
+    </ng-container>
+</div>

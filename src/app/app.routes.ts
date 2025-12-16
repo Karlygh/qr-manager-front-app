@@ -20,6 +20,7 @@ import { EditarMenu } from './editar-menu/editar-menu';
 import { EditarRedesComponent } from './editar-redes/editar-redes';
 import { CrearProducto } from './crear-producto/crear-producto';
 import { CartaPrincipalComponent } from './carta-principal/carta-principal';
+import { GoogleOpiniones } from './google-opiniones/google-opiniones';
 
 
 export const routes: Routes = [
@@ -43,6 +44,7 @@ export const routes: Routes = [
   { path: 'panel/:businessId/editar-redes', component:EditarRedesComponent},
   { path: 'crear-producto',component:CrearProducto },
   { path: 'carta-principal', component:CartaPrincipalComponent },
+  { path: 'google-reseñas/:businessId', component:GoogleOpiniones },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: error404PageComponent }
 ];

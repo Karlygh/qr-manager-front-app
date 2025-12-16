@@ -1,0 +1,311 @@
+.page-title {
+    color: #105f34;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--add-btn-color);
+    margin-top: 50px;
+}
+
+.explanation-text {
+    color: var(--text-muted);
+    background-color: #e8f5e9;
+    border-left: 5px solid #4caf50; 
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0.25rem;
+    line-height: 1.5;
+}
+
+.app-alert {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+}
+
+.alert-danger {
+    color: #c62828;
+    background-color: #ffcdd2;
+    border-color: #e57373;
+}
+
+.alert-success {
+    color: #388e3c;
+    background-color: #c8e6c9;
+    border-color: #81c784;
+}
+
+.card {
+    background-color: #e6f3e7;
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-subtle);
+}
+
+.card-title {
+    color: var(--text-dark);
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.custom-input, .editing-input {
+    border: 1px solid #ced4da;
+    border-radius: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    transition: border-color 0.2s;
+}
+
+.custom-input:focus, .editing-input:focus {
+    border-color: var(--add-btn-color);
+    box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
+}
+
+.form-text {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.btn {
+    font-weight: 600;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.btn:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    transform: none;
+    box-shadow: none;
+}
+
+/* BOTÓN AÑADIR */
+.primary-btn {
+    background-color: var(--add-btn-color);
+    border: 1px solid var(--add-btn-color);
+    color: #ababab;
+    background-color: #1b5e20;
+}
+
+.primary-btn:hover:not(:disabled) {
+    background-color: #1b5e20;
+    border-color: #1b5e20;
+    color: #f1f1f1;
+}
+
+/* BOTONES MODIFICAR/GUARDAR */
+.btn-modify {
+    background-color: #f9bf66;
+    border: 2px solid var(--modify-btn-color);
+    color: var(--modify-btn-color);
+}
+
+.btn-modify:hover {
+    background-color: #1f221f;
+    border-color: var(--modify-btn-color);
+    color: #f9bf66;
+}
+
+.btn-save {
+    background-color: var(--save-btn-color);
+    border: 1px solid var(--save-btn-color);
+    color: #fff;
+}
+
+.btn-save:hover {
+    background-color: #388e3c;
+    border-color: #388e3c;
+}
+
+/* BOTÓN ELIMINAR */
+.delete-btn {
+    background-color: #b71c1c;
+    border: 1px solid var(--danger-color);
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+    color: #fff;
+    margin-left: 8px;
+}
+
+.delete-btn:hover {
+    background-color: #b71c1c;
+    border-color: #b71c1c;
+}
+
+/* BOTÓN CANCELAR */
+.btn-cancel {
+    background-color: #e5d710;
+    border: 1px solid #011902;
+    color: #403f3f;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+    margin-left: 8px;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+/* BOTÓN DESHACER */
+.undo-btn {
+    background-color: #ff9800;
+    border: 1px solid #f57c00;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+    color: #fff;
+    margin-left: 8px;
+}
+
+.undo-btn:hover {
+    background-color: #f57c00;
+    border-color: #e65100;
+}
+
+/* LISTA DE RESEÑAS */
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.review-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    padding: 4px;
+    border: 2px solid #053e14;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+    background-color: #e9ebee;
+    padding: 25px;
+    border-bottom: 2px solid #053e14;
+}
+
+.list-item:last-child {
+    border-bottom: none;
+}
+
+.list-item.marked-for-deletion {
+    opacity: 0.5;
+    background-color: #ffebee;
+}
+
+.review-label {
+    font-weight: 700;
+    color: var(--text-dark);
+    flex-shrink: 0;
+    padding: 4px;
+    margin-left: 8px;
+    background-color: #80a186;
+    border-radius: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-right: 15px;
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+}
+
+.review-url-display {
+    color: var(--accent-color);
+    text-decoration: none;
+    padding: 0 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.review-url-display:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+.deleted-url-display {
+    color: #999;
+    padding: 0 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-decoration: line-through;
+}
+
+.deletion-badge {
+    color: #d32f2f;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+.empty-list-message {
+    color: var(--text-muted);
+    padding: 1rem 0;
+    text-align: center;
+    font-style: italic;
+}
+
+.spinner-border {
+    color: var(--add-btn-color);
+}
+
+/* BOTÓN VOLVER */
+.back-btn {
+    background-color: #053e14;
+    border-color: #28a745;
+    color: #fff;
+    margin-top: 5px;
+    display: inline-block;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    margin-bottom: 25px;
+}
+
+.back-btn:hover {
+    background-color: #218838 ;
+    border-color: #1e7e34 ;
+    color: #fff ;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .back-btn {
+        width: 100%;
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+    
+    .list-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .review-label {
+        width: 100%;
+    }
+    
+    .editing-input,
+    .review-url-display,
+    .deleted-url-display {
+        width: 100%;
+        margin: 10px 0;
+    }
+}
