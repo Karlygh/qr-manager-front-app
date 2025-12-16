@@ -102,10 +102,11 @@
 
 .mobile-mockup-container {
     position: relative;
-    width: 320px; 
-    height: 640px; 
-    border: 15px solid #000;
-    border-radius: 40px;
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 9/16;
+    border: 8px solid #000;
+    border-radius: 25px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     background-color: #000; 
     overflow: hidden; 
@@ -184,61 +185,76 @@
 
 /* MÓVILES MUY PEQUEÑOS (≤ 480px) - Títulos y textos más pequeños */
 @media (max-width: 480px) {
+    .hero-section {
+        height: auto;
+        min-height: 100vh;
+        padding: 20px 0;
+    }
     .hero-section h1 {
-        font-size: 1.8rem; /* Título principal reducido */
+        font-size: 1.8rem;
     }
     .key-features {
-        font-size: 0.9rem; /* Características más pequeñas */
+        font-size: 0.9rem;
     }
     .benefits-list h5 {
-        font-size: 0.9rem; /* Texto beneficios reducido */
+        font-size: 0.9rem;
     }
     .benefits-list .benefit-title {
-        font-size: 1rem; /* Títulos beneficios pequeños */
+        font-size: 1rem;
     }
     .mobile-mockup-container {
-        width: 200px;
-        height: 400px;
+        max-width: 200px;
+        border-width: 5px;
+        border-radius: 20px;
     }
 }
 
 /* MÓVILES MEDIANOS (481px - 768px) - Tamaños moderados */
 @media (min-width: 481px) and (max-width: 768px) {
+    .hero-section {
+        height: auto;
+        min-height: 100vh;
+        padding: 30px 0;
+    }
     .hero-section h1 {
-        font-size: 2.2rem; /* Título principal moderado */
+        font-size: 2.2rem;
     }
     .key-features {
-        font-size: 1rem; /* Características normales */
+        font-size: 1rem;
     }
     .benefits-list h5 {
-        font-size: 1.1rem; /* Texto beneficios normal */
+        font-size: 1.1rem;
     }
     .benefits-list .benefit-title {
-        font-size: 1.3rem; /* Títulos beneficios destacados */
+        font-size: 1.3rem;
     }
     .mobile-mockup-container {
-        width: 250px;
-        height: 500px;
+        max-width: 250px;
+        border-width: 6px;
     }
 }
 
 /* TABLETS (769px - 992px) - Tamaños crecientes */
 @media (min-width: 769px) and (max-width: 992px) {
+    .hero-section {
+        height: auto;
+        min-height: 100vh;
+        padding: 40px 0;
+    }
     .hero-section h1 {
-        font-size: 2.5rem; /* Título principal aumenta */
+        font-size: 2.5rem;
     }
     .key-features {
-        font-size: 1.1rem; /* Características ligeramente más grandes */
+        font-size: 1.1rem;
     }
     .benefits-list h5 {
-        font-size: 1.2rem; /* Texto beneficios aumenta */
+        font-size: 1.2rem;
     }
     .benefits-list .benefit-title {
-        font-size: 1.5rem; /* Títulos beneficios más grandes */
+        font-size: 1.5rem;
     }
     .mobile-mockup-container {
-        width: 280px;
-        height: 560px;
+        max-width: 280px;
     }
 }
 
@@ -282,8 +298,7 @@
         margin-bottom: 1.2rem;
     }
     .mobile-mockup-container {
-        width: 280px;
-        height: 560px;
+        max-width: 280px;
     }
 }
 
@@ -318,7 +333,6 @@
         font-size: 2rem; /* Títulos beneficios máximos */
     }
     .mobile-mockup-container {
-        width: 400px;
-        height: 800px;
+        max-width: 400px;
     }
 }
