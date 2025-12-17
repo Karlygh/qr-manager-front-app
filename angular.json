@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "qr-manager-front": {
+    "qr-manager-front-app": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -18,8 +18,8 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "src/assets", 
-                "output": "assets"   
+                "input": "src/assets",
+                "output": "assets"
               }
             ],
             "styles": [
@@ -36,13 +36,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
+                  "maximumWarning": "700kB",
                   "maximumError": "1MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "20kB",
+                  "maximumError": "25kB"
                 }
               ],
               "outputHashing": "all"
@@ -59,10 +59,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "qr-manager-front:build:production"
+              "buildTarget": "qr-manager-front-app:build:production"
             },
             "development": {
-              "buildTarget": "qr-manager-front:build:development",
+              "buildTarget": "qr-manager-front-app:build:development",
               "proxyConfig": "proxy.conf.json"
             }
           },
@@ -78,7 +78,7 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "src/assets" 
+                "input": "src/assets"
               }
             ],
             "styles": [

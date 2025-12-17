@@ -10,7 +10,7 @@ import { Business } from '../models/business.model';
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './editar-wifi.html',
-  styleUrl: './editar-wifi.css'
+  styleUrls: ['./editar-wifi.css']
 })
 export class EditarWifi implements OnInit {
 

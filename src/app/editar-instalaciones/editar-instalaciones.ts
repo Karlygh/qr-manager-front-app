@@ -10,7 +10,7 @@ import { Business } from '../models/business.model';
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './editar-instalaciones.html',
-  styleUrl: './editar-instalaciones.css'
+  styleUrls: ['./editar-instalaciones.css']
 })
 export class EditarInstalaciones implements OnInit {
 

@@ -1,21 +1,53 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
+// Interfaces según la documentación de la API
+export interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+  refreshExpiresIn: number;
+}
+
+export interface RegisterResponse {
+  userId: string;
+  message: string;
+}
+
+export interface RefreshTokenResponse {
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+  refreshExpiresIn: number;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api';
-  private tokenKey = 'auth_token';
+  private platformId = inject(PLATFORM_ID);
+  private http = inject(HttpClient);
+  
+  private apiUrl = 'http://91.107.235.58:8081/api/v1/auth-manager/auth';
+  private accessTokenKey = 'access_token';
+  private refreshTokenKey = 'refresh_token';
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
   
-  constructor(private http: HttpClient) {}
-  
-  login(credentials: { email: string; password: string }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, credentials);
+  // Login
+  login(credentials: { email: string; password: string }): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials).pipe(
+      tap(response => {
+        if (response.accessToken) {
+          this.setTokens(response.accessToken, response.refreshToken);
+        }
+      })
+    );
   }
 
+  // Registro
   register(userData: {
     email: string;
     password: string;
@@ -27,30 +59,87 @@ export class AuthService {
     city: string;
     country: string;
     locality: string;
-    phone?: string;
-  }): Observable<any> {
-    return this.http.post('http://localhost:8080/api/v1/auth-manager/auth/register', userData);
+    phone: string;
+  }): Observable<RegisterResponse> {
+    return this.http.post<RegisterResponse>(`${this.apiUrl}/register`, userData);
+  }
+
+  // Refresh Token
+  refreshToken(): Observable<RefreshTokenResponse> {
+    const refreshToken = this.getRefreshToken();
+    return this.http.post<RefreshTokenResponse>(`${this.apiUrl}/refresh`, { refreshToken }).pipe(
+      tap(response => {
+        if (response.accessToken) {
+          this.setTokens(response.accessToken, response.refreshToken);
+        }
+      })
+    );
   }
   
-  logout(): void {
-    localStorage.removeItem(this.tokenKey);
+  // Logout
+  logout(): Observable<any> {
+    const refreshToken = this.getRefreshToken();
+    return this.http.post(`${this.apiUrl}/logout`, { refreshToken }).pipe(
+      tap(() => {
+        this.clearTokens();
+      })
+    );
+  }
+
+  // Logout local (sin llamada al backend)
+  logoutLocal(): void {
+    this.clearTokens();
+  }
+  
+  // Guardar tokens
+  private setTokens(accessToken: string, refreshToken: string): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem(this.accessTokenKey, accessToken);
+      localStorage.setItem(this.refreshTokenKey, refreshToken);
+    }
+    this.isAuthenticatedSubject.next(true);
+  }
+
+  // Limpiar tokens
+  private clearTokens(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem(this.accessTokenKey);
+      localStorage.removeItem(this.refreshTokenKey);
+    }
     this.isAuthenticatedSubject.next(false);
   }
   
-  setToken(token: string): void {
-    localStorage.setItem(this.tokenKey, token);
-    this.isAuthenticatedSubject.next(true);
-  }
-  
+  // Obtener access token
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem(this.accessTokenKey);
+    }
+    return null;
+  }
+
+  // Obtener refresh token
+  getRefreshToken(): string | null {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem(this.refreshTokenKey);
+    }
+    return null;
   }
   
+  // Observable de autenticación
   isAuthenticated(): Observable<boolean> {
     return this.isAuthenticatedSubject.asObservable();
   }
+
+  // Verificar si está autenticado (síncrono)
+  isAuthenticatedSync(): boolean {
+    return this.hasToken();
+  }
   
+  // Verificar si hay token
   private hasToken(): boolean {
-    return !!this.getToken();
+    if (isPlatformBrowser(this.platformId)) {
+      return !!localStorage.getItem(this.accessTokenKey);
+    }
+    return false;
   }
 }

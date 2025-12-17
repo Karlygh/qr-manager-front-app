@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './actualiza-carta-digital.html',
-  styleUrl: './actualiza-carta-digital.css'
+  styleUrls: ['./actualiza-carta-digital.css']
 })
 export class ActualizaCartaDigital {
 imageUrl = '../../assets/mockup/actualiza-comida.jpg';

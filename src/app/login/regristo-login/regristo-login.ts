@@ -9,7 +9,7 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule,RouterModule],
   templateUrl: './regristo-login.html',
-  styleUrl: './regristo-login.css'
+  styleUrls: ['./regristo-login.css']
 })
 export class RegristoLogin {
   private fb = inject(FormBuilder);

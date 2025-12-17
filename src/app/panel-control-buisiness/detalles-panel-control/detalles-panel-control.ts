@@ -1,6 +1,6 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, PLATFORM_ID, inject, OnDestroy } from '@angular/core';
 import { ActivatedRoute, RouterLink, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BusinessService } from '../../services/business.service';
 import { Business } from '../../models/business.model';
@@ -13,9 +13,12 @@ import { OpeningScheduleService, OpeningHour } from '../../services/opening-sche
   standalone: true,
   imports: [RouterModule, CommonModule, FormsModule, RouterLink,],
   templateUrl: './detalles-panel-control.html',
-  styleUrl: './detalles-panel-control.css'
+  styleUrls: ['./detalles-panel-control.css']
 })
-export class DetallesPanelControl implements OnInit, AfterViewInit {
+export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
+
+  private platformId = inject(PLATFORM_ID);
+  private visibilityChangeListener?: () => void;
 
   businessId: string | null = null;
   businessData: Business | null = null;
@@ -47,14 +50,16 @@ export class DetallesPanelControl implements OnInit, AfterViewInit {
     private businessService: BusinessService,
     private kitchenScheduleService: KitchenScheduleService,
     private openingScheduleService: OpeningScheduleService,
-
   ) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.businessId = params['businessId'];
       if (this.businessId) {
-        localStorage.setItem('currentBusinessId', this.businessId);
+        // ✅ Proteger localStorage
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('currentBusinessId', this.businessId);
+        }
         this.loadBusinessDetails(this.businessId);
       } else {
         this.error = 'Error: No se encontró el ID del negocio en la URL.';
@@ -64,12 +69,23 @@ export class DetallesPanelControl implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // Recargar datos cuando se regresa a la página
-    window.addEventListener('visibilitychange', () => {
-      if (!document.hidden && this.businessId) {
-        this.loadBusinessDetails(this.businessId);
-      }
-    });
+    // ✅ Proteger window
+    if (isPlatformBrowser(this.platformId)) {
+      this.visibilityChangeListener = () => {
+        if (!document.hidden && this.businessId) {
+          this.loadBusinessDetails(this.businessId);
+        }
+      };
+      
+      window.addEventListener('visibilitychange', this.visibilityChangeListener);
+    }
+  }
+
+  // ✅ Limpiar el listener cuando se destruya el componente
+  ngOnDestroy(): void {
+    if (isPlatformBrowser(this.platformId) && this.visibilityChangeListener) {
+      window.removeEventListener('visibilitychange', this.visibilityChangeListener);
+    }
   }
 
   loadBusinessDetails(id: string | number): void {
@@ -98,6 +114,7 @@ export class DetallesPanelControl implements OnInit, AfterViewInit {
     });
   }
 
+  // ... resto del código sin cambios
   loadKitchenHours(businessId: number): void {
     this.kitchenScheduleService.getKitchenHoursByBusiness(businessId).subscribe({
       next: (hours) => {

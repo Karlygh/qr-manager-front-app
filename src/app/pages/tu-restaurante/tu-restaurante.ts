@@ -8,7 +8,7 @@ import { PanelControlBuisiness } from '../../panel-control-buisiness/panel-contr
   standalone: true,
   imports: [CommonModule,RouterModule,PanelControlBuisiness],
   templateUrl: './tu-restaurante.html',
-  styleUrl: './tu-restaurante.css'
+  styleUrls: ['./tu-restaurante.css']
 })
 export class TuRestaurante {
 

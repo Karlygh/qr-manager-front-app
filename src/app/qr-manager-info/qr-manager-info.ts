@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   imports: [],
   standalone: true,
   templateUrl: './qr-manager-info.html',
-  styleUrl: './qr-manager-info.css'
+  styleUrls: ['./qr-manager-info.css']
 })
 export class QrManagerInfo {
 

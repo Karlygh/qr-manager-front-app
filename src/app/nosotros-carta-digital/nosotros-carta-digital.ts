@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './nosotros-carta-digital.html',
-  styleUrl: './nosotros-carta-digital.css'
+  styleUrls: ['./nosotros-carta-digital.css']
 })
 export class NosotrosCartaDigital {
 

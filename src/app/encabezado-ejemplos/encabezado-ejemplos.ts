@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './encabezado-ejemplos.html',
-  styleUrl: './encabezado-ejemplos.css'
+  styleUrls: ['./encabezado-ejemplos.css']
 })
 export class EncabezadoEjemplos {
 

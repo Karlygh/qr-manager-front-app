@@ -8,6 +8,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   ],
   templateUrl: './error404-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrl: './error404-page.component.css',
+  styleUrls: ['./error404-page.component.css'],
 })
 export default class error404PageComponent{}

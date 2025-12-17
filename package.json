@@ -1,13 +1,13 @@
 {
-  "name": "qr-manager-front",
-  "version": "0.0.0",
+  "name": "qr-manager-front-app",
+  "version": "1.0.0.0-SNAPSHOT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:qr-manager-front": "node dist/qr-manager-front/server/server.mjs"
+    "serve:ssr:qr-manager-front-app": "node dist/qr-manager-front-app/server/server.mjs"
   },
   "prettier": {
     "printWidth": 100,

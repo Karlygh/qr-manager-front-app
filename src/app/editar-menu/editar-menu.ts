@@ -25,7 +25,7 @@ interface Product {
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule, CrearProducto],
   templateUrl: './editar-menu.html',
-  styleUrl: './editar-menu.css'
+  styleUrls: ['./editar-menu.css']
 })
 export class EditarMenu implements OnInit {
   
