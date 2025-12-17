@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
     RouterModule
   ],
   templateUrl: './encabezado.html',
-  styleUrl: './encabezado.css'
+  styleUrls: ['./encabezado.css']
 })
 export class Encabezado {
 }

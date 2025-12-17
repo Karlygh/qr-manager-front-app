@@ -7,7 +7,7 @@ import { RouterLink, RouterModule } from '@angular/router';
   standalone: true,
   imports: [RouterLink,CommonModule,RouterModule],
   templateUrl: './sectionqr-cartadigital.html',
-  styleUrl: './sectionqr-cartadigital.css'
+  styleUrls: ['./sectionqr-cartadigital.css']
 })
 export class SectionqrCartadigital {
 

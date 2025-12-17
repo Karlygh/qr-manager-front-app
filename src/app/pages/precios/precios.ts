@@ -7,7 +7,7 @@ import { PreguntasFrecuentes } from "../../preguntas-frecuentes/preguntas-frecue
   standalone: true,
   imports: [CommonModule, PreguntasFrecuentes],
   templateUrl: './precios.html',
-  styleUrl: './precios.css'
+  styleUrls: ['./precios.css']
 })
 export class Precios {
   @Input() mostrarFaqs: boolean = true;

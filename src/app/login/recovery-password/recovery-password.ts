@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule,RouterModule],
   templateUrl: './recovery-password.html',
-  styleUrl: './recovery-password.css'
+  styleUrls: ['./recovery-password.css']
 })
 export class RecoveryPassword {
 

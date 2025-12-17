@@ -59,10 +59,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "qr-manager-front:build:production"
+              "buildTarget": "qr-manager-front-app:build:production"
             },
             "development": {
-              "buildTarget": "qr-manager-front:build:development",
+              "buildTarget": "qr-manager-front-app:build:development",
               "proxyConfig": "proxy.conf.json"
             }
           },

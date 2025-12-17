@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-login-social',
   imports: [],
   templateUrl: './login-social.html',
-  styleUrl: './login-social.css'
+  styleUrls: ['./login-social.css']
 })
 export class LoginSocial {
 

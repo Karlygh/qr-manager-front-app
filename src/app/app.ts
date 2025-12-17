@@ -18,7 +18,7 @@ import { LayoutService } from './services/layout.service';
     FooterComponent,
   ],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
 // 🔑 CLAVE: La clase se llama App
 export class App implements OnInit {

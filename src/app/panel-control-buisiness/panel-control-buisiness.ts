@@ -8,7 +8,7 @@ import { DetallesPanelControl } from './detalles-panel-control/detalles-panel-co
   standalone: true,
   imports: [RouterModule, CommonModule,DetallesPanelControl],
   templateUrl: './panel-control-buisiness.html',
-  styleUrl: './panel-control-buisiness.css'
+  styleUrls: ['./panel-control-buisiness.css']
 })
 export class PanelControlBuisiness {
 

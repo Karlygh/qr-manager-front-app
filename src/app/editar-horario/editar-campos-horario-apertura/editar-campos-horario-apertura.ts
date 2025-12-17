@@ -9,7 +9,7 @@ import { OpeningScheduleService, OpeningHour } from '../../services/opening-sche
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './editar-campos-horario-apertura.html',
-  styleUrl: './editar-campos-horario-apertura.css'
+  styleUrls: ['./editar-campos-horario-apertura.css']
 })
 export class EditarCamposHorarioApertura implements OnInit {
   businessId: number = 1;

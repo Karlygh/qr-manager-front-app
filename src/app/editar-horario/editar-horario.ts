@@ -9,7 +9,7 @@ import { KitchenScheduleService, KitchenHour } from '../services/kitchen-schedul
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './editar-horario.html',
-  styleUrl: './editar-horario.css'
+  styleUrls: ['./editar-horario.css']
 })
 export class EditarHorario implements OnInit {
   @Input() businessId: number = 1;

@@ -11,7 +11,7 @@ import { NosotrosCartaDigital } from "../../nosotros-carta-digital/nosotros-cart
   selector: 'app-carta-digital',
   imports: [RouterLink, CommonModule, RouterModule, SectionqrCartadigital, ActualizaCartaDigital, AlergenosCartaDigital, NosotrosCartaDigital], 
   templateUrl: './carta-digital.html',
-  styleUrl: './carta-digital.css'
+  styleUrls: ['./carta-digital.css']
 })
 export class CartaDigital {
 }

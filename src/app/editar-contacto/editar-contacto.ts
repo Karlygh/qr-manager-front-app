@@ -10,7 +10,7 @@ import { Business } from '../models/business.model';
   standalone: true,
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
   templateUrl: './editar-contacto.html',
-  styleUrl: './editar-contacto.css'
+  styleUrls: ['./editar-contacto.css']
 })
 export class EditarContacto implements OnInit {
 

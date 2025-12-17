@@ -10,7 +10,7 @@ import { SocialNetwork, SocialNetworkService } from '../../app/services/social-n
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './google-opiniones.html',
-  styleUrl: './google-opiniones.css'
+  styleUrls: ['./google-opiniones.css']
 })
 export class GoogleOpiniones implements OnInit {
   

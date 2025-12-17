@@ -10,7 +10,7 @@ import { SocialNetwork, SocialNetworkService } from '../../app/services/social-n
   standalone: true,
   imports: [CommonModule, FormsModule,RouterModule], 
   templateUrl: './editar-redes.html',
-  styleUrl: './editar-redes.css'
+  styleUrls: ['./editar-redes.css']
 })
 export class EditarRedesComponent implements OnInit {
   

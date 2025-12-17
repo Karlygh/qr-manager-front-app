@@ -7,7 +7,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 @Component({
   selector: 'app-contacto',
   standalone: true,
-  imports: [FormsModule,CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './contacto.html',
   styleUrls: ['./contacto.css']
 })

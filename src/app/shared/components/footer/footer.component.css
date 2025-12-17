@@ -1,169 +1,166 @@
-/* =========================================
-   Estilo General del Footer
-========================================= */
+/* Footer Container */
 .qr-footer {
-    background-color: #6aa486; /* Verde oscuro (como el texto de tu navbar) */
-    color: #e7e7e7; /* Gris claro */
-    padding: 60px 0 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #6aa486 0%, #105f34 100%);
+  color: #e7e7e7;
+  padding: 3rem 0 1.25rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .qr-footer-container {
-    display: flex;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    flex-wrap: wrap;
-    gap: 40px; /* Espacio entre columnas */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
 }
 
-/* -----------------------------------------
-   Estilos de Columnas
------------------------------------------ */
-.qr-footer-column {
-    flex-grow: 1;
-    min-width: 200px; /* Tamaño base para desktop */
-}
-
+/* Column Styles */
 .qr-footer-column h5 {
-    font-size: 1.1rem;
-    margin-bottom: 25px;
-    text-transform: uppercase;
-    color: #6aa486; /* Verde claro */
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    border-left: 3px solid #6aa486; /* Detalle decorativo */
-    padding-left: 10px;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 0.5rem;
 }
 
-/* -----------------------------------------
-   Sección Logo y Slogan
------------------------------------------ */
+/* Logo Section */
 .qr-logo-brand {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #105f34;
-    text-decoration: none;
-    display: block;
-    margin-bottom: 10px;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 0.75rem;
 }
 
 .qr-slogan {
-    font-size: 0.9rem;
-    color:#e7e7e7;
-    margin-bottom: 20px;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
 }
 
-/* -----------------------------------------
-   Enlaces y Hover
------------------------------------------ */
+/* Links */
 .qr-link {
-    color: #105f34;
-    text-decoration: none;
-    display: block;
-    margin-bottom: 12px;
-    font-size: 0.95rem;
-    transition: color 0.3s ease, transform 0.3s ease;
-    font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  font-weight: 400;
 }
 
 .qr-link:hover {
-    color: #e7e7e7; /* Resaltado en verde claro */
-    transform: translateX(5px); /* Deslizamiento sutil */
+  color: #fff;
+  transform: translateX(5px);
 }
 
-/* -----------------------------------------
-   Iconos Redes Sociales
------------------------------------------ */
+.link-active {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* Social Icons */
 .qr-social-icons {
-    margin-top: 30px;
-}
-.qr-social-icons a {
-    color: #105f34; /* Verde claro */
-    font-size: 1.6rem;
-    margin-right: 15px;
-    transition: color 0.3s ease, transform 0.3s ease;
-}
-.qr-social-icons a:hover {
-    color: #fff;
-    transform: scale(1.1);
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
 }
 
-/* -----------------------------------------
-   Copyright y Separador
------------------------------------------ */
+.qr-social-icons a {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.qr-social-icons a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* Footer Bottom */
 .qr-footer-bottom {
-    max-width: 1200px;
-    margin: 40px auto 0;
-    padding: 0 20px;
-    text-align: center;
+  max-width: 1200px;
+  margin: 2.5rem auto 0;
+  padding: 0 1.25rem;
+  text-align: center;
 }
 
 .qr-separator {
-    border: 0;
-    height: 1px;
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
-    margin: 20px 0;
+  border: 0;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0)
+  );
+  margin: 1.25rem 0;
 }
 
 .qr-copyright {
-    font-size: 0.85rem;
-    color: #a8c9e0;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
-/* =========================================
-   Responsividad (Móviles)
-========================================= */
+/* Contact Info */
+.qr-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-    .qr-footer-container {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-    
-    .qr-footer-column {
-        min-width: 90%;
-        margin-bottom: 20px;
-    }
+  .qr-footer {
+    padding: 2rem 0 1rem;
+  }
 
-    /* Centrar iconos en móviles */
-    .qr-social-icons {
-        margin-top: 20px;
-        text-align: center;
-    }
+  .qr-footer-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
 
-    /* Eliminar el borde decorativo de los títulos en móvil */
-    .qr-footer-column h5 {
-        border-left: none;
-        padding-left: 0;
-    }
+  .qr-footer-column h5 {
+    border-bottom: none;
+    border-left: 3px solid rgba(255, 255, 255, 0.5);
+    padding-left: 0.75rem;
+    text-align: left;
+  }
 
-    /* Alinear enlaces de la lista a la izquierda para mejor lectura en móvil */
-    .qr-info-links,
-    .qr-support-legal {
-        text-align: left;
-    }
+  .qr-social-icons {
+    justify-content: center;
+  }
 
-    /* Mover los links a la izquierda para mejor UX en móvil */
-    .qr-link {
-        display: inline-block; /* Permite que los links fluyan en lugar de ser bloques */
-        margin-right: 20px;
-        margin-bottom: 8px;
-    }
-}
-.link-estatico {
-    color: #e7e7e7; /* Color para resaltar que es la página actual */
-    text-decoration: underline; /* Subrayado permanente */
-    display: block;
-    margin-bottom: 12px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    
-    /* ❌ SIN PROPIEDADES TRANSITION NI TRANSFORM */
+  .qr-link {
+    text-align: left;
+  }
 }
 
-/* Si usas la clase link-subrayado solo para el subrayado (opcional): */
-.link-subrayado {
-    text-decoration: underline;
+@media (max-width: 480px) {
+  .qr-logo-brand {
+    font-size: 1.5rem;
+  }
+
+  .qr-social-icons a {
+    width: 36px;
+    height: 36px;
+    font-size: 1.25rem;
+  }
 }
