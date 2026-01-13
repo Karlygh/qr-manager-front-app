@@ -179,9 +179,9 @@
                 </table>
                 <p *ngIf="openingHours.length === 0" class="text-muted small">No hay horarios de apertura configurados.</p>
                 <div class="text-center mt-3">
-                    <a [routerLink]="['/editar-campos-horario-apertura']" class="btn btn-sm custom-btn-secondary">
+                    <button (click)="editarHorarioApertura()" class="btn btn-sm custom-btn-secondary">
                         <i class="bi bi-pencil-square me-1"></i> Ver/Editar Horarios de Apertura
-                    </a>
+                    </button>
                 </div>
 
                 <h3 class="fw-bold mt-5 mb-3 color-secondary border-bottom pb-2">📅 Horarios de Cocina</h3>
@@ -209,9 +209,9 @@
                 </table>
                 <p *ngIf="kitchenHours.length === 0" class="text-muted small">No hay horarios de cocina configurados.</p>
                 <div class="text-center mt-3">
-                    <a [routerLink]="['/editar-horario']" class="btn btn-sm custom-btn-secondary">
+                    <button (click)="editarHorarioCocina()" class="btn btn-sm custom-btn-secondary">
                         <i class="bi bi-pencil-square me-1"></i> Ver/Editar Horarios
-                    </a>
+                    </button>
                 </div>
                 
                 <h3 class="fw-bold mt-5 mb-3 color-secondary border-bottom pb-2">

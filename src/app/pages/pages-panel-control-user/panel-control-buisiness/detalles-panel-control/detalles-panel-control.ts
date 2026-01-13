@@ -1,17 +1,14 @@
 import { Component, OnInit, AfterViewInit, PLATFORM_ID, inject, OnDestroy } from '@angular/core';
-import { ActivatedRoute, RouterLink, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BusinessService } from '../../../../services/business.service';
 import { Business } from '../../../../models/business.model';
-import { KitchenScheduleService, KitchenHour } from '../../../../services/kitchen-schedule.service';
-import { OpeningScheduleService, OpeningHour } from '../../../../services/opening-schedule.service';
-
 
 @Component({
   selector: 'app-detalles-panel-control',
   standalone: true,
-  imports: [RouterModule, CommonModule, FormsModule, RouterLink,],
+  imports: [RouterModule, CommonModule, FormsModule, RouterLink],
   templateUrl: './detalles-panel-control.html',
   styleUrls: ['./detalles-panel-control.css']
 })
@@ -22,9 +19,14 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
 
   businessId: string | null = null;
   businessData: Business | null = null;
-  kitchenHours: KitchenHour[] = [];
-  openingHours: OpeningHour[] = [];
-  wifiData: any = null;
+  
+  get kitchenHours() {
+    return this.businessData?.kitchenHours || [];
+  }
+  
+  get openingHours() {
+    return this.businessData?.openingHours || [];
+  }
 
   isLoading: boolean = true;
   error: string | null = null;
@@ -47,16 +49,14 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private businessService: BusinessService,
-    private kitchenScheduleService: KitchenScheduleService,
-    private openingScheduleService: OpeningScheduleService,
+    private router: Router,
+    private businessService: BusinessService
   ) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.businessId = params['businessId'];
       if (this.businessId) {
-        // ✅ Proteger localStorage
         if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem('currentBusinessId', this.businessId);
         }
@@ -69,7 +69,6 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    // ✅ Proteger window
     if (isPlatformBrowser(this.platformId)) {
       this.visibilityChangeListener = () => {
         if (!document.hidden && this.businessId) {
@@ -81,7 +80,6 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // ✅ Limpiar el listener cuando se destruya el componente
   ngOnDestroy(): void {
     if (isPlatformBrowser(this.platformId) && this.visibilityChangeListener) {
       window.removeEventListener('visibilitychange', this.visibilityChangeListener);
@@ -95,10 +93,6 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
     this.businessService.getBusinessById(id).subscribe({
       next: (data: Business) => {
         this.businessData = data;
-        this.loadKitchenHours(Number(id));
-        this.loadOpeningHours(Number(id));
-        this.loadWifiData(String(id));
-
         this.isLoading = false;
       },
       error: (err) => {
@@ -110,40 +104,6 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
         this.isLoading = false;
         console.error('Error de la API al obtener negocio:', err);
         this.checkAvailableBusinesses();
-      }
-    });
-  }
-
-  // ... resto del código sin cambios
-  loadKitchenHours(businessId: number): void {
-    this.kitchenScheduleService.getKitchenHoursByBusiness(businessId).subscribe({
-      next: (hours) => {
-        this.kitchenHours = hours || [];
-      },
-      error: () => {
-        this.kitchenHours = [];
-      }
-    });
-  }
-
-  loadOpeningHours(businessId: number): void {
-    this.openingScheduleService.getOpeningHoursByBusiness(businessId).subscribe({
-      next: (hours) => {
-        this.openingHours = hours || [];
-      },
-      error: () => {
-        this.openingHours = [];
-      }
-    });
-  }
-
-  loadWifiData(businessId: string): void {
-    this.businessService.getWifiByBusinessId(businessId).subscribe({
-      next: (wifi) => {
-        this.wifiData = wifi;
-      },
-      error: () => {
-        this.wifiData = null;
       }
     });
   }
@@ -208,6 +168,24 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
         }
       });
     }
+  }
+
+  editarHorarioCocina(): void {
+    this.router.navigate(['/editar-horario'], {
+      state: { 
+        businessId: this.businessData?.id,
+        kitchenHours: this.kitchenHours 
+      }
+    });
+  }
+
+  editarHorarioApertura(): void {
+    this.router.navigate(['/editar-campos-horario-apertura'], {
+      state: { 
+        businessId: this.businessData?.id,
+        openingHours: this.openingHours 
+      }
+    });
   }
 
   hasGoogleReviews(): boolean {

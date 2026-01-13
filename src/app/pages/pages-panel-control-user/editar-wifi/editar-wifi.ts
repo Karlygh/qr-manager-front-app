@@ -51,34 +51,17 @@ export class EditarWifi implements OnInit {
     this.businessService.getBusinessById(id).subscribe({
       next: (data: Business) => {
         this.businessData = data;
-        this.loadWifiData();
+        this.wifiData = data.wifi || null;
+        this.wifiForm = {
+          name: data.wifi?.name || '',
+          password: data.wifi?.password || ''
+        };
+        this.isLoading = false;
       },
       error: (err) => {
         this.error = 'Error al cargar los datos del negocio.';
         this.isLoading = false;
         console.error('Error:', err);
-      }
-    });
-  }
-
-  loadWifiData(): void {
-    if (!this.businessId) return;
-    
-    this.businessService.getWifiByBusinessId(this.businessId).subscribe({
-      next: (wifiData) => {
-        console.log('WiFi data loaded:', wifiData);
-        this.wifiData = wifiData;
-        this.wifiForm = {
-          name: wifiData.name || '',
-          password: wifiData.password || ''
-        };
-        this.isLoading = false;
-      },
-      error: (err) => {
-        // Si no existe WiFi, no es un error, simplemente no hay configuración
-        this.wifiData = null;
-        this.isLoading = false;
-        console.log('No WiFi configuration found:', err);
       }
     });
   }
@@ -100,7 +83,6 @@ export class EditarWifi implements OnInit {
     };
 
     if (this.wifiData) {
-      // Actualizar WiFi existente
       this.businessService.updateWifi(this.businessId, this.wifiData.id, wifiData).subscribe({
         next: (updatedWifi) => {
           this.wifiData = updatedWifi;
@@ -114,7 +96,6 @@ export class EditarWifi implements OnInit {
         }
       });
     } else {
-      // Crear nuevo WiFi
       this.businessService.createWifi(wifiData).subscribe({
         next: (newWifi) => {
           this.wifiData = newWifi;
@@ -158,7 +139,6 @@ export class EditarWifi implements OnInit {
         console.error('Error status:', err.status);
         console.error('Error body:', err.error);
         
-        // El backend tiene un bug y no puede eliminar el WiFi
         this.error = 'Error del servidor: No se pudo eliminar la configuración WiFi. Contacta al administrador del sistema.';
         console.error('Backend error: El endpoint DELETE no funciona correctamente');
         this.closeDeleteModal();
