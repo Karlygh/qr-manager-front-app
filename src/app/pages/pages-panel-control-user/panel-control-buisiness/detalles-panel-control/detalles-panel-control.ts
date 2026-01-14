@@ -5,6 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { BusinessService } from '../../../../services/business.service';
 import { Business } from '../../../../models/business.model';
 
+interface GroupedSchedule {
+  day: string;
+  intervals: { opening: string; closing: string; }[];
+  status: boolean;
+  isSplit: boolean;
+}
+
 @Component({
   selector: 'app-detalles-panel-control',
   standalone: true,
@@ -19,13 +26,51 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
 
   businessId: string | null = null;
   businessData: Business | null = null;
-  
-  get kitchenHours() {
-    return this.businessData?.kitchenHours || [];
+  kitchenHours: GroupedSchedule[] = [];
+  openingHours: GroupedSchedule[] = [];
+
+  private groupSchedulesByDay(schedules: any[]): GroupedSchedule[] {
+    const dayOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    const grouped: { [key: string]: GroupedSchedule } = {};
+    
+    schedules.forEach(schedule => {
+      if (!grouped[schedule.day]) {
+        grouped[schedule.day] = {
+          day: schedule.day,
+          intervals: [],
+          status: schedule.status,
+          isSplit: false
+        };
+      }
+      
+      if (schedule.intervals && schedule.intervals.length > 0) {
+        schedule.intervals.forEach((interval: any) => {
+          grouped[schedule.day].intervals.push({
+            opening: this.formatTime(interval.startTime),
+            closing: this.formatTime(interval.endTime)
+          });
+        });
+        
+        grouped[schedule.day].isSplit = grouped[schedule.day].intervals.length > 1;
+      }
+    });
+    
+    return dayOrder
+      .filter(day => grouped[day])
+      .map(day => grouped[day]);
   }
-  
-  get openingHours() {
-    return this.businessData?.openingHours || [];
+
+  private formatTime(time: string): string {
+    if (!time) return '00:00';
+    const parts = time.split(':');
+    return `${parts[0]}:${parts[1]}`;
+  }
+
+  // MÉTODO QUE FALTABA
+  getFormattedIntervals(schedule: GroupedSchedule): string {
+    return schedule.intervals
+      .map(interval => `${interval.opening} - ${interval.closing}`)
+      .join(' / ');
   }
 
   isLoading: boolean = true;
@@ -87,12 +132,23 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
   }
 
   loadBusinessDetails(id: string | number): void {
+    console.log('🔄 Loading business details for ID:', id);
     this.isLoading = true;
     this.error = null;
 
     this.businessService.getBusinessById(id).subscribe({
       next: (data: Business) => {
+        console.log('✅ Business data loaded:', data);
+        console.log('🍳 Kitchen hours in response:', data.kitchenHours);
+        console.log('🏢 Opening hours in response:', data.openingHours);
+        
         this.businessData = data;
+        this.kitchenHours = this.groupSchedulesByDay(data.kitchenHours || []);
+        this.openingHours = this.groupSchedulesByDay(data.openingHours || []);
+        
+        console.log('🔍 Kitchen hours procesados:', this.kitchenHours);
+        console.log('🔍 Opening hours procesados:', this.openingHours);
+        
         this.isLoading = false;
       },
       error: (err) => {
@@ -102,7 +158,7 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
           this.error = 'Error al cargar los detalles del negocio.';
         }
         this.isLoading = false;
-        console.error('Error de la API al obtener negocio:', err);
+        console.error('❌ Error de la API al obtener negocio:', err);
         this.checkAvailableBusinesses();
       }
     });
@@ -171,21 +227,15 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
   }
 
   editarHorarioCocina(): void {
-    this.router.navigate(['/editar-horario'], {
-      state: { 
-        businessId: this.businessData?.id,
-        kitchenHours: this.kitchenHours 
-      }
-    });
+    if (this.businessData?.id) {
+      this.router.navigate(['/panel', this.businessData.id, 'editar-horario']);
+    }
   }
 
   editarHorarioApertura(): void {
-    this.router.navigate(['/editar-campos-horario-apertura'], {
-      state: { 
-        businessId: this.businessData?.id,
-        openingHours: this.openingHours 
-      }
-    });
+    if (this.businessData?.id) {
+      this.router.navigate(['/panel', this.businessData.id, 'editar-campos-horario-apertura']);
+    }
   }
 
   hasGoogleReviews(): boolean {

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 export interface KitchenHour {
   id?: number;
@@ -10,6 +10,7 @@ export interface KitchenHour {
   openingTime: string;
   closingTime: string;
   status?: boolean;
+  dayGroupId?: number;
 }
 
 export interface KitchenHourResponse {
@@ -27,8 +28,11 @@ export interface KitchenHourResponse {
 export interface KitchenHourRequest {
   businessId: number;
   day: string;
-  openingTime: string;
-  closingTime: string;
+  status: boolean;
+  intervals: {
+    startTime: string;
+    endTime: string;
+  }[];
 }
 
 @Injectable({
@@ -40,22 +44,61 @@ export class KitchenScheduleService {
 
   getKitchenHoursByBusiness(businessId: number): Observable<KitchenHour[]> {
     return this.http.get<KitchenHourResponse[]>(`${this.apiUrl}/${businessId}`).pipe(
+      map(responses => this.convertResponsesToKitchenHours(responses)),
+      catchError(error => {
+        console.error('Error fetching kitchen hours:', error);
+        return of([]);
+      })
+    );
+  }
+
+  saveDaySchedules(businessId: number, day: string, schedules: KitchenHour[]): Observable<KitchenHourResponse> {
+    const request: KitchenHourRequest = {
+      businessId: businessId,
+      day: day,
+      status: schedules.length > 0 && schedules[0].status !== undefined ? schedules[0].status : true,
+      intervals: schedules.map(s => ({
+        startTime: this.normalizeTime(s.openingTime),
+        endTime: this.normalizeTime(s.closingTime)
+      }))
+    };
+
+    const dayGroupId = schedules[0]?.dayGroupId;
+    if (dayGroupId) {
+      return this.http.patch<KitchenHourResponse>(`${this.apiUrl}/${dayGroupId}`, request);
+    } else {
+      return this.http.post<KitchenHourResponse>(`${this.apiUrl}/${businessId}`, request);
+    }
+  }
+
+  saveAllKitchenHours(businessId: number, allSchedules: KitchenHour[]): Observable<KitchenHour[]> {
+    const schedulesByDay = this.groupSchedulesByDay(allSchedules);
+    const requests: KitchenHourRequest[] = [];
+    
+    Object.keys(schedulesByDay).forEach(day => {
+      const daySchedules = schedulesByDay[day];
+      requests.push({
+        businessId: businessId,
+        day: day,
+        status: daySchedules.length > 0 && daySchedules[0].status !== undefined ? daySchedules[0].status : true,
+        intervals: daySchedules.map(s => ({
+          startTime: this.normalizeTime(s.openingTime),
+          endTime: this.normalizeTime(s.closingTime)
+        }))
+      });
+    });
+
+    return this.http.post<KitchenHourResponse[]>(`${this.apiUrl}/all/${businessId}`, requests).pipe(
       map(responses => this.convertResponsesToKitchenHours(responses))
     );
   }
 
-  createKitchenHour(businessId: number, hour: KitchenHourRequest): Observable<KitchenHour> {
-    console.log('Creating kitchen hour:', { businessId, hour, url: `${this.apiUrl}/${businessId}` });
-    return this.http.post<KitchenHourResponse>(`${this.apiUrl}/${businessId}`, hour).pipe(
-      map(response => this.convertResponseToKitchenHour(response))
-    );
+  deleteAllKitchenHours(businessId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/all/${businessId}`);
   }
 
-  updateKitchenHour(id: number, hour: KitchenHourRequest): Observable<KitchenHour> {
-    console.log('Updating kitchen hour:', { id, hour, url: `${this.apiUrl}/${id}` });
-    return this.http.patch<KitchenHourResponse>(`${this.apiUrl}/${id}`, hour).pipe(
-      map(response => this.convertResponseToKitchenHour(response))
-    );
+  deleteDaySchedule(dayGroupId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${dayGroupId}`);
   }
 
   private convertResponsesToKitchenHours(responses: KitchenHourResponse[]): KitchenHour[] {
@@ -67,9 +110,10 @@ export class KitchenScheduleService {
           id: interval.id,
           businessId: response.businessId,
           day: response.day,
-          openingTime: interval.startTime,
-          closingTime: interval.endTime,
-          status: response.status
+          openingTime: this.stripSeconds(interval.startTime),
+          closingTime: this.stripSeconds(interval.endTime),
+          status: response.status,
+          dayGroupId: response.id
         });
       });
     });
@@ -77,29 +121,31 @@ export class KitchenScheduleService {
     return kitchenHours;
   }
 
-  private convertResponseToKitchenHour(response: KitchenHourResponse): KitchenHour {
-    // Devolver el primer interval como KitchenHour
-    const firstInterval = response.intervals[0];
-    return {
-      id: firstInterval.id,
-      businessId: response.businessId,
-      day: response.day,
-      openingTime: firstInterval.startTime,
-      closingTime: firstInterval.endTime,
-      status: response.status
-    };
+  private groupSchedulesByDay(schedules: KitchenHour[]): { [key: string]: KitchenHour[] } {
+    const grouped: { [key: string]: KitchenHour[] } = {};
+    
+    schedules.forEach(schedule => {
+      if (!grouped[schedule.day]) {
+        grouped[schedule.day] = [];
+      }
+      grouped[schedule.day].push(schedule);
+    });
+    
+    return grouped;
   }
 
-  deleteKitchenHour(id: number): Observable<void> {
-    console.log('Deleting kitchen hour:', { id, url: `${this.apiUrl}/${id}` });
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  private normalizeTime(time: string): string {
+    if (!time) return '00:00:00';
+    const parts = time.split(':');
+    if (parts.length === 2) {
+      return `${parts[0]}:${parts[1]}:00`;
+    }
+    return time;
   }
 
-  saveAllKitchenHours(businessId: number, hours: KitchenHourRequest[]): Observable<KitchenHour[]> {
-    return this.http.post<KitchenHour[]>(`${this.apiUrl}/all/${businessId}`, hours);
-  }
-
-  deleteAllKitchenHours(businessId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/all/${businessId}`);
+  private stripSeconds(time: string): string {
+    if (!time) return '00:00';
+    const parts = time.split(':');
+    return `${parts[0]}:${parts[1]}`;
   }
 }

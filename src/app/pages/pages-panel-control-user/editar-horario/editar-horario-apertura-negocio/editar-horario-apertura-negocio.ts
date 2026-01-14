@@ -22,7 +22,7 @@ export class EditarHorarioAperturaNegocio implements OnInit {
   days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
   daySchedules: DaySchedules = {};
   loading = false;
-  savingScheduleId: number | null = null;
+  savingDay: string | null = null;
   errorMessage: string | null = null;
   successMessage: string | null = null;
 
@@ -52,12 +52,14 @@ export class EditarHorarioAperturaNegocio implements OnInit {
       .subscribe({
         next: (hours) => {
           if (hours && hours.length > 0) {
+            this.openingHours = hours;
             this.groupSchedulesByDay(hours);
           } else {
             this.initializeSchedule();
           }
         },
-        error: () => {
+        error: (err) => {
+          console.error('Error loading schedules:', err);
           this.initializeSchedule();
         }
       });
@@ -68,8 +70,8 @@ export class EditarHorarioAperturaNegocio implements OnInit {
       this.daySchedules[day] = [{
         businessId: this.businessId,
         day,
-        openingTime: '08:00:00',
-        closingTime: '22:00:00',
+        openingTime: '08:00',
+        closingTime: '22:00',
         status: true
       }];
     });
@@ -93,8 +95,8 @@ export class EditarHorarioAperturaNegocio implements OnInit {
         this.daySchedules[day] = [{
           businessId: this.businessId,
           day,
-          openingTime: '08:00:00',
-          closingTime: '22:00:00',
+          openingTime: '08:00',
+          closingTime: '22:00',
           status: true
         }];
       }
@@ -110,8 +112,8 @@ export class EditarHorarioAperturaNegocio implements OnInit {
     this.daySchedules[day].push({
       businessId: this.businessId,
       day,
-      openingTime: '08:00:00',
-      closingTime: '22:00:00',
+      openingTime: '08:00',
+      closingTime: '22:00',
       status: true
     });
   }
@@ -157,76 +159,61 @@ export class EditarHorarioAperturaNegocio implements OnInit {
     return time.length === 5 ? time + ':00' : time;
   }
 
+  // Guardar un horario individual = guardar TODOS los horarios del día
   saveSchedule(schedule: OpeningHour) {
-    const validationError = this.validateSchedule(schedule);
-    if (validationError) {
-      this.showError(validationError);
-      return;
+    const day = schedule.day;
+    const daySchedules = this.daySchedules[day];
+    
+    // Validar TODOS los horarios del día
+    for (const s of daySchedules) {
+      const validationError = this.validateSchedule(s);
+      if (validationError) {
+        this.showError(validationError);
+        return;
+      }
     }
 
-    this.savingScheduleId = schedule.id || null;
+    this.savingDay = day;
     this.errorMessage = null;
 
-    const normalized = {
-      businessId: this.businessId,
-      day: schedule.day,
-      openingTime: this.normalizeTime(schedule.openingTime),
-      closingTime: this.normalizeTime(schedule.closingTime),
-      status: schedule.status !== undefined ? schedule.status : true
-    };
-
-    if (schedule.id) {
-      this.openingScheduleService.updateOpeningHour(schedule.id, normalized).subscribe({
-        next: (updated) => {
-          Object.assign(schedule, updated);
-          // Actualizar en la lista principal
-          const index = this.openingHours.findIndex(h => h.id === schedule.id);
-          if (index !== -1) {
-            this.openingHours[index] = {...updated};
-          }
-          this.savingScheduleId = null;
-          this.showSuccess('Horario guardado correctamente');
-        },
-        error: (err) => {
-          console.error('Error updating schedule:', err);
-          this.showError('Error al guardar el horario');
-          this.savingScheduleId = null;
-        }
-      });
-    } else {
-      this.openingScheduleService.createOpeningHour(this.businessId, normalized).subscribe({
-        next: (created) => {
-          Object.assign(schedule, created);
-          // Actualizar la lista principal de horarios
-          this.openingHours.push(created);
-          this.savingScheduleId = null;
-          this.showSuccess('Horario creado correctamente');
-        },
-        error: (err) => {
-          console.error('Error creating schedule:', err);
-          this.showError('Error al crear el horario');
-          this.savingScheduleId = null;
-        }
-      });
-    }
+    // Guardar todos los horarios del día
+    this.openingScheduleService.saveDaySchedules(this.businessId, day, daySchedules).subscribe({
+      next: (response) => {
+        // Actualizar los horarios con la respuesta del servidor
+        const newHours: OpeningHour[] = [];
+        response.intervals.forEach(interval => {
+          newHours.push({
+            id: interval.id,
+            businessId: response.businessId,
+            day: response.day,
+            openingTime: this.stripSeconds(interval.startTime),
+            closingTime: this.stripSeconds(interval.endTime),
+            status: response.status,
+            dayGroupId: response.id
+          });
+        });
+        
+        this.daySchedules[day] = newHours;
+        
+        // Actualizar la lista principal de openingHours
+        this.openingHours = this.openingHours.filter(h => h.day !== day);
+        this.openingHours.push(...newHours);
+        
+        this.savingDay = null;
+        this.showSuccess('Horarios del día guardados correctamente');
+      },
+      error: (err) => {
+        console.error('Error saving day schedules:', err);
+        this.showError('Error al guardar el horario');
+        this.savingDay = null;
+      }
+    });
   }
 
   deleteSchedule(day: string, schedule: OpeningHour) {
-    if (!schedule.id) {
-      const index = this.daySchedules[day].indexOf(schedule);
-      if (index > -1) {
-        this.daySchedules[day].splice(index, 1);
-      }
-      
-      if (this.daySchedules[day].length === 0) {
-        this.daySchedules[day] = [{
-          businessId: this.businessId,
-          day,
-          openingTime: '08:00:00',
-          closingTime: '22:00:00',
-          status: true
-        }];
-      }
+    // Si es el único horario del día, no permitir eliminar
+    if (this.daySchedules[day].length === 1) {
+      this.showError('Debe haber al menos un horario por día');
       return;
     }
 
@@ -234,36 +221,19 @@ export class EditarHorarioAperturaNegocio implements OnInit {
       return;
     }
 
-    this.openingScheduleService.deleteOpeningHour(schedule.id).subscribe({
-      next: () => {
-        const index = this.daySchedules[day].indexOf(schedule);
-        if (index > -1) {
-          this.daySchedules[day].splice(index, 1);
-        }
-        
-        // Eliminar de la lista principal
-        const mainIndex = this.openingHours.findIndex(h => h.id === schedule.id);
-        if (mainIndex !== -1) {
-          this.openingHours.splice(mainIndex, 1);
-        }
-        
-        if (this.daySchedules[day].length === 0) {
-          this.daySchedules[day] = [{
-            businessId: this.businessId,
-            day,
-            openingTime: '08:00:00',
-            closingTime: '22:00:00',
-            status: true
-          }];
-        }
-        
-        this.showSuccess('Horario eliminado correctamente');
-      },
-      error: (err) => {
-        console.error('Error deleting schedule:', err);
-        this.showError('Error al eliminar el horario');
-      }
-    });
+    // Remover del array local
+    const index = this.daySchedules[day].indexOf(schedule);
+    if (index > -1) {
+      this.daySchedules[day].splice(index, 1);
+    }
+    
+    // Eliminar de la lista principal
+    const mainIndex = this.openingHours.findIndex(h => h.id === schedule.id);
+    if (mainIndex !== -1) {
+      this.openingHours.splice(mainIndex, 1);
+    }
+    
+    this.showSuccess('Horario eliminado. Recuerda guardar los cambios.');
   }
 
   saveAllSchedules() {
@@ -275,6 +245,7 @@ export class EditarHorarioAperturaNegocio implements OnInit {
       allSchedules.push(...this.daySchedules[day]);
     }
 
+    // Validar todos los horarios
     for (const schedule of allSchedules) {
       const validationError = this.validateSchedule(schedule);
       if (validationError) {
@@ -284,47 +255,22 @@ export class EditarHorarioAperturaNegocio implements OnInit {
       }
     }
 
-    const updatePromises = allSchedules
-      .filter(s => s.id)
-      .map(schedule => {
-        const normalized = {
-          businessId: this.businessId,
-          day: schedule.day,
-          openingTime: this.normalizeTime(schedule.openingTime),
-          closingTime: this.normalizeTime(schedule.closingTime),
-          status: schedule.status !== undefined ? schedule.status : true
-        };
-        return this.openingScheduleService.updateOpeningHour(schedule.id!, normalized).toPromise();
-      });
-
-    const createPromises = allSchedules
-      .filter(s => !s.id)
-      .map(schedule => {
-        const normalized = {
-          businessId: this.businessId,
-          day: schedule.day,
-          openingTime: this.normalizeTime(schedule.openingTime),
-          closingTime: this.normalizeTime(schedule.closingTime),
-          status: schedule.status !== undefined ? schedule.status : true
-        };
-        return this.openingScheduleService.createOpeningHour(this.businessId, normalized).toPromise();
-      });
-
-    Promise.all([...updatePromises, ...createPromises])
-      .then((results) => {
-        // Actualizar openingHours con los resultados
-        this.loadSchedule();
+    this.openingScheduleService.saveAllOpeningHours(this.businessId, allSchedules).subscribe({
+      next: (updatedHours) => {
         this.loading = false;
+        this.openingHours = updatedHours;
+        this.groupSchedulesByDay(updatedHours);
         this.showSuccess('Todos los horarios guardados correctamente');
         setTimeout(() => {
           this.router.navigate(['/panel-control-buisiness', this.businessId]);
         }, 1500);
-      })
-      .catch((error) => {
-        console.error('Error saving schedules:', error);
+      },
+      error: (error) => {
+        console.error('Error saving all schedules:', error);
         this.showError('Error al guardar los horarios');
         this.loading = false;
-      });
+      }
+    });
   }
 
   deleteAllSchedules() {
@@ -336,6 +282,7 @@ export class EditarHorarioAperturaNegocio implements OnInit {
       .subscribe({
         next: () => {
           this.initializeSchedule();
+          this.openingHours = [];
           this.showSuccess('Horarios reseteados correctamente');
         },
         error: (error) => {
@@ -363,11 +310,12 @@ export class EditarHorarioAperturaNegocio implements OnInit {
   }
 
   isSaving(schedule: OpeningHour): boolean {
-    return this.savingScheduleId === schedule.id;
+    return this.savingDay === schedule.day;
   }
 
   showError(message: string) {
     this.errorMessage = message;
+    this.successMessage = null;
     setTimeout(() => {
       this.errorMessage = null;
     }, 5000);
@@ -375,8 +323,15 @@ export class EditarHorarioAperturaNegocio implements OnInit {
 
   showSuccess(message: string) {
     this.successMessage = message;
+    this.errorMessage = null;
     setTimeout(() => {
       this.successMessage = null;
     }, 3000);
+  }
+
+  private stripSeconds(time: string): string {
+    if (!time) return '00:00';
+    const parts = time.split(':');
+    return `${parts[0]}:${parts[1]}`;
   }
 }

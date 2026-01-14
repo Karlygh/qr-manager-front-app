@@ -31,7 +31,7 @@
     z-index: 1;
     border-radius: 12px;
 }
-span.badge{
+.badge-business-id {
     background-color: #198754;
     color: white;
     font-size: 0.6rem;
@@ -104,15 +104,25 @@ span.badge{
     font-size: 0.75rem;
     border-radius: 0.25rem;
 }
-.custom-badge-info {
-    background-color: #3b3c78;
-    color: #198754;
+.badge-facility {
+    background-color: #198754;
+    color: white;
+    font-weight: 300;
+    padding: 0.4em 0.8em;
+    font-size: 0.85rem;
 }
-.custom-badge-success {
+.badge-configured {
+    background-color: #198754;
+    color: white;
+    font-weight: 400;
+    padding: 0.4em 0.8em;
+    font-size: 0.85rem;
+}
+span.badge.custom-badge-success {
     background-color: #198754;
     color: white;
 }
-.custom-badge-danger {
+span.badge.custom-badge-danger {
     background-color: #dc3545;
     color: white;
 }
