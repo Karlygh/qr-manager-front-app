@@ -47,7 +47,7 @@
                         <li><strong>Dirección:</strong> {{ businessData.address || 'No especificada' }}</li>
                     </ul>
                 </div>
-                <a [routerLink]="['/editar-contacto']" class="btn btn-sm custom-btn-secondary mt-3">
+                <a [routerLink]="['/panel', businessData.id, 'editar-contacto']" class="btn btn-sm custom-btn-secondary mt-3">
                     <i class="bi bi-pencil-square me-1"></i> Ver/Editar Contacto
                 </a>
             </div>
@@ -65,7 +65,7 @@
                     </ul>
                     <p *ngIf="!businessData.wifi" class="text-muted small">Wi-Fi no configurado.</p>
                 </div>
-                <a [routerLink]="['/editar-wifi']" class="btn btn-sm custom-btn-secondary mt-3">
+                <a [routerLink]="['/panel', businessData.id, 'editar-wifi']" class="btn btn-sm custom-btn-secondary mt-3">
                     <i class="bi bi-pencil-square me-1"></i> Ver/Editar Wifi
                 </a>
             </div>
@@ -79,12 +79,12 @@
                     <h5 class="card-title color-success"><i class="bi bi-gear-fill me-2"></i>Instalaciones</h5>
                     <div class="mt-3">
                         <span *ngIf="businessData.facilities.length === 0" class="text-muted small">No hay instalaciones registradas.</span>
-                        <span *ngFor="let facility of businessData.facilities" class="badge custom-badge-info me-2 mb-1">
+                        <span *ngFor="let facility of businessData.facilities" class="badge badge-facility me-2 mb-1">
                             {{ facility.name }}
                         </span>
                     </div>
                 </div>
-                <a [routerLink]="['/editar-instalaciones']" class="btn btn-sm custom-btn-secondary mt-3">
+                <a [routerLink]="['/panel', businessData.id, 'editar-instalaciones']" class="btn btn-sm custom-btn-secondary mt-3">
                     <i class="bi bi-pencil-square me-1"></i> Ver/Editar Instalaciones
                 </a>
             </div>
@@ -102,7 +102,7 @@
                         <li><strong>Categorías:</strong> 0 creadas</li>
                     </ul>
                 </div>
-                <a [routerLink]="['/editar-menu']" class="btn btn-sm custom-btn-secondary mt-3">
+                <a [routerLink]="['/panel', businessData.id, 'editar-menu']" class="btn btn-sm custom-btn-secondary mt-3">
                     <i class="bi bi-pencil-square me-1"></i> Ver/Editar Menú
                 </a>
             </div>
@@ -129,7 +129,7 @@
                 <div>
                     <h5 class="card-title" [ngClass]="hasGoogleReviews() ? 'color-primary' : 'color-info'">
                         <i class="bi" [ngClass]="hasGoogleReviews() ? 'bi-google text-primary' : 'bi-google'" class="me-2"></i>Google Reseñas
-                        <span *ngIf="hasGoogleReviews()" class="badge bg-success ms-2 small">
+                        <span *ngIf="hasGoogleReviews()" class="badge badge-configured ms-2 small">
                             <i class="bi bi-check-circle-fill me-1"></i>Configurado
                         </span>
                     </h5>
@@ -159,19 +159,22 @@
                     <thead>
                         <tr class="custom-table-dark">
                             <th>Día</th>
-                            <th>Apertura</th>
-                            <th>Cierre</th>
+                            <th>Horario</th>
                             <th>Estado</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let hour of openingHours">
-                            <td>{{ getDayName(hour.day) }}</td> 
-                            <td>{{ hour.openingTime }}</td>
-                            <td>{{ hour.closingTime }}</td>
+                        <tr *ngFor="let schedule of openingHours">
                             <td>
-                                <span class="badge" [ngClass]="hour.status ? 'custom-badge-success' : 'custom-badge-danger'">
-                                    {{ hour.status ? 'Abierto' : 'Cerrado' }}
+                                <strong>{{ getDayName(schedule.day) }}</strong>
+                            </td> 
+                            <td>{{ getFormattedIntervals(schedule) }}</td>
+                            <td>
+                                <span class="badge" [ngClass]="schedule.status ? 'custom-badge-success' : 'custom-badge-danger'">
+                                    {{ schedule.status ? 'Abierto' : 'Cerrado' }}
+                                </span>
+                                <span *ngIf="schedule.isSplit" class="badge bg-warning text-dark ms-2" style="font-size: 0.7rem;">
+                                    <i class="bi bi-clock-history"></i> Partido
                                 </span>
                             </td>
                         </tr>
@@ -179,9 +182,9 @@
                 </table>
                 <p *ngIf="openingHours.length === 0" class="text-muted small">No hay horarios de apertura configurados.</p>
                 <div class="text-center mt-3">
-                    <a [routerLink]="['/editar-campos-horario-apertura']" class="btn btn-sm custom-btn-secondary">
+                    <button (click)="editarHorarioApertura()" class="btn btn-sm custom-btn-secondary">
                         <i class="bi bi-pencil-square me-1"></i> Ver/Editar Horarios de Apertura
-                    </a>
+                    </button>
                 </div>
 
                 <h3 class="fw-bold mt-5 mb-3 color-secondary border-bottom pb-2">📅 Horarios de Cocina</h3>
@@ -189,19 +192,22 @@
                     <thead>
                         <tr class="custom-table-dark">
                             <th>Día</th>
-                            <th>Apertura</th>
-                            <th>Cierre</th>
+                            <th>Horario</th>
                             <th>Estado</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let hour of kitchenHours">
-                            <td>{{ getDayName(hour.day) }}</td> 
-                            <td>{{ hour.openingTime }}</td>
-                            <td>{{ hour.closingTime }}</td>
+                        <tr *ngFor="let schedule of kitchenHours">
                             <td>
-                                <span class="badge" [ngClass]="hour.status ? 'custom-badge-success' : 'custom-badge-danger'">
-                                    {{ hour.status ? 'Abierto' : 'Cerrado' }}
+                                <strong>{{ getDayName(schedule.day) }}</strong>
+                            </td> 
+                            <td>{{ getFormattedIntervals(schedule) }}</td>
+                            <td>
+                                <span class="badge" [ngClass]="schedule.status ? 'custom-badge-success' : 'custom-badge-danger'">
+                                    {{ schedule.status ? 'Abierto' : 'Cerrado' }}
+                                </span>
+                                <span *ngIf="schedule.isSplit" class="badge bg-warning text-dark ms-2" style="font-size: 0.7rem;">
+                                    <i class="bi bi-clock-history"></i> Partido
                                 </span>
                             </td>
                         </tr>
@@ -209,9 +215,9 @@
                 </table>
                 <p *ngIf="kitchenHours.length === 0" class="text-muted small">No hay horarios de cocina configurados.</p>
                 <div class="text-center mt-3">
-                    <a [routerLink]="['/editar-horario']" class="btn btn-sm custom-btn-secondary">
+                    <button (click)="editarHorarioCocina()" class="btn btn-sm custom-btn-secondary">
                         <i class="bi bi-pencil-square me-1"></i> Ver/Editar Horarios
-                    </a>
+                    </button>
                 </div>
                 
                 <h3 class="fw-bold mt-5 mb-3 color-secondary border-bottom pb-2">

@@ -368,17 +368,17 @@
   }
   
   .hero-badge {
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     margin-bottom: 1rem;
   }
   
   .hero-title {
-    font-size: 2.2rem;  /* Se mantiene en 3rem - MÁXIMO */
+    font-size: 3.5rem;  /* Se mantiene en 3rem - MÁXIMO */
     letter-spacing: 2px;
   }
   
   .hero-description {
-    font-size: 1.4rem;
+    font-size: 1.8rem;
     margin-top: 0.8rem;
     margin-bottom: 1.5rem;
   }

@@ -244,7 +244,33 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/ProductRequest'
+              type: object
+              properties:
+                businessId:
+                  type: integer
+                  format: int64
+                name:
+                  type: string
+                price:
+                  type: number
+                  format: float
+                image:
+                  type: string
+                  format: binary
+                description:
+                  type: string
+                label:
+                  type: string
+                status:
+                  type: boolean
+                categoryId:
+                  type: integer
+                  format: int64
+                subcategoryId:
+                  type: integer
+                  format: int64
+                allergenIds:
+                  type: string
       responses:
         '201':
           description: Product created successfully
@@ -724,7 +750,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /api/v1//schedule/opening-hours/{businessId}:
+  /api/v1/schedule/opening-hours/{businessId}:
     get:
       tags: [schedule_opening]
       summary: Retrieve schedule from a specific business
@@ -1460,6 +1486,9 @@ components:
           type: string
           format: binary
           example: photo.jpg
+        oldImageLogo:
+          type: string
+          example: photo.jpg
 
     BusinessResponse:
       type: object
@@ -1833,19 +1862,28 @@ components:
           example: 1
         day:
           type: string
-          enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+          enum: [ monday, tuesday, wednesday, thursday, friday, saturday, sunday ]
           example: "monday"
-        openingTime:
-          type: string
-          format: time
-          example: "08:00:00"
-        closingTime:
-          type: string
-          format: time
-          example: "22:00:00"
         status:
           type: boolean
           example: true
+        intervals:
+          type: array
+          description: Lista de intervalos de apertura para ese día
+          items:
+            $ref: '#/components/schemas/OpeningHourIntervalRequest'
+
+    OpeningHourIntervalRequest:
+      type: object
+      properties:
+        startTime:
+          type: string
+          format: time
+          example: "08:00:00"
+        endTime:
+          type: string
+          format: time
+          example: "13:00:00"
 
     OpeningHourResponse:
       type: object
@@ -1860,19 +1898,31 @@ components:
           example: 1
         day:
           type: string
-          enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+          enum: [ monday, tuesday, wednesday, thursday, friday, saturday, sunday ]
           example: "monday"
-        openingTime:
-          type: string
-          format: time
-          example: "08:00:00"
-        closingTime:
-          type: string
-          format: time
-          example: "22:00:00"
         status:
           type: boolean
           example: true
+        intervals:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpeningHourIntervalResponse'
+
+    OpeningHourIntervalResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        startTime:
+          type: string
+          format: time
+          example: "08:00:00"
+        endTime:
+          type: string
+          format: time
+          example: "13:00:00"
 
     KitchenHourRequest:
       type: object
@@ -1885,14 +1935,27 @@ components:
           type: string
           enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
           example: "monday"
-        openingTime:
+        status:
+          type: boolean
+          example: true
+        intervals:
+          type: array
+          description: Lista de intervalos de cocina para ese día
+          items:
+            $ref: '#/components/schemas/KitchenHourIntervalRequest'
+
+    KitchenHourIntervalRequest:
+      type: object
+      properties:
+        startTime:
           type: string
           format: time
-          example: "12:00:00"
-        closingTime:
+          example: "08:00:00"
+        endTime:
           type: string
           format: time
-          example: "16:00:00"
+          example: "13:00:00"
+
 
     KitchenHourResponse:
       type: object
@@ -1900,7 +1963,7 @@ components:
         id:
           type: integer
           format: int64
-          example: 2
+          example: 1
         businessId:
           type: integer
           format: int64
@@ -1909,17 +1972,30 @@ components:
           type: string
           enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
           example: "monday"
-        openingTime:
-          type: string
-          format: time
-          example: "12:00:00"
-        closingTime:
-          type: string
-          format: time
-          example: "16:00:00"
         status:
           type: boolean
           example: true
+        intervals:
+          type: array
+          items:
+            $ref: '#/components/schemas/KitchenHourIntervalResponse'
+
+    KitchenHourIntervalResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        startTime:
+          type: string
+          format: time
+          example: "08:00:00"
+        endTime:
+          type: string
+          format: time
+          example: "13:00:00"
+
 
     FacilityRequest:
       type: object

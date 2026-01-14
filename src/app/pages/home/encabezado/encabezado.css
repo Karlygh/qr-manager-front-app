@@ -261,16 +261,16 @@
 /* DESKTOP PEQUEÑO (993px - 1199px) - Tamaños estándar */
 @media (min-width: 993px) and (max-width: 1199px) {
     .hero-section h1 {
-        font-size: 1rem; /* Título principal estándar */
+        font-size: 1rem; 
     }
     .key-features {
-        font-size: 1.15rem; /* Características estándar */
+        font-size: 1.15rem; 
     }
     .benefits-list h5 {
-        font-size: 1.1rem; /* Texto beneficios estándar */
+        font-size: 1.1rem; 
     }
     .benefits-list .benefit-title {
-        font-size: 1.4rem; /* Títulos beneficios estándar */
+        font-size: 1.4rem; 
     }
 }
 
@@ -281,7 +281,7 @@
         padding: 0;
     }
     .hero-section h1 {
-        font-size: 1.8rem;
+        font-size: 1.4rem;
         margin-bottom: 1rem;
     }
     .key-features {
@@ -305,32 +305,32 @@
 /* MONITORES 2K (1920px - 2559px) - Tamaños aumentados */
 @media (min-width: 1920px) and (max-width: 2559px) {
     .hero-section h1 {
-        font-size: 3rem; /* Título principal muy grande */
+        font-size: 2rem; 
     }
     .key-features {
-        font-size: 1.4rem; /* Características muy grandes */
+        font-size: 1.4rem; 
     }
     .benefits-list h5 {
-        font-size: 1.1rem; /* Texto beneficios muy grande */
+        font-size: 1.1rem; 
     }
     .benefits-list .benefit-title {
-        font-size: 1.6rem; /* Títulos beneficios muy grandes */
+        font-size: 1.6rem; 
     }
 }
 
 /* MONITORES ULTRAWIDE Y 4K (≥ 2560px) - Tamaños máximos */
 @media (min-width: 2560px) {
     .hero-section h1 {
-        font-size: 4.5rem; /* Título principal máximo */
+        font-size: 4.5rem; 
     }
     .key-features {
-        font-size: 1.8rem; /* Características máximas */
+        font-size: 1.8rem; 
     }
     .benefits-list h5 {
-        font-size: 1.6rem; /* Texto beneficios máximo */
+        font-size: 1.6rem; 
     }
     .benefits-list .benefit-title {
-        font-size: 2rem; /* Títulos beneficios máximos */
+        font-size: 2rem; 
     }
     .mobile-mockup-container {
         max-width: 400px;

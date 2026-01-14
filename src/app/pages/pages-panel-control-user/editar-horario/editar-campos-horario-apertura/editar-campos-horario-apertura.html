@@ -1,41 +1,118 @@
 <div class="kitchen-schedule-container">
   <h2>Horarios de Apertura del Negocio</h2>
-   <p class="schedule-instructions">Para modificar los horarios, seleccione la hora de apertura y cierre para cada día. Los cambios se guardarán automáticamente al hacer clic en "Guardar Todos". Use el botón "Resetear" para volver a los valores predeterminados.</p>
   
-  <div class="schedule-grid">
-    <div class="schedule-item" *ngFor="let schedule of openingHours; let i = index">
-      <div class="day-header">
-        <h3>{{ getDayName(schedule.day) }}</h3>
-      </div>
-      
-      <div class="time-inputs">
-        <div class="input-group">
-          <label>Apertura:</label>
-          <input 
-            type="time" 
-            [(ngModel)]="schedule.openingTime"
-            (change)="onTimeChange(i)"
-            class="time-input">
-        </div>
-        
-        <div class="input-group">
-          <label>Cierre:</label>
-          <input 
-            type="time" 
-            [(ngModel)]="schedule.closingTime"
-            (change)="onTimeChange(i)"
-            class="time-input">
-        </div>
-      </div>
+  <!-- Botón volver -->
+  <div class="back-button-container">
+    <button (click)="goBack()" class="btn-back">
+      <i class="bi bi-arrow-left"></i> Volver al Panel
+    </button>
+  </div>
 
+  <p class="schedule-instructions">
+    Configura los horarios de apertura de tu negocio. Puedes añadir hasta 2 horarios por día para horarios partidos (ej: mañana y tarde). 
+    Los cambios se pueden guardar individualmente o todos a la vez.
+  </p>
+
+  <!-- Mensajes de error/éxito -->
+  @if (errorMessage) {
+    <div class="alert alert-error">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      {{ errorMessage }}
     </div>
+  }
+
+  @if (successMessage) {
+    <div class="alert alert-success">
+      <i class="bi bi-check-circle-fill"></i>
+      {{ successMessage }}
+    </div>
+  }
+
+  <div class="schedule-grid">
+    @for (day of days; track day) {
+      <div class="schedule-day-card">
+        <div class="day-header">
+          <h3>{{ getDayName(day) }}</h3>
+        </div>
+
+        <!-- Lista de horarios para este día -->
+        <div class="schedules-list">
+          @for (schedule of daySchedules[day]; track schedule; let i = $index) {
+            <div class="schedule-item">
+              <div class="schedule-number">Horario {{ i + 1 }}</div>
+
+              <div class="time-inputs">
+                <div class="input-group">
+                  <label>Apertura:</label>
+                  <input 
+                    type="time" 
+                    [(ngModel)]="schedule.openingTime"
+                    class="time-input">
+                </div>
+                
+                <div class="input-group">
+                  <label>Cierre:</label>
+                  <input 
+                    type="time" 
+                    [(ngModel)]="schedule.closingTime"
+                    class="time-input">
+                </div>
+              </div>
+
+              <!-- Toggle activo/inactivo -->
+              <div class="status-toggle">
+                <label class="switch">
+                  <input 
+                    type="checkbox" 
+                    [(ngModel)]="schedule.status">
+                  <span class="slider"></span>
+                </label>
+                <span class="status-label">{{ schedule.status ? 'Abierto' : 'Cerrado' }}</span>
+              </div>
+
+              <!-- Botones individuales -->
+              <div class="actions">
+                <button 
+                  (click)="saveSchedule(schedule)" 
+                  [disabled]="isSaving(schedule)"
+                  class="btn btn-save-individual">
+                  {{ isSaving(schedule) ? 'Guardando...' : 'Guardar' }}
+                </button>
+                
+                <button 
+                  (click)="deleteSchedule(day, schedule)"
+                  class="btn btn-delete"
+                  [disabled]="daySchedules[day].length === 1">
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Botón añadir horario partido -->
+        @if (canAddSchedule(day)) {
+          <button 
+            (click)="addSplitSchedule(day)" 
+            class="btn-add-split">
+            <i class="bi bi-plus-circle"></i> Añadir horario partido
+          </button>
+        }
+        @if (!canAddSchedule(day)) {
+          <div class="max-schedules-notice">
+            Máximo 2 horarios por día
+          </div>
+        }
+      </div>
+    }
   </div>
   
+  <!-- Botones globales -->
   <div class="global-actions">
     <button 
       (click)="saveAllSchedules()" 
       [disabled]="loading"
-      class="btn btn-save">
+      class="btn btn-save-all">
       {{ loading ? 'Guardando...' : 'Guardar Todos' }}
     </button>
     
