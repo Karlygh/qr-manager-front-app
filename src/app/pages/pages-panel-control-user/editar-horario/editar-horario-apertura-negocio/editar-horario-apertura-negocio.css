@@ -107,6 +107,7 @@ h2 {
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 25px;
   margin-bottom: 30px;
+  align-items: start;
 }
 
 .schedule-day-card {
