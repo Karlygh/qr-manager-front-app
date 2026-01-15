@@ -3,7 +3,7 @@ import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
-import { Subject, takeUntil, finalize, catchError, of } from 'rxjs';
+import { Subject, takeUntil, finalize, catchError, of, forkJoin } from 'rxjs';
 
 import { CategoryService, Category } from '../../../services/category.service';
 import { SubCategoryService, SubCategory } from '../../../services/subcategory.service';
@@ -38,6 +38,7 @@ export class CrearProducto implements OnInit, OnDestroy {
 
   private readonly BUSINESS_ID = 1;
   private readonly MESSAGE_DURATION = 5000;
+  readonly PREDETERMINADO_VALUE = -1; // Valor especial para "Predeterminado"
 
   currentStep = 1;
   readonly totalSteps = 5;
@@ -56,7 +57,7 @@ export class CrearProducto implements OnInit, OnDestroy {
   errorMessage = '';
   notificationMessage: NotificationMessage | null = null;
   
-  // STEP 2 - Categorías (NUEVO)
+  // STEP 2 - Categorías
   showCategoryForm = false;
   categoryFormName = '';
   categoryFormTouched = false;
@@ -100,8 +101,9 @@ export class CrearProducto implements OnInit, OnDestroy {
   }
 
   private initializeForm(): void {
+    // categoryId se inicializa con el valor PREDETERMINADO
     this.productForm = this.fb.group({
-      categoryId: ['', Validators.required],
+      categoryId: [this.PREDETERMINADO_VALUE, Validators.required],
       subcategoryId: [null],
       name: ['', [Validators.required, Validators.maxLength(100)]],
       description: ['', [Validators.required, Validators.maxLength(500)]],
@@ -128,18 +130,32 @@ export class CrearProducto implements OnInit, OnDestroy {
       .subscribe({
         next: (categories) => {
           this.categories = categories;
-          this.logInfo(`Categorías cargadas: ${categories.length}`, categories);
+          this.logInfo(`✅ Categorías cargadas: ${categories.length}`, categories);
           
           if (categories.length === 0) {
-            this.showNotification('No hay categorías disponibles. Crea una categoría primero.', MessageType.WARNING);
+            this.showNotification(
+              'No hay categorías disponibles. Te recomendamos crear una para organizar mejor tu menú.', 
+              MessageType.INFO
+            );
           }
         }
       });
   }
 
+  // ================================
+  // NAVEGACIÓN ENTRE PASOS
+  // ================================
+
   nextStep(): void {
     if (!this.canProceed()) {
-      this.showNotification('Por favor, completa los campos requeridos antes de continuar', MessageType.WARNING);
+      if (this.currentStep === 2 && this.isPredeterminadoSelected()) {
+        this.showNotification(
+          'Por favor, selecciona una categoría o créala. Esto te ayudará a organizar mejor tu menú.', 
+          MessageType.WARNING
+        );
+      } else {
+        this.showNotification('Por favor, completa los campos requeridos antes de continuar', MessageType.WARNING);
+      }
       return;
     }
 
@@ -161,122 +177,13 @@ export class CrearProducto implements OnInit, OnDestroy {
     }
   }
 
-  onImageSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    
-    if (!input.files || input.files.length === 0) {
-      this.logWarning('No se seleccionó ninguna imagen');
-      return;
-    }
-
-    const file = input.files[0];
-    const maxSize = 5 * 1024 * 1024;
-
-    if (file.size > maxSize) {
-      this.showNotification('La imagen no debe superar los 5MB', MessageType.ERROR);
-      input.value = '';
-      return;
-    }
-
-    if (!file.type.startsWith('image/')) {
-      this.showNotification('El archivo debe ser una imagen', MessageType.ERROR);
-      input.value = '';
-      return;
-    }
-
-    this.selectedImage = file;
-    this.logInfo('Imagen seleccionada', { name: file.name, size: file.size, type: file.type });
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      this.selectedImagePreview = e.target?.result as string;
-    };
-    reader.readAsDataURL(file);
-  }
-
-  onSubmit(): void {
-    if (!this.productForm.valid) {
-      this.showNotification('Por favor, completa todos los campos correctamente', MessageType.ERROR);
-      this.markFormGroupTouched(this.productForm);
-      return;
-    }
-
-    this.isLoading = true;
-    this.logInfo('Creando producto...', this.productForm.value);
-
-    const formData = this.buildFormData();
-
-    this.productService.createProduct(formData)
-      .pipe(
-        takeUntil(this.destroy$),
-        finalize(() => {
-          this.isLoading = false;
-          this.logInfo('Petición de creación finalizada');
-        }),
-        catchError(error => {
-          this.handleError('Error al crear el producto', error);
-          return of(null);
-        })
-      )
-      .subscribe({
-        next: (product) => {
-          if (product) {
-            this.productCreated = true;
-            this.logInfo('Producto creado exitosamente', product);
-            this.showNotification('¡Producto creado exitosamente!', MessageType.SUCCESS);
-          }
-        }
-      });
-  }
-
-  private buildFormData(): FormData {
-    const formData = new FormData();
-    const formValue = this.productForm.value;
-
-    Object.keys(formValue).forEach(key => {
-      const value = formValue[key];
-      
-      if (value !== null && value !== undefined && value !== '') {
-        formData.append(key, value.toString());
-      }
-    });
-
-    if (this.selectedImage) {
-      formData.append('image', this.selectedImage);
-      this.logInfo('Imagen agregada al FormData');
-    }
-
-    return formData;
-  }
-
-  createNewProduct(): void {
-    this.logInfo('Reiniciando formulario para nuevo producto');
-    
-    this.currentStep = 1;
-    this.productCreated = false;
-    this.selectedImage = null;
-    this.selectedImagePreview = null;
-    this.selectedCategoryId = null;
-    this.selectedSubcategoryId = null;
-    this.subcategories = [];
-    
-    this.productForm.reset({
-      businessId: this.BUSINESS_ID
-    });
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  goToDashboard(): void {
-    this.router.navigate(['/panel-control-buisiness', this.BUSINESS_ID]);
-  }
-
   // ================================
-  // STEP 2: GESTIÓN DE CATEGORÍAS (NUEVO)
+  // PASO 2: GESTIÓN DE CATEGORÍAS
   // ================================
 
   toggleCategoryForm(): void {
     this.showCategoryForm = !this.showCategoryForm;
+    
     if (!this.showCategoryForm) {
       this.cancelCategoryForm();
     }
@@ -286,14 +193,20 @@ export class CrearProducto implements OnInit, OnDestroy {
     this.selectedCategoryId = category.id;
     this.productForm.patchValue({ categoryId: category.id });
     this.showStep2Notification(`Has seleccionado "${category.name}"`, 'info', 'ℹ️');
-    this.logInfo('Categoría seleccionada', category);
+    this.logInfo('✅ Categoría seleccionada', category);
   }
 
   removeCategorySelection(): void {
     this.selectedCategoryId = null;
-    this.productForm.patchValue({ categoryId: null });
-    this.showStep2Notification('Producto sin categoría', 'info', 'ℹ️');
+    this.productForm.patchValue({ categoryId: this.PREDETERMINADO_VALUE });
+    this.showStep2Notification('Producto sin categoría asignada', 'info', 'ℹ️');
     this.logInfo('Categoría removida del producto');
+  }
+
+  getSelectedCategoryName(): string {
+    if (!this.selectedCategoryId) return 'Sin categoría';
+    const category = this.categories.find(c => c.id === this.selectedCategoryId);
+    return category?.name || 'Sin categoría';
   }
 
   startEditCategory(category: Category): void {
@@ -305,30 +218,100 @@ export class CrearProducto implements OnInit, OnDestroy {
     this.logInfo('Editando categoría', category);
   }
 
-  submitCategoryForm(): void {
-    const trimmedName = this.categoryFormName.trim();
+  confirmDeleteCategory(id: number): void {
+    const category = this.categories.find(c => c.id === id);
+    
+    if (!category) {
+      this.showStep2Notification('Categoría no encontrada', 'error', '❌');
+      return;
+    }
 
-    if (!trimmedName) {
-      this.categoryFormTouched = true;
-      this.showStep2Notification('El nombre es obligatorio', 'warning', '⚠️');
+    // Mensaje personalizado si tiene subcategorías
+    const message = `¿Estás seguro de eliminar la categoría "${category.name}"?\n\n` +
+      `⚠️ Esta acción también eliminará todas las subcategorías asociadas.`;
+    
+    const confirmed = confirm(message);
+    
+    if (!confirmed) {
+      return;
+    }
+
+    this.deleteCategoryById(id);
+  }
+
+  private deleteCategoryById(id: number): void {
+    this.logInfo(`Eliminando categoría ${id}`);
+    this.isLoading = true;
+
+    this.categoryService.deleteCategoryById(id)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.isLoading = false),
+        catchError(error => {
+          if (error.status === 500) {
+            this.showStep2Notification(
+              'No se puede eliminar: está siendo usada por productos activos',
+              'error',
+              '❌'
+            );
+          } else if (error.status === 404) {
+            this.showStep2Notification('La categoría ya no existe', 'warning', '⚠️');
+            this.loadInitialData();
+          } else {
+            this.handleError('Error al eliminar categoría', error);
+            this.showStep2Notification('Error al eliminar la categoría', 'error', '❌');
+          }
+          return of(null);
+        })
+      )
+      .subscribe({
+        next: (result) => {
+          if (result !== null) {
+            this.categories = this.categories.filter(c => c.id !== id);
+            
+            // Si la categoría eliminada estaba seleccionada, resetear selección
+            if (this.selectedCategoryId === id) {
+              this.selectedCategoryId = null;
+              this.productForm.patchValue({ categoryId: this.PREDETERMINADO_VALUE });
+            }
+            
+            // Si estamos en el step 3, recargar subcategorías
+            if (this.currentStep === 3) {
+              this.loadSubcategories();
+            }
+            
+            this.showStep2Notification(
+              'Categoría y sus subcategorías eliminadas correctamente',
+              'success',
+              '✅'
+            );
+            this.logInfo('✅ Categoría eliminada con cascade', { id });
+          }
+        }
+      });
+  }
+
+  submitCategoryForm(): void {
+    this.categoryFormTouched = true;
+    
+    if (!this.categoryFormName.trim()) {
+      this.showStep2Notification('El nombre de la categoría es obligatorio', 'error', '❌');
       return;
     }
 
     this.isLoading = true;
-    const request = { name: trimmedName, businessId: this.BUSINESS_ID };
 
-    if (this.isEditingCategory && this.editingCategoryId) {
-      this.updateCategory(this.editingCategoryId, request);
+    if (this.isEditingCategory && this.editingCategoryId !== null) {
+      this.updateCategory(this.editingCategoryId, this.categoryFormName.trim());
     } else {
-      this.createCategory(request);
+      this.createCategory(this.categoryFormName.trim());
     }
   }
 
-private createCategory(request: { name: string; businessId: number }): void {
-  this.logInfo('Creando categoría', request);
+  private createCategory(name: string): void {
+    this.logInfo('Creando categoría', { name });
 
-  this.categoryService.createCategory(request.businessId, request.name)
-
+    this.categoryService.createCategory(this.BUSINESS_ID, name)
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => this.isLoading = false),
@@ -340,27 +323,29 @@ private createCategory(request: { name: string; businessId: number }): void {
       )
       .subscribe({
         next: (created) => {
-          if (created && created.id) {
+          if (created) {
             this.categories.push(created);
+            
+            // Seleccionar automáticamente la categoría recién creada
             this.selectedCategoryId = created.id;
             this.productForm.patchValue({ categoryId: created.id });
-            this.showStep2Notification(`Categoría "${created.name}" creada y seleccionada`, 'success', '✅');
-            this.logInfo('Categoría creada y seleccionada', created);
-            this.cancelCategoryForm();
             
-            // Recargar categorías para asegurar sincronización
-            setTimeout(() => {
-              this.loadInitialData();
-            }, 500);
+            this.showStep2Notification(
+              `Categoría "${created.name}" creada y seleccionada automáticamente`, 
+              'success', 
+              '✅'
+            );
+            this.logInfo('✅ Categoría creada y seleccionada', created);
+            this.cancelCategoryForm();
           }
         }
       });
   }
 
-private updateCategory(id: number, request: { name: string; businessId: number }): void {
-  this.logInfo(`Actualizando categoría ${id}`, request);
+  private updateCategory(id: number, name: string): void {
+    this.logInfo(`Actualizando categoría ${id}`, { name });
 
-  this.categoryService.updateCategoryById(id, request.name)
+    this.categoryService.updateCategoryById(id, name)
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => this.isLoading = false),
@@ -378,7 +363,7 @@ private updateCategory(id: number, request: { name: string; businessId: number }
               this.categories[index] = updated;
             }
             this.showStep2Notification('Categoría actualizada con éxito', 'success', '✅');
-            this.logInfo('Categoría actualizada', updated);
+            this.logInfo('✅ Categoría actualizada', updated);
             this.cancelCategoryForm();
           }
         }
@@ -394,89 +379,6 @@ private updateCategory(id: number, request: { name: string; businessId: number }
     this.logInfo('Formulario de categoría cancelado');
   }
 
-  confirmDeleteCategory(id: number): void {
-    const category = this.categories.find(c => c.id === id);
-    
-    if (!category) {
-      this.showStep2Notification('Categoría no encontrada', 'error', '❌');
-      return;
-    }
-
-    const confirmed = confirm(`¿Estás seguro de eliminar "${category.name}"?\n\nEsto eliminará también todas sus subcategorías y productos asociados.`);
-    
-    if (!confirmed) {
-      return;
-    }
-
-    // Primero eliminar todas las subcategorías
-    this.deleteAllSubcategoriesAndCategory(id);
-  }
-
-  private deleteAllSubcategoriesAndCategory(categoryId: number): void {
-    this.logInfo(`Eliminando subcategorías de categoría ${categoryId}`);
-    
-    this.subcategoryService.deleteAllSubCategoriesByCategoryId(categoryId)
-      .pipe(
-        takeUntil(this.destroy$),
-        catchError(error => {
-          this.logWarning('Error al eliminar subcategorías, continuando con categoría', error);
-          return of(null);
-        })
-      )
-      .subscribe({
-        next: () => {
-          // Después de eliminar subcategorías, eliminar la categoría
-          this.deleteCategoryById(categoryId);
-        }
-      });
-  }
-
-  private deleteCategoryById(id: number): void {
-    this.logInfo(`Eliminando categoría ${id}`);
-
-    this.categoryService.deleteCategoryById(id)
-      .pipe(
-        takeUntil(this.destroy$),
-        catchError(error => {
-          if (error.status === 500) {
-            this.showStep2Notification(
-              'No se puede eliminar: tiene subcategorías o productos asociados',
-              'error',
-              '❌'
-            );
-          } else if (error.status === 400) {
-            this.showStep2Notification(
-              'No se puede eliminar esta categoría (puede tener contenido asociado)',
-              'error',
-              '❌'
-            );
-          } else if (error.status === 404) {
-            this.showStep2Notification('La categoría ya no existe', 'warning', '⚠️');
-            this.loadInitialData();
-          } else {
-            this.handleError('Error al eliminar categoría', error);
-            this.showStep2Notification('Error al eliminar', 'error', '❌');
-          }
-          return of(null);
-        })
-      )
-      .subscribe({
-        next: (result) => {
-          if (result !== null) {
-            this.categories = this.categories.filter(c => c.id !== id);
-            
-            if (this.selectedCategoryId === id) {
-              this.selectedCategoryId = null;
-              this.productForm.patchValue({ categoryId: null });
-            }
-            
-            this.showStep2Notification('Categoría eliminada', 'success', '✅');
-            this.logInfo('Categoría eliminada', { id });
-          }
-        }
-      });
-  }
-
   private showStep2Notification(message: string, type: 'success' | 'error' | 'warning' | 'info', icon: string): void {
     this.categoryNotification = { message, type, icon };
     
@@ -485,32 +387,30 @@ private updateCategory(id: number, request: { name: string; businessId: number }
     }, 4000);
   }
 
-  getSelectedCategoryName(): string {
-    if (!this.selectedCategoryId) return 'Categoría';
-    const category = this.categories.find(c => c.id === this.selectedCategoryId);
-    return category?.name || 'Categoría';
-  }
-
   // ================================
-  // STEP 3: GESTIÓN DE SUBCATEGORÍAS
+  // PASO 3: GESTIÓN DE SUBCATEGORÍAS
   // ================================
 
-  private loadSubcategories(): void {
-    const categoryId = this.productForm.get('categoryId')?.value;
-    
-    if (!categoryId) {
-      this.logWarning('No hay categoría seleccionada');
+  loadSubcategories(): void {
+    // Solo cargar subcategorías si hay una categoría seleccionada válida
+    if (!this.selectedCategoryId || this.selectedCategoryId === this.PREDETERMINADO_VALUE) {
+      this.subcategories = [];
+      this.logInfo('No hay categoría seleccionada, subcategorías vacías');
       return;
     }
 
-    this.logInfo(`Cargando subcategorías para categoría ${categoryId}`);
+    this.logInfo(`Cargando subcategorías de la categoría ${this.selectedCategoryId}`);
     this.isLoading = true;
 
-    this.subcategoryService.getAllSubCategoriesByCategoryId(categoryId)
+    this.subcategoryService.getAllSubCategoriesByCategoryId(this.selectedCategoryId)
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => this.isLoading = false),
         catchError(error => {
+          if (error.status === 404) {
+            this.logInfo('No hay subcategorías para esta categoría');
+            return of([] as SubCategory[]);
+          }
           this.handleError('Error al cargar subcategorías', error);
           return of([] as SubCategory[]);
         })
@@ -518,13 +418,23 @@ private updateCategory(id: number, request: { name: string; businessId: number }
       .subscribe({
         next: (subcategories) => {
           this.subcategories = subcategories;
-          this.logInfo(`Subcategorías cargadas: ${subcategories.length}`, subcategories);
+          this.logInfo(`✅ Subcategorías cargadas: ${subcategories.length}`, subcategories);
         }
       });
   }
 
   toggleSubcategoryForm(): void {
+    if (!this.selectedCategoryId || this.selectedCategoryId === this.PREDETERMINADO_VALUE) {
+      this.showStep3Notification(
+        'Primero debes seleccionar una categoría para crear subcategorías',
+        'warning',
+        '⚠️'
+      );
+      return;
+    }
+
     this.showSubcategoryForm = !this.showSubcategoryForm;
+    
     if (!this.showSubcategoryForm) {
       this.cancelSubcategoryForm();
     }
@@ -540,25 +450,26 @@ private updateCategory(id: number, request: { name: string; businessId: number }
   }
 
   submitSubcategoryForm(): void {
-    const trimmedName = this.subcategoryFormName.trim();
-
-    if (!trimmedName) {
-      this.subcategoryFormTouched = true;
-      this.showStep3Notification('El nombre es obligatorio', 'warning', '⚠️');
+    this.subcategoryFormTouched = true;
+    
+    if (!this.subcategoryFormName.trim()) {
+      this.showStep3Notification('El nombre de la subcategoría es obligatorio', 'error', '❌');
       return;
     }
 
-    const categoryId = this.productForm.get('categoryId')?.value;
-    
-    if (!categoryId) {
-      this.showStep3Notification('Error: no hay categoría seleccionada', 'error', '❌');
+    if (!this.selectedCategoryId || this.selectedCategoryId === this.PREDETERMINADO_VALUE) {
+      this.showStep3Notification('Debes seleccionar una categoría primero', 'error', '❌');
       return;
     }
 
     this.isLoading = true;
-    const request = { name: trimmedName, categoryId };
 
-    if (this.isEditingSubcategory && this.editingSubcategoryId) {
+    const request = {
+      name: this.subcategoryFormName.trim(),
+      categoryId: this.selectedCategoryId
+    };
+
+    if (this.isEditingSubcategory && this.editingSubcategoryId !== null) {
       this.updateSubcategory(this.editingSubcategoryId, request);
     } else {
       this.createSubcategory(request);
@@ -567,14 +478,6 @@ private updateCategory(id: number, request: { name: string; businessId: number }
 
   private createSubcategory(request: { name: string; categoryId: number }): void {
     this.logInfo('Creando subcategoría', request);
-    
-    // Verificar que la categoría existe
-    const categoryExists = this.categories.find(c => c.id === request.categoryId);
-    if (!categoryExists) {
-      this.showStep3Notification('Error: La categoría no existe', 'error', '❌');
-      this.isLoading = false;
-      return;
-    }
 
     this.subcategoryService.createSubCategory(request)
       .pipe(
@@ -592,8 +495,12 @@ private updateCategory(id: number, request: { name: string; businessId: number }
             this.subcategories.push(created);
             this.selectedSubcategoryId = created.id;
             this.productForm.patchValue({ subcategoryId: created.id });
-            this.showStep3Notification(`Subcategoría "${created.name}" creada y seleccionada`, 'success', '✅');
-            this.logInfo('Subcategoría creada y seleccionada', created);
+            this.showStep3Notification(
+              `Subcategoría "${created.name}" creada y seleccionada`, 
+              'success', 
+              '✅'
+            );
+            this.logInfo('✅ Subcategoría creada y seleccionada', created);
             this.cancelSubcategoryForm();
           }
         }
@@ -621,7 +528,7 @@ private updateCategory(id: number, request: { name: string; businessId: number }
               this.subcategories[index] = updated;
             }
             this.showStep3Notification('Subcategoría actualizada con éxito', 'success', '✅');
-            this.logInfo('Subcategoría actualizada', updated);
+            this.logInfo('✅ Subcategoría actualizada', updated);
             this.cancelSubcategoryForm();
           }
         }
@@ -641,7 +548,7 @@ private updateCategory(id: number, request: { name: string; businessId: number }
     this.selectedSubcategoryId = subcategory.id;
     this.productForm.patchValue({ subcategoryId: subcategory.id });
     this.showStep3Notification(`Has seleccionado "${subcategory.name}"`, 'info', 'ℹ️');
-    this.logInfo('Subcategoría seleccionada', subcategory);
+    this.logInfo('✅ Subcategoría seleccionada', subcategory);
   }
 
   removeSubcategorySelection(): void {
@@ -702,7 +609,7 @@ private updateCategory(id: number, request: { name: string; businessId: number }
             }
             
             this.showStep3Notification('Subcategoría eliminada', 'success', '✅');
-            this.logInfo('Subcategoría eliminada', { id });
+            this.logInfo('✅ Subcategoría eliminada', { id });
           }
         }
       });
@@ -716,6 +623,146 @@ private updateCategory(id: number, request: { name: string; businessId: number }
     }, 4000);
   }
 
+  getSelectedSubcategoryName(): string {
+    if (!this.selectedSubcategoryId) return 'Sin subcategoría';
+    const subcategory = this.subcategories.find(s => s.id === this.selectedSubcategoryId);
+    return subcategory?.name || 'Sin subcategoría';
+  }
+
+  // ================================
+  // PASO 4 Y 5: DETALLES DEL PRODUCTO E IMAGEN
+  // ================================
+
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    
+    if (!input.files || input.files.length === 0) {
+      this.logWarning('No se seleccionó ninguna imagen');
+      return;
+    }
+
+    const file = input.files[0];
+    const maxSize = 5 * 1024 * 1024;
+
+    if (file.size > maxSize) {
+      this.showNotification('La imagen no debe superar los 5MB', MessageType.ERROR);
+      input.value = '';
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      this.showNotification('El archivo debe ser una imagen', MessageType.ERROR);
+      input.value = '';
+      return;
+    }
+
+    this.selectedImage = file;
+    this.logInfo('✅ Imagen seleccionada', { name: file.name, size: file.size, type: file.type });
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.selectedImagePreview = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // ================================
+  // ENVÍO DEL FORMULARIO
+  // ================================
+
+  onSubmit(): void {
+    // Si el valor es PREDETERMINADO, establecer categoryId como null antes de enviar
+    if (this.productForm.value.categoryId === this.PREDETERMINADO_VALUE) {
+      this.productForm.patchValue({ categoryId: null });
+    }
+
+    if (!this.productForm.valid) {
+      this.showNotification('Por favor, completa todos los campos correctamente', MessageType.ERROR);
+      this.markFormGroupTouched(this.productForm);
+      return;
+    }
+
+    this.isLoading = true;
+    this.logInfo('Creando producto...', this.productForm.value);
+
+    const formData = this.buildFormData();
+
+    this.productService.createProduct(formData)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.isLoading = false;
+          this.logInfo('Petición de creación finalizada');
+        }),
+        catchError(error => {
+          this.handleError('Error al crear el producto', error);
+          return of(null);
+        })
+      )
+      .subscribe({
+        next: (product) => {
+          if (product) {
+            this.productCreated = true;
+            this.logInfo('✅ Producto creado exitosamente', product);
+            this.showNotification('¡Producto creado exitosamente!', MessageType.SUCCESS);
+          }
+        }
+      });
+  }
+
+  private buildFormData(): FormData {
+    const formData = new FormData();
+    const formValue = this.productForm.value;
+
+    Object.keys(formValue).forEach(key => {
+      const value = formValue[key];
+      
+      // No enviar valores null o vacíos, excepto para categoryId y subcategoryId
+      if (value !== null && value !== undefined && value !== '') {
+        formData.append(key, value.toString());
+      } else if ((key === 'categoryId' || key === 'subcategoryId') && value === null) {
+        // Permitir enviar null explícitamente para categoryId y subcategoryId
+        formData.append(key, '');
+      }
+    });
+
+    if (this.selectedImage) {
+      formData.append('image', this.selectedImage);
+      this.logInfo('Imagen agregada al FormData');
+    }
+
+    return formData;
+  }
+
+  createNewProduct(): void {
+    this.logInfo('Reiniciando formulario para nuevo producto');
+    
+    this.currentStep = 1;
+    this.productCreated = false;
+    
+    this.productForm.reset({
+      categoryId: this.PREDETERMINADO_VALUE,
+      subcategoryId: null,
+      businessId: this.BUSINESS_ID
+    });
+    
+    this.selectedImage = null;
+    this.selectedImagePreview = null;
+    this.selectedCategoryId = null;
+    this.selectedSubcategoryId = null;
+    
+    this.categories = [];
+    this.subcategories = [];
+    
+    this.loadInitialData();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  goToDashboard(): void {
+    this.logInfo('Navegando al dashboard');
+    this.router.navigate(['/dashboard']);
+  }
+
   // ================================
   // MÉTODOS AUXILIARES
   // ================================
@@ -726,9 +773,12 @@ private updateCategory(id: number, request: { name: string; businessId: number }
         return true;
       
       case 2:
-        return !!this.selectedCategoryId;
+        // Permitir avanzar solo si hay una categoría seleccionada válida (no PREDETERMINADO)
+        return this.selectedCategoryId !== null && 
+               this.selectedCategoryId !== this.PREDETERMINADO_VALUE;
       
       case 3:
+        // Subcategoría es opcional, siempre se puede avanzar
         return true;
       
       case 4:
@@ -740,6 +790,11 @@ private updateCategory(id: number, request: { name: string; businessId: number }
       default:
         return false;
     }
+  }
+
+  isPredeterminadoSelected(): boolean {
+    return this.productForm.value.categoryId === this.PREDETERMINADO_VALUE || 
+           this.selectedCategoryId === null;
   }
 
   private showNotification(text: string, type: MessageType): void {
@@ -792,6 +847,7 @@ private updateCategory(id: number, request: { name: string; businessId: number }
     console.error(`[CrearProducto] ❌ ${message}`, error || '');
   }
 
+  // Getters
   get isFirstStep(): boolean {
     return this.currentStep === 1;
   }
@@ -806,11 +862,5 @@ private updateCategory(id: number, request: { name: string; businessId: number }
 
   get formControls() {
     return this.productForm.controls;
-  }
-
-  getSelectedSubcategoryName(): string {
-    if (!this.selectedSubcategoryId) return 'Subcategoría';
-    const subcategory = this.subcategories.find(s => s.id === this.selectedSubcategoryId);
-    return subcategory?.name || 'Subcategoría';
   }
 }

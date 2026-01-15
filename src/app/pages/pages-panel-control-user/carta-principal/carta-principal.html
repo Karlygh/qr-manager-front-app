@@ -1,97 +1,211 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <i class="bi bi-shop me-2"></i>Mi Restaurante
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</nav>
+<div class="carta-wrapper" [class.dark-theme]="isDarkMode">
 
-<!-- Loading State -->
-<div *ngIf="isLoading" class="text-center py-5">
-  <div class="spinner-border" role="status">
-    <span class="visually-hidden">Cargando...</span>
+<!-- Header personalizado -->
+<header class="business-header">
+  <div class="container-fluid d-flex justify-content-between align-items-center py-3">
+    <div class="d-flex flex-column align-items-start">
+      <div class="d-flex align-items-center mb-1">
+        <i class="bi bi-shop me-2" style="font-size:1.7rem;color:var(--primary-color)"></i>
+        <span class="fw-bold" style="font-size:1.1rem;">Bienvenido a</span>
+      </div>
+      <span class="business-title fw-bold">{{ businessName }}</span>
+    </div>
+    <!-- Toggle Modo Oscuro -->
+    <button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Activar modo claro' : 'Activar modo oscuro'">
+      <i class="bi" [ngClass]="isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill'"></i>
+    </button>
   </div>
-  <p class="mt-2">Cargando productos...</p>
+</header>
+
+<!-- Skeleton Loading -->
+<div *ngIf="isLoading" class="skeleton-container">
+  <div class="skeleton skeleton-search"></div>
+  <div class="skeleton-filters">
+    <div class="skeleton skeleton-chip" *ngFor="let i of [1,2,3,4,5]"></div>
+  </div>
+  <div class="skeleton-products">
+    <div class="skeleton skeleton-card" *ngFor="let i of [1,2,3,4,5,6]"></div>
+  </div>
 </div>
 
 <!-- Error State -->
-<div *ngIf="errorMessage" class="alert alert-danger mx-3" role="alert">
-  <h4 class="alert-heading">Error</h4>
+<div *ngIf="errorMessage && !isLoading" class="error-state">
+  <div class="error-icon">⚠️</div>
+  <h3>Ups, algo salió mal</h3>
   <p>{{ errorMessage }}</p>
-  <button class="btn btn-outline-danger" (click)="retryLoadProducts()">Reintentar</button>
+  <button class="btn-retry" (click)="retryLoadData()">
+    <i class="bi bi-arrow-clockwise"></i> Reintentar
+  </button>
 </div>
 
-<!-- Menu Content -->
-<div class="container" *ngIf="!isLoading && !errorMessage">
-  <!-- Category Sections -->
-  <div *ngFor="let categoryId of categoryIds" class="category-section mb-5">
-    <div *ngIf="hasProductsInCategory(categoryId)">
-      <h2 class="category-title mb-4">{{ getCategoryTitle(categoryId) }}</h2>
-      <div class="row">
-        <div class="col-12 col-sm-6 col-md-4 mb-4" *ngFor="let product of getProductsByCategory(categoryId)">
-          <div class="card product-card h-100" (click)="onProductClick(product)">
-            <img *ngIf="getProductImage(product)" 
-                 [src]="getProductImage(product)" 
-                 [alt]="product.name" 
-                 class="card-img-top">
-            <div class="card-body d-flex flex-column">
-              <div class="product-name fw-bold">{{ product.name }}</div>
-              <div class="product-price text-success fw-bold">{{ formatPrice(product.price) }}</div>
-              <div class="product-description flex-grow-1" *ngIf="product.description">
-                {{ truncateText(product.description, 100) }}
-              </div>
-              <div class="product-allergens mt-2" *ngIf="getAllergenNames(product).length > 0">
-                <small class="text-muted">
-                  <i class="bi bi-exclamation-triangle"></i> {{ getAllergensText(product) }}
-                </small>
-              </div>
-            </div>
+<!-- Main Content -->
+<div class="main-wrapper" *ngIf="!isLoading && !errorMessage">
+
+  <!-- Search Bar (Sticky) -->
+  <div class="search-bar-sticky">
+    <div class="search-container">
+      <i class="bi bi-search search-icon"></i>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Buscar platos, bebidas..."
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
+      />
+      <button *ngIf="searchTerm" class="clear-search-btn" (click)="searchTerm=''; onSearch()">
+        <i class="bi bi-x-circle-fill"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Category Filters (Sticky) -->
+  <div class="filters-sticky">
+    <div class="filters-scroll">
+      <!-- Botón "Todos" -->
+      <button
+        class="filter-chip"
+        [class.active]="selectedCategoryId === null && selectedSubcategoryId === null && !searchTerm"
+        (click)="clearFilters()">
+        <span class="filter-emoji">🍽️</span>
+        <span class="filter-text">Todos</span>
+        <span class="filter-count">({{ allProducts.length }})</span>
+      </button>
+
+      <!-- Filtros de categorías -->
+      <button
+        *ngFor="let category of categories"
+        class="filter-chip"
+        [class.active]="selectedCategoryId === category.id"
+        (click)="filterByCategory(category.id)">
+        <span class="filter-emoji">{{ category.emoji }}</span>
+        <span class="filter-text">{{ category.name }}</span>
+        <span class="filter-count">({{ getCategoryCount(category.id) }})</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Subcategory Filters (si hay) -->
+  <div class="subcategory-filters" *ngIf="subcategories.length > 0">
+    <div class="filters-scroll">
+      <button
+        *ngFor="let sub of subcategories"
+        class="sub-chip"
+        [class.active]="selectedSubcategoryId === sub.id"
+        (click)="filterBySubcategory(sub.id)">
+        {{ sub.name }}
+        <span class="filter-count">({{ getSubcategoryCount(sub.id) }})</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Products Container -->
+  <div class="products-container">
+
+    <!-- Empty State: Sin resultados de búsqueda -->
+    <div *ngIf="filteredProducts.length === 0 && searchTerm" class="empty-state">
+      <div class="empty-icon">🔍</div>
+      <h3>No encontramos "{{ searchTerm }}"</h3>
+      <p>Intenta buscar con otras palabras</p>
+      <button class="btn-clear-search" (click)="searchTerm=''; onSearch()">
+        <i class="bi bi-arrow-left"></i> Limpiar búsqueda
+      </button>
+    </div>
+
+    <!-- Empty State: Sin productos en categoría -->
+    <div *ngIf="filteredProducts.length === 0 && !searchTerm && selectedCategoryId" class="empty-state">
+      <div class="empty-icon">🍽️</div>
+      <h3>Aún no hay productos disponibles</h3>
+      <p>Esta sección está en construcción</p>
+      <button class="btn-clear-search" (click)="clearFilters()">
+        <i class="bi bi-arrow-left"></i> Ver todos
+      </button>
+    </div>
+
+    <!-- Empty State: Sin productos en absoluto -->
+    <div *ngIf="allProducts.length === 0" class="empty-state">
+      <div class="empty-icon">📋</div>
+      <h3>No hay productos disponibles</h3>
+      <p>Actualmente no hay productos en el menú</p>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="products-grid" *ngIf="filteredProducts.length > 0">
+      <div
+        class="product-card"
+        *ngFor="let product of filteredProducts"
+        (click)="onProductClick(product)">
+
+        <div class="product-image-wrapper">
+          <img
+            *ngIf="getProductImage(product)"
+            [src]="getProductImage(product)"
+            [alt]="product.name"
+            class="product-image"
+            loading="lazy"
+          />
+          <div *ngIf="!getProductImage(product)" class="product-image-placeholder">
+            <i class="bi bi-image"></i>
+          </div>
+        </div>
+
+        <div class="product-body">
+          <h3 class="product-name">{{ product.name }}</h3>
+          <p class="product-description" *ngIf="product.description">
+            {{ truncateText(product.description, 80) }}
+          </p>
+          <div class="product-footer">
+            <span class="product-price">{{ formatPrice(product.price) }}</span>
+            <button class="btn-view-product">
+              <i class="bi bi-plus-circle"></i>
+            </button>
+          </div>
+          <div class="product-allergens" *ngIf="getAllergenNames(product).length > 0">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <span>{{ getAllergensText(product) }}</span>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- No Products Message -->
-  <div *ngIf="!hasAnyProducts()" class="text-center py-5">
-    <i class="bi bi-basket display-1 text-muted"></i>
-    <h3 class="mt-3">No hay productos disponibles</h3>
-    <p class="text-muted">Actualmente no hay productos en el menú.</p>
-  </div>
+  <!-- Botón flotante "Limpiar filtros" -->
+  <button
+    *ngIf="hasActiveFilters()"
+    class="btn-clear-filters-floating"
+    (click)="clearFilters()">
+    <i class="bi bi-x-circle"></i> Limpiar filtros
+  </button>
+
 </div>
 
 <!-- Product Modal -->
-<div class="modal fade" id="productModal" tabindex="-1" *ngIf="selectedProduct">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ selectedProduct.name }}</h5>
-        <button type="button" class="btn-close" (click)="closeProductModal()"></button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-md-6" *ngIf="getProductImage(selectedProduct)">
-            <img [src]="getProductImage(selectedProduct)" 
-                 [alt]="selectedProduct.name" 
-                 class="img-fluid rounded">
-          </div>
-          <div class="col-md-6">
-            <h4 class="text-success">{{ formatPrice(selectedProduct.price) }}</h4>
-            <p *ngIf="selectedProduct.description">{{ selectedProduct.description }}</p>
-            <div *ngIf="getAllergenNames(selectedProduct).length > 0">
-              <h6>Alérgenos:</h6>
-              <p class="text-muted">{{ getAllergensText(selectedProduct) }}</p>
-            </div>
-          </div>
-        </div>
+<div class="product-modal-overlay" *ngIf="selectedProduct" (click)="closeProductModal()">
+  <div class="product-modal" (click)="$event.stopPropagation()">
+    <button class="modal-close-btn" (click)="closeProductModal()">
+      <i class="bi bi-x-lg"></i>
+    </button>
+
+    <div class="modal-image-wrapper" *ngIf="getProductImage(selectedProduct)">
+      <img [src]="getProductImage(selectedProduct)" [alt]="selectedProduct.name" />
+    </div>
+
+    <div class="modal-content-wrapper">
+      <h2 class="modal-product-name">{{ selectedProduct.name }}</h2>
+      <p class="modal-product-price">{{ formatPrice(selectedProduct.price) }}</p>
+
+      <p class="modal-product-description" *ngIf="selectedProduct.description">
+        {{ selectedProduct.description }}
+      </p>
+
+      <div class="modal-allergens" *ngIf="getAllergenNames(selectedProduct).length > 0">
+        <h4><i class="bi bi-exclamation-triangle-fill"></i> Alérgenos</h4>
+        <p>{{ getAllergensText(selectedProduct) }}</p>
       </div>
     </div>
   </div>
 </div>
+
+</div> <!-- /carta-wrapper -->

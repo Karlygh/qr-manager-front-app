@@ -1,135 +1,318 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Subject, takeUntil } from 'rxjs';
+import { Component, inject, OnInit, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Subject, takeUntil, forkJoin } from 'rxjs';
 import { LayoutService } from '../../../services/layout.service';
 import { ProductosService } from '../../../services/productos.service';
+import { CategoryService, Category } from '../../../services/category.service';
+import { SubCategoryService, SubCategory } from '../../../services/subcategory.service';
+import { BusinessService } from '../../../services/business.service';
 import { ProductResponse } from '../../../shared/models/product.model';
+
+interface CategoryWithIcon extends Category {
+  emoji: string;
+}
 
 @Component({
   selector: 'app-carta-principal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './carta-principal.html',
   styleUrls: ['./carta-principal.css']
 })
 export class CartaPrincipalComponent implements OnInit, OnDestroy {
   private layoutService = inject(LayoutService);
   private productosService = inject(ProductosService);
+  private categoryService = inject(CategoryService);
+  private subcategoryService = inject(SubCategoryService);
+  private businessService = inject(BusinessService);
+  private platformId = inject(PLATFORM_ID);
   private destroy$ = new Subject<void>();
 
-  // Productos agrupados por categoría
-  productsByCategory: { [key: number]: ProductResponse[] } = {};
-  
-  // Mapeo de IDs de categoría a nombres (según tu backend)
-  categoryMap: { [key: number]: { name: string, emoji: string, title: string } } = {
-    1: { name: 'entrantes', emoji: '🍽️', title: 'Entrantes' },
-    10: { name: 'bebidas', emoji: '🥤', title: 'Bebidas' },
-    12: { name: 'postres', emoji: '🍰', title: 'Postres' },
-    14: { name: 'principales', emoji: '🍖', title: 'Platos Principales' }
-  };
+  // Datos cargados del backend
+  allProducts: ProductResponse[] = [];
+  categories: CategoryWithIcon[] = [];
+  subcategories: SubCategory[] = [];
+  businessName: string = '';
+
+  // Productos filtrados (lo que se muestra)
+  filteredProducts: ProductResponse[] = [];
+
+  // Estados de filtrado
+  selectedCategoryId: number | null = null;
+  selectedSubcategoryId: number | null = null;
+  searchTerm: string = '';
 
   // Estados de la UI
   isLoading = false;
   errorMessage: string | null = null;
   selectedProduct: ProductResponse | null = null;
+  businessId: number | null = null;
+  isDarkMode = false;
 
-  // IDs de categorías disponibles
-  categoryIds = [1, 10, 12, 14];
+  // Mapeo genérico de emojis por nombre de categoría
+  private categoryEmojiMap: { [key: string]: string } = {
+    'entrantes': '🍽️',
+    'principales': '🍖',
+    'platos principales': '🍖',
+    'carnes': '🥩',
+    'pescados': '🐟',
+    'pescado': '🐟',
+    'mariscos': '🦞',
+    'bebidas': '🥤',
+    'refrescos': '🥤',
+    'vinos': '🍷',
+    'vino': '🍷',
+    'cervezas': '🍺',
+    'cerveza': '🍺',
+    'postres': '🍰',
+    'postre': '🍰',
+    'cafés': '☕',
+    'café': '☕',
+    'ensaladas': '🥗',
+    'ensalada': '🥗',
+    'pizzas': '🍕',
+    'pizza': '🍕',
+    'pastas': '🍝',
+    'pasta': '🍝',
+    'hamburguesas': '🍔',
+    'hamburguesa': '🍔',
+    'tapas': '🍢',
+    'raciones': '🍲',
+    'sopas': '🍜',
+    'sopa': '🍜',
+    'vegetariano': '🥬',
+    'vegano': '🌱',
+    'bocadillos': '🥖',
+    'bocadillo': '🥖',
+    'desayunos': '🥐',
+    'desayuno': '🥐'
+  };
 
-  // Métodos del ciclo de vida
   ngOnInit(): void {
     this.layoutService.hideNavbar();
-    console.log('🚫 Navbar oculto');
-    
-    this.loadProducts();
-    this.subscribeToProductService();
+    this.loadBusinessId();
+    this.loadThemePreference();
+
+    if (this.businessId) {
+      this.loadAllData();
+      this.loadBusinessName();
+    } else {
+      this.errorMessage = 'No se pudo cargar el negocio. Vuelve al panel de control.';
+    }
+  }
+
+  private loadThemePreference(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const savedTheme = localStorage.getItem('carta-theme');
+      this.isDarkMode = savedTheme === 'dark';
+    }
+  }
+
+  toggleTheme(): void {
+    this.isDarkMode = !this.isDarkMode;
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('carta-theme', this.isDarkMode ? 'dark' : 'light');
+    }
+  }
+
+  private loadBusinessName(): void {
+    this.businessService.getBusinessById(this.businessId!).subscribe({
+      next: (business) => {
+        this.businessName = business?.name || '';
+      },
+      error: () => {
+        this.businessName = '';
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.layoutService.showNavbarMethod();
-    console.log('✅ Navbar visible');
-    
-    // Limpieza de suscripciones
     this.destroy$.next();
     this.destroy$.complete();
   }
 
   /**
-   * Carga los productos desde el backend
+   * Carga el businessId desde localStorage
    */
-  private loadProducts(): void {
-    this.productosService.getAllProducts()
+  private loadBusinessId(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const storedId = localStorage.getItem('currentBusinessId');
+      this.businessId = storedId ? parseInt(storedId, 10) : null;
+    }
+  }
+
+  /**
+   * Carga todos los datos en paralelo (productos + categorías)
+   */
+  private loadAllData(): void {
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    forkJoin({
+      products: this.productosService.getAllProducts(),
+      categories: this.categoryService.getAllCategoriesByBusinessId(this.businessId!)
+    })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (products) => {
-          console.log('🔍 Productos recibidos del backend:', products);
-          console.log('📊 Total productos:', products.length);
-          products.forEach(product => {
-            console.log(`- ${product.name} (ID: ${product.id}, Categoría: ${product.categoryId})`);
-          });
-          this.groupProducts(products);
-          console.log('📦 Productos agrupados por categoría:', this.productsByCategory);
+        next: ({ products, categories }) => {
+          this.allProducts = this.productosService.getActiveProducts(products);
+          this.categories = categories.map(cat => ({
+            ...cat,
+            emoji: this.getCategoryEmoji(cat.name)
+          }));
+          this.filteredProducts = [...this.allProducts];
+          this.isLoading = false;
         },
         error: (error) => {
-          console.error('❌ Error al cargar productos:', error);
-          this.errorMessage = 'No se pudieron cargar los productos. Por favor, intente más tarde.';
+          console.error('❌ Error al cargar datos:', error);
+          this.errorMessage = 'No se pudieron cargar los datos. Por favor, intente más tarde.';
+          this.isLoading = false;
         }
       });
   }
 
   /**
-   * Se suscribe a los observables del servicio de productos
+   * Obtiene el emoji correspondiente a una categoría
    */
-  private subscribeToProductService(): void {
-    // Suscripción al estado de carga
-    this.productosService.loading$
+  private getCategoryEmoji(categoryName: string): string {
+    const normalized = categoryName.toLowerCase().trim();
+    return this.categoryEmojiMap[normalized] || '🍴';
+  }
+
+  /**
+   * Filtra productos por categoría
+   */
+  filterByCategory(categoryId: number): void {
+    this.selectedCategoryId = categoryId;
+    this.selectedSubcategoryId = null;
+    this.searchTerm = '';
+
+    // Cargar subcategorías de esta categoría
+    this.subcategoryService.getAllSubCategoriesByCategoryId(categoryId)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(loading => {
-        this.isLoading = loading;
+      .subscribe({
+        next: (subs) => {
+          this.subcategories = subs;
+        },
+        error: () => {
+          this.subcategories = [];
+        }
       });
 
-    // Suscripción a los errores
-    this.productosService.error$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(error => {
-        this.errorMessage = error;
-      });
+    this.applyFilters();
+    this.scrollToProducts();
   }
 
   /**
-   * Agrupa los productos por categoría
+   * Filtra productos por subcategoría
    */
-  private groupProducts(products: ProductResponse[]): void {
-    this.productsByCategory = this.productosService.groupProductsByCategory(products);
+  filterBySubcategory(subcategoryId: number): void {
+    this.selectedSubcategoryId = subcategoryId;
+    this.searchTerm = '';
+    this.applyFilters();
+    this.scrollToProducts();
   }
 
   /**
-   * Obtiene productos de una categoría específica
+   * Resetea todos los filtros
    */
-  getProductsByCategory(categoryId: number): ProductResponse[] {
-    return this.productsByCategory[categoryId] || [];
+  clearFilters(): void {
+    this.selectedCategoryId = null;
+    this.selectedSubcategoryId = null;
+    this.subcategories = [];
+    this.searchTerm = '';
+    this.applyFilters();
   }
 
   /**
-   * Obtiene el nombre de la categoría basado en su ID
+   * Busca productos por término
    */
-  getCategoryName(categoryId: number): string {
-    return this.categoryMap[categoryId]?.name || 'otros';
+  onSearch(): void {
+    this.selectedCategoryId = null;
+    this.selectedSubcategoryId = null;
+    this.subcategories = [];
+    this.applyFilters();
   }
 
   /**
-   * Obtiene el emoji de la categoría
+   * Aplica los filtros combinados
    */
-  getCategoryEmoji(categoryId: number): string {
-    return this.categoryMap[categoryId]?.emoji || '🍴';
+  private applyFilters(): void {
+    let result = [...this.allProducts];
+
+    // Filtro por búsqueda
+    if (this.searchTerm.trim()) {
+      result = this.productosService.searchProducts(result, this.searchTerm);
+    }
+
+    // Filtro por subcategoría (tiene prioridad)
+    if (this.selectedSubcategoryId !== null) {
+      result = result.filter(p => p.subCategoryId === this.selectedSubcategoryId);
+    }
+    // Filtro por categoría
+    else if (this.selectedCategoryId !== null) {
+      result = result.filter(p => p.categoryId === this.selectedCategoryId);
+    }
+
+    this.filteredProducts = result;
   }
 
   /**
-   * Obtiene el título completo de la categoría
+   * Scroll suave a la sección de productos
    */
-  getCategoryTitle(categoryId: number): string {
-    const category = this.categoryMap[categoryId];
-    return category ? `${category.emoji} ${category.title}` : '🍴 Otros';
+  private scrollToProducts(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        const element = document.querySelector('.products-container');
+        element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }
+
+  /**
+   * Obtiene el conteo de productos por categoría
+   */
+  getCategoryCount(categoryId: number): number {
+    return this.allProducts.filter(p => p.categoryId === categoryId).length;
+  }
+
+  /**
+   * Obtiene el conteo de productos por subcategoría
+   */
+  getSubcategoryCount(subcategoryId: number): number {
+    return this.allProducts.filter(p => p.subCategoryId === subcategoryId).length;
+  }
+
+  /**
+   * Verifica si hay filtros activos
+   */
+  hasActiveFilters(): boolean {
+    return this.selectedCategoryId !== null ||
+           this.selectedSubcategoryId !== null ||
+           this.searchTerm.trim() !== '';
+  }
+
+  /**
+   * Abre el modal del producto
+   */
+  onProductClick(product: ProductResponse): void {
+    this.selectedProduct = product;
+  }
+
+  /**
+   * Cierra el modal del producto
+   */
+  closeProductModal(): void {
+    this.selectedProduct = null;
+  }
+
+  /**
+   * Obtiene la imagen del producto
+   */
+  getProductImage(product: ProductResponse): string {
+    return product.image || '';
   }
 
   /**
@@ -147,41 +330,19 @@ export class CartaPrincipalComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Verifica si hay productos en una categoría
+   * Obtiene el texto de los alérgenos
    */
-  hasProductsInCategory(categoryId: number): boolean {
-    return this.getProductsByCategory(categoryId).length > 0;
+  getAllergensText(product: ProductResponse): string {
+    const allergens = this.getAllergenNames(product);
+    return allergens.length > 0 ? allergens.join(', ') : 'Sin alérgenos declarados';
   }
 
   /**
-   * Maneja el clic en un producto para mostrar el modal
+   * Trunca el texto
    */
-  onProductClick(product: ProductResponse): void {
-    this.selectedProduct = product;
-    console.log('🔍 Producto seleccionado:', product);
-  }
-
-  /**
-   * Cierra el modal del producto
-   */
-  closeProductModal(): void {
-    this.selectedProduct = null;
-  }
-
-  /**
-   * Obtiene la imagen del producto del backend
-   */
-  getProductImage(product: ProductResponse): string {
-    return product.image || '';
-  }
-
-  /**
-   * Intenta recargar los productos
-   */
-  retryLoadProducts(): void {
-    this.errorMessage = null;
-    this.productosService.clearError();
-    this.loadProducts();
+  truncateText(text: string | undefined, limit: number = 100): string {
+    if (!text) return '';
+    return text.length > limit ? text.substring(0, limit) + '...' : text;
   }
 
   /**
@@ -192,35 +353,10 @@ export class CartaPrincipalComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Trunca el texto si excede el límite
+   * Intenta recargar los datos
    */
-  truncateText(text: string | undefined, limit: number = 100): string {
-    if (!text) return '';
-    return text.length > limit ? text.substring(0, limit) + '...' : text;
-  }
-
-  /**
-   * Obtiene el total de productos
-   */
-  getTotalProducts(): number {
-    return Object.values(this.productsByCategory).reduce(
-      (total, products) => total + products.length, 
-      0
-    );
-  }
-
-  /**
-   * Verifica si hay algún producto cargado
-   */
-  hasAnyProducts(): boolean {
-    return this.getTotalProducts() > 0;
-  }
-
-  /**
-   * Obtiene el texto del alérgeno formateado
-   */
-  getAllergensText(product: ProductResponse): string {
-    const allergens = this.getAllergenNames(product);
-    return allergens.length > 0 ? allergens.join(', ') : 'Sin alérgenos declarados';
+  retryLoadData(): void {
+    this.errorMessage = null;
+    this.loadAllData();
   }
 }

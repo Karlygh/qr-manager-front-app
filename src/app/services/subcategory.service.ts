@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
@@ -14,16 +14,11 @@ export interface SubCategoryRequest {
   categoryId: number;
 }
 
-export interface SubCategoryValidation {
-  isValid: boolean;
-  belongsToCategory: boolean;
-  hasProducts: boolean;
-}
-
 @Injectable({
   providedIn: 'root'
 })
 export class SubCategoryService {
+  private http = inject(HttpClient);
   private baseUrl = 'http://91.107.235.58:8081/api/v1';
 
   private httpOptions = {
@@ -33,10 +28,8 @@ export class SubCategoryService {
     })
   };
 
-  constructor(private http: HttpClient) {}
-
-  private handleError(error: HttpErrorResponse) {
-    console.error('Error en subcategory service:', {
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    console.error('❌ Error en subcategory service:', {
       status: error.status,
       statusText: error.statusText,
       url: error.url,
@@ -46,6 +39,9 @@ export class SubCategoryService {
     return throwError(() => error);
   }
 
+  /**
+   * Obtiene todas las subcategorías de una categoría
+   */
   getAllSubCategoriesByCategoryId(categoryId: number): Observable<SubCategory[]> {
     return this.http.get<SubCategory[]>(`${this.baseUrl}/subcategory/${categoryId}`)
       .pipe(
@@ -54,6 +50,9 @@ export class SubCategoryService {
       );
   }
 
+  /**
+   * Crea una nueva subcategoría
+   */
   createSubCategory(request: SubCategoryRequest): Observable<SubCategory> {
     return this.http.post<SubCategory>(`${this.baseUrl}/subcategory`, request, this.httpOptions)
       .pipe(
@@ -61,39 +60,39 @@ export class SubCategoryService {
       );
   }
 
+  /**
+   * Actualiza una subcategoría por ID
+   */
   updateSubCategoryById(subCategoryId: number, request: SubCategoryRequest): Observable<SubCategory> {
-    return this.http.patch<SubCategory>(`${this.baseUrl}/subcategory/${subCategoryId}`, request, this.httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      );
+    return this.http.patch<SubCategory>(
+      `${this.baseUrl}/subcategory/${subCategoryId}`, 
+      request, 
+      this.httpOptions
+    ).pipe(
+      catchError(this.handleError)
+    );
   }
 
+  /**
+   * Elimina una subcategoría por ID
+   */
   deleteSubCategoryById(subCategoryId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/subcategory/${subCategoryId}`, {
       headers: this.httpOptions.headers
-    })
-      .pipe(
-        catchError(this.handleError)
-      );
+    }).pipe(
+      catchError(this.handleError)
+    );
   }
 
-  // Método para forzar eliminación con validación adicional
-  forceDeleteSubCategory(subCategoryId: number, categoryId: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/subcategory/${subCategoryId}?categoryId=${categoryId}`, {
-      headers: this.httpOptions.headers
-    })
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
-
-  // Eliminar todas las subcategorías de una categoría
+  /**
+   * Elimina todas las subcategorías de una categoría
+   * Este método se llama automáticamente cuando se elimina una categoría (cascade)
+   */
   deleteAllSubCategoriesByCategoryId(categoryId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/subcategory/${categoryId}`, {
       headers: this.httpOptions.headers
-    })
-      .pipe(
-        catchError(this.handleError)
-      );
+    }).pipe(
+      catchError(this.handleError)
+    );
   }
 }
