@@ -1342,6 +1342,130 @@ opacity: 1;
 transform: translateY(0);
 }
 }
+
+/* ================================
+   STEP 4: ALÉRGENOS
+   ================================ */
+.allergens-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.allergen-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 12px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.allergen-item:hover {
+  border-color: #adb5bd;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.allergen-item.item-selected {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border-color: #4caf50;
+  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.25);
+}
+
+.allergen-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.allergen-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #495057;
+  text-align: center;
+  word-break: break-word;
+}
+
+.allergen-item.item-selected .allergen-name {
+  color: #2e7d32;
+}
+
+.allergen-check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  background: #4caf50;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  animation: scaleIn 0.2s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.selected-allergens-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border: 2px solid #4caf50;
+  border-radius: 12px;
+  gap: 16px;
+}
+
+.allergens-text {
+  flex: 1;
+  font-weight: 500;
+  color: #2e7d32;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Responsive para alérgenos */
+@media (max-width: 576px) {
+  .allergens-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .allergen-item {
+    padding: 12px 8px;
+  }
+  
+  .allergen-icon {
+    font-size: 1.75rem;
+  }
+  
+  .allergen-name {
+    font-size: 0.8rem;
+  }
+  
+  .selected-allergens-summary {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+}
+
 /* ================================
 REDUCED MOTION
 ================================ */

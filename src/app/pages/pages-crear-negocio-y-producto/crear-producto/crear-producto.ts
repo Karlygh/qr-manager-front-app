@@ -8,6 +8,8 @@ import { Subject, takeUntil, finalize, catchError, of, forkJoin } from 'rxjs';
 import { CategoryService, Category } from '../../../services/category.service';
 import { SubCategoryService, SubCategory } from '../../../services/subcategory.service';
 import { ProductosService } from '../../../services/productos.service';
+import { AllergenService } from '../../../services/allergen.service';
+import { AllergenResponse } from '../../../shared/models/allergen.model';
 
 enum MessageType {
   SUCCESS = 'success',
@@ -33,6 +35,7 @@ export class CrearProducto implements OnInit, OnDestroy {
   private readonly categoryService = inject(CategoryService);
   private readonly subcategoryService = inject(SubCategoryService);
   private readonly productService = inject(ProductosService);
+  private readonly allergenService = inject(AllergenService);
   private readonly router = inject(Router);
   private readonly destroy$ = new Subject<void>();
 
@@ -41,7 +44,7 @@ export class CrearProducto implements OnInit, OnDestroy {
   readonly PREDETERMINADO_VALUE = -1; // Valor especial para "Predeterminado"
 
   currentStep = 1;
-  readonly totalSteps = 5;
+  readonly totalSteps = 6;
   
   categories: Category[] = [];
   subcategories: SubCategory[] = [];
@@ -80,6 +83,16 @@ export class CrearProducto implements OnInit, OnDestroy {
   selectedSubcategoryId: number | null = null;
   
   subcategoryNotification: {
+    message: string;
+    type: 'success' | 'error' | 'warning' | 'info';
+    icon: string;
+  } | null = null;
+
+  // STEP 4 - Alérgenos
+  allergens: AllergenResponse[] = [];
+  selectedAllergenIds: number[] = [];
+  
+  allergenNotification: {
     message: string;
     type: 'success' | 'error' | 'warning' | 'info';
     icon: string;
@@ -164,6 +177,10 @@ export class CrearProducto implements OnInit, OnDestroy {
 
     if (this.currentStep === 3) {
       this.loadSubcategories();
+    }
+
+    if (this.currentStep === 4) {
+      this.loadAllergens();
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -630,7 +647,109 @@ export class CrearProducto implements OnInit, OnDestroy {
   }
 
   // ================================
-  // PASO 4 Y 5: DETALLES DEL PRODUCTO E IMAGEN
+  // PASO 4: GESTIÓN DE ALÉRGENOS
+  // ================================
+
+  loadAllergens(): void {
+    this.logInfo('Cargando alérgenos...');
+    this.isLoading = true;
+
+    this.allergenService.getAllAllergens()
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.isLoading = false),
+        catchError(error => {
+          this.handleError('Error al cargar alérgenos', error);
+          this.showStep4Notification('No se pudieron cargar los alérgenos', 'error', '❌');
+          return of([] as AllergenResponse[]);
+        })
+      )
+      .subscribe({
+        next: (allergens) => {
+          this.allergens = allergens;
+          this.logInfo(`✅ Alérgenos cargados: ${allergens.length}`, allergens);
+        }
+      });
+  }
+
+  toggleAllergen(allergenId: number): void {
+    const index = this.selectedAllergenIds.indexOf(allergenId);
+    
+    if (index === -1) {
+      this.selectedAllergenIds.push(allergenId);
+      const allergen = this.allergens.find(a => a.id === allergenId);
+      this.showStep4Notification(`Alérgeno "${allergen?.name}" añadido`, 'info', '✅');
+    } else {
+      this.selectedAllergenIds.splice(index, 1);
+      const allergen = this.allergens.find(a => a.id === allergenId);
+      this.showStep4Notification(`Alérgeno "${allergen?.name}" removido`, 'info', '❌');
+    }
+    
+    this.logInfo('Alérgenos seleccionados:', this.selectedAllergenIds);
+  }
+
+  isAllergenSelected(allergenId: number): boolean {
+    return this.selectedAllergenIds.includes(allergenId);
+  }
+
+  clearAllAllergens(): void {
+    this.selectedAllergenIds = [];
+    this.showStep4Notification('Se han removido todos los alérgenos', 'info', 'ℹ️');
+    this.logInfo('Todos los alérgenos removidos');
+  }
+
+  getSelectedAllergensText(): string {
+    if (this.selectedAllergenIds.length === 0) {
+      return 'Ninguno seleccionado';
+    }
+    
+    const names = this.selectedAllergenIds
+      .map(id => this.allergens.find(a => a.id === id)?.name)
+      .filter(name => name)
+      .join(', ');
+    
+    return names || 'Ninguno seleccionado';
+  }
+
+  private showStep4Notification(message: string, type: 'success' | 'error' | 'warning' | 'info', icon: string): void {
+    this.allergenNotification = { message, type, icon };
+    
+    setTimeout(() => {
+      this.allergenNotification = null;
+    }, 3000);
+  }
+
+  getAllergenIcon(name: string): string {
+    const icons: { [key: string]: string } = {
+      'gluten': '🌾',
+      'crustáceos': '🦐',
+      'crustaceos': '🦐',
+      'huevos': '🥚',
+      'huevo': '🥚',
+      'pescado': '🐟',
+      'cacahuetes': '🥜',
+      'cacahuete': '🥜',
+      'soja': '🫘',
+      'lácteos': '🥛',
+      'lacteos': '🥛',
+      'leche': '🥛',
+      'frutos secos': '🌰',
+      'apio': '🥬',
+      'mostaza': '🟡',
+      'sésamo': '⚪',
+      'sesamo': '⚪',
+      'sulfitos': '🍷',
+      'altramuces': '🌻',
+      'moluscos': '🦪',
+      'default': '⚠️'
+    };
+    
+    const lowerName = name.toLowerCase();
+    return icons[lowerName] || icons['default'];
+  }
+
+  // ================================
+  // PASO 5 Y 6: DETALLES DEL PRODUCTO E IMAGEN
   // ================================
 
   onImageSelected(event: Event): void {
@@ -731,6 +850,12 @@ export class CrearProducto implements OnInit, OnDestroy {
       this.logInfo('Imagen agregada al FormData');
     }
 
+    // Agregar alérgenos seleccionados como string separado por comas
+    if (this.selectedAllergenIds.length > 0) {
+      formData.append('allergenIds', this.selectedAllergenIds.join(','));
+      this.logInfo('Alérgenos agregados al FormData', this.selectedAllergenIds);
+    }
+
     return formData;
   }
 
@@ -750,9 +875,11 @@ export class CrearProducto implements OnInit, OnDestroy {
     this.selectedImagePreview = null;
     this.selectedCategoryId = null;
     this.selectedSubcategoryId = null;
+    this.selectedAllergenIds = [];
     
     this.categories = [];
     this.subcategories = [];
+    this.allergens = [];
     
     this.loadInitialData();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -782,6 +909,10 @@ export class CrearProducto implements OnInit, OnDestroy {
         return true;
       
       case 4:
+        // Alérgenos son opcionales, siempre se puede avanzar
+        return true;
+      
+      case 5:
         const name = this.productForm.get('name');
         const description = this.productForm.get('description');
         const price = this.productForm.get('price');
