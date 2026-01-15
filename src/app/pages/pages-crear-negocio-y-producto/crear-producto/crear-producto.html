@@ -401,8 +401,100 @@
 
         </div>
 
-        <!-- Step 4: Product Details -->
+        <!-- Step 4: Allergen Management -->
         <div *ngIf="currentStep === 4" class="step-content">
+          
+          <!-- Header -->
+          <div class="step3-header">
+            <div class="header-icon">⚠️</div>
+            <h2>Alérgenos del Producto</h2>
+            <p class="header-description">
+              Indica qué alérgenos contiene tu producto para informar a tus clientes.<br>
+              <strong>Importante:</strong> Esta información es obligatoria por ley para proteger a personas con alergias.<br>
+              <em>Si tu producto no contiene alérgenos, puedes continuar sin seleccionar ninguno.</em>
+            </p>
+          </div>
+
+          <!-- Notificación -->
+          <div *ngIf="allergenNotification" class="step3-notification" [ngClass]="'notif-' + allergenNotification.type">
+            <span class="notif-icon">{{ allergenNotification.icon }}</span>
+            <span class="notif-text">{{ allergenNotification.message }}</span>
+          </div>
+
+          <!-- Loading -->
+          <div *ngIf="isLoading" class="step3-loading">
+            <div class="spinner"></div>
+            <p>Cargando alérgenos...</p>
+          </div>
+
+          <!-- Contenido Principal -->
+          <div *ngIf="!isLoading" class="step3-content">
+
+            <!-- SECCIÓN 1: Alérgenos Seleccionados -->
+            <div class="step3-section selected-section" *ngIf="selectedAllergenIds.length > 0">
+              <div class="section-title">
+                <span class="title-icon">✅</span>
+                <h3>Alérgenos del Producto</h3>
+                <p class="section-subtitle">{{ selectedAllergenIds.length }} alérgeno(s) seleccionado(s)</p>
+              </div>
+
+              <div class="selected-allergens-summary">
+                <p class="allergens-text">{{ getSelectedAllergensText() }}</p>
+                <button type="button" 
+                        class="btn-remove-selection" 
+                        (click)="clearAllAllergens()"
+                        title="Quitar todos">
+                  🗑️ Limpiar todos
+                </button>
+              </div>
+            </div>
+
+            <!-- SECCIÓN 2: Lista de Alérgenos Disponibles -->
+            <div class="step3-section">
+              <div class="section-title">
+                <span class="title-icon">📋</span>
+                <h3>Alérgenos Disponibles</h3>
+                <p class="section-subtitle">Selecciona los alérgenos que contiene tu producto</p>
+              </div>
+
+              <!-- Sin alérgenos -->
+              <div *ngIf="allergens.length === 0 && !hasApiError" class="no-items">
+                <div class="no-items-icon">⚠️</div>
+                <p>No hay alérgenos disponibles.</p>
+                <p class="no-items-hint">Contacta con el administrador si crees que esto es un error.</p>
+              </div>
+
+              <!-- Lista de alérgenos -->
+              <div *ngIf="allergens.length > 0" class="allergens-grid">
+                <div *ngFor="let allergen of allergens" 
+                     class="allergen-item"
+                     [class.item-selected]="isAllergenSelected(allergen.id)"
+                     (click)="toggleAllergen(allergen.id)">
+                  <span class="allergen-icon">{{ getAllergenIcon(allergen.name) }}</span>
+                  <span class="allergen-name">{{ allergen.name }}</span>
+                  <span class="allergen-check" *ngIf="isAllergenSelected(allergen.id)">✓</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Navigation -->
+          <div class="step3-navigation">
+            <button type="button" class="btn-nav btn-prev" (click)="prevStep()">
+              <span class="btn-nav-icon">⬅️</span>
+              <span class="btn-nav-text">Anterior</span>
+            </button>
+            <button type="button" class="btn-nav btn-next" (click)="nextStep()">
+              <span class="btn-nav-text">Siguiente</span>
+              <span class="btn-nav-icon">➡️</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Step 5: Product Details -->
+        <div *ngIf="currentStep === 5" class="step-content">
           <h2>Detalles del Producto</h2>
           <p class="step-description">Completa la información básica de tu producto</p>
           
@@ -468,8 +560,8 @@
           </div>
         </div>
 
-        <!-- Step 5: Image Upload -->
-        <div *ngIf="currentStep === 5" class="step-content">
+        <!-- Step 6: Image Upload -->
+        <div *ngIf="currentStep === 6" class="step-content">
           <h2>Imagen del Producto</h2>
           <p class="step-description">Agrega una imagen atractiva de tu producto (opcional)</p>
           
@@ -567,15 +659,23 @@
         <div class="step" 
              [class.active]="currentStep >= 4" 
              [class.completed]="currentStep > 4"
-             [attr.aria-label]="'Paso 4: Detalles'">
+             [attr.aria-label]="'Paso 4: Alérgenos'">
           4
         </div>
         <div class="line" [class.completed]="currentStep > 4"></div>
         
         <div class="step" 
-             [class.active]="currentStep >= 5"
-             [attr.aria-label]="'Paso 5: Imagen'">
+             [class.active]="currentStep >= 5" 
+             [class.completed]="currentStep > 5"
+             [attr.aria-label]="'Paso 5: Detalles'">
           5
+        </div>
+        <div class="line" [class.completed]="currentStep > 5"></div>
+        
+        <div class="step" 
+             [class.active]="currentStep >= 6"
+             [attr.aria-label]="'Paso 6: Imagen'">
+          6
         </div>
       </div>
     </div>
