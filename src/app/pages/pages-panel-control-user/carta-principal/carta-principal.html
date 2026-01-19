@@ -1,10 +1,11 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <div class="carta-wrapper" [class.dark-theme]="isDarkMode">
 
 <!-- Header personalizado -->
-<header class="business-header">
+<header class="business-header" [class.header-hidden]="isHeaderHidden">
   <div class="container-fluid d-flex justify-content-between align-items-center py-3">
     <div class="d-flex flex-column align-items-start">
       <div class="d-flex align-items-center mb-1">
@@ -84,11 +85,21 @@
         <span class="filter-text">{{ category.name }}</span>
         <span class="filter-count">({{ getCategoryCount(category.id) }})</span>
       </button>
+
+      <!-- Botón Limpiar filtros -->
+      <button
+        *ngIf="hasActiveFilters()"
+        class="filter-chip filter-chip-clear"
+        (click)="clearFilters()">
+        <i class="bi bi-x-lg"></i>
+        <span class="filter-text">Limpiar</span>
+      </button>
     </div>
   </div>
 
   <!-- Subcategory Filters (si hay) -->
   <div class="subcategory-filters" *ngIf="subcategories.length > 0">
+    <div class="subcategory-title">Subcategorías</div>
     <div class="filters-scroll">
       <button
         *ngFor="let sub of subcategories"
@@ -163,7 +174,7 @@
             </button>
           </div>
           <div class="product-allergens" *ngIf="getAllergenNames(product).length > 0">
-            <i class="bi bi-exclamation-triangle-fill"></i>
+            <i class="bi bi-info-circle"></i>
             <span>{{ getAllergensText(product) }}</span>
           </div>
         </div>
@@ -201,7 +212,7 @@
       </p>
 
       <div class="modal-allergens" *ngIf="getAllergenNames(selectedProduct).length > 0">
-        <h4><i class="bi bi-exclamation-triangle-fill"></i> Alérgenos</h4>
+        <h4><i class="bi bi-info-circle"></i> Alérgenos</h4>
         <p>{{ getAllergensText(selectedProduct) }}</p>
       </div>
     </div>

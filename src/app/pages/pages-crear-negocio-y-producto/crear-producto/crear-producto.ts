@@ -67,6 +67,7 @@ export class CrearProducto implements OnInit, OnDestroy {
   isEditingCategory = false;
   editingCategoryId: number | null = null;
   selectedCategoryId: number | null = null;
+  showCategoryInfoTooltip = false;
   
   categoryNotification: {
     message: string;
@@ -81,6 +82,7 @@ export class CrearProducto implements OnInit, OnDestroy {
   isEditingSubcategory = false;
   editingSubcategoryId: number | null = null;
   selectedSubcategoryId: number | null = null;
+  showSubcategoryInfoTooltip = false;
   
   subcategoryNotification: {
     message: string;
@@ -161,7 +163,7 @@ export class CrearProducto implements OnInit, OnDestroy {
 
   nextStep(): void {
     if (!this.canProceed()) {
-      if (this.currentStep === 2 && this.isPredeterminadoSelected()) {
+      if (this.currentStep === 3 && this.isPredeterminadoSelected()) {
         this.showNotification(
           'Por favor, selecciona una categoría o créala. Esto te ayudará a organizar mejor tu menú.', 
           MessageType.WARNING
@@ -175,11 +177,11 @@ export class CrearProducto implements OnInit, OnDestroy {
     this.currentStep++;
     this.logInfo(`Avanzando al paso ${this.currentStep}`);
 
-    if (this.currentStep === 3) {
+    if (this.currentStep === 4) {
       this.loadSubcategories();
     }
 
-    if (this.currentStep === 4) {
+    if (this.currentStep === 5) {
       this.loadAllergens();
     }
 
@@ -704,11 +706,56 @@ export class CrearProducto implements OnInit, OnDestroy {
     }
     
     const names = this.selectedAllergenIds
-      .map(id => this.allergens.find(a => a.id === id)?.name)
+      .map(id => {
+        const allergen = this.allergens.find(a => a.id === id);
+        return allergen ? this.translateAllergenName(allergen.name) : null;
+      })
       .filter(name => name)
       .join(', ');
     
     return names || 'Ninguno seleccionado';
+  }
+
+  translateAllergenName(name: string): string {
+    const translations: { [key: string]: string } = {
+      'gluten': 'Gluten',
+      'crustaceans': 'Crustáceos',
+      'crustaceos': 'Crustáceos',
+      'eggs': 'Huevos',
+      'egg': 'Huevos',
+      'fish': 'Pescado',
+      'peanuts': 'Cacahuetes',
+      'peanut': 'Cacahuetes',
+      'soybeans': 'Soja',
+      'soybean': 'Soja',
+      'soy': 'Soja',
+      'milk': 'Leche',
+      'dairy': 'Lácteos',
+      'nuts': 'Frutos secos',
+      'tree nuts': 'Frutos secos',
+      'almonds': 'Almendras',
+      'hazelnuts': 'Avellanas',
+      'walnuts': 'Nueces',
+      'cashews': 'Anacardos',
+      'cashew': 'Anacardos',
+      'pistachios': 'Pistachos',
+      'pistachio': 'Pistachos',
+      'celery': 'Apio',
+      'mustard': 'Mostaza',
+      'sesame': 'Sésamo',
+      'sesame seeds': 'Sésamo',
+      'sulphites': 'Sulfitos',
+      'sulfites': 'Sulfitos',
+      'sulphur dioxide': 'Dióxido de azufre',
+      'sulphur dioxide and sulphites': 'Sulfitos',
+      'lupin': 'Altramuces',
+      'lupins': 'Altramuces',
+      'molluscs': 'Moluscos',
+      'mollusks': 'Moluscos'
+    };
+    
+    const key = name.toLowerCase().trim();
+    return translations[key] || name.charAt(0).toUpperCase() + name.slice(1);
   }
 
   private showStep4Notification(message: string, type: 'success' | 'error' | 'warning' | 'info', icon: string): void {
@@ -720,32 +767,157 @@ export class CrearProducto implements OnInit, OnDestroy {
   }
 
   getAllergenIcon(name: string): string {
+    // Diccionario de iconos con múltiples variantes de nombres (español e inglés)
     const icons: { [key: string]: string } = {
+      // Gluten - Cereales con gluten
       'gluten': '🌾',
+      'cereales': '🌾',
+      'trigo': '🌾',
+      'wheat': '🌾',
+      'cebada': '🌾',
+      'barley': '🌾',
+      'avena': '🌾',
+      'oats': '🌾',
+      'centeno': '🌾',
+      'rye': '🌾',
+      
+      // Crustáceos
       'crustáceos': '🦐',
       'crustaceos': '🦐',
+      'crustaceans': '🦐',
+      'shellfish': '🦐',
+      'gambas': '🦐',
+      'shrimp': '🦐',
+      'prawns': '🦐',
+      'langostinos': '🦐',
+      'cangrejo': '🦀',
+      'crab': '🦀',
+      'langosta': '🦞',
+      'lobster': '🦞',
+      
+      // Huevos
       'huevos': '🥚',
       'huevo': '🥚',
+      'egg': '🥚',
+      'eggs': '🥚',
+      
+      // Pescado
       'pescado': '🐟',
+      'pescados': '🐟',
+      'fish': '🐟',
+      
+      // Cacahuetes
       'cacahuetes': '🥜',
       'cacahuete': '🥜',
-      'soja': '🫘',
+      'maní': '🥜',
+      'mani': '🥜',
+      'peanut': '🥜',
+      'peanuts': '🥜',
+      
+      // Soja
+      'soja': '🫛',
+      'soya': '🫛',
+      'soybeans': '🫛',
+      'soybean': '🫛',
+      'soy': '🫛',
+      
+      // Lácteos / Leche
       'lácteos': '🥛',
       'lacteos': '🥛',
       'leche': '🥛',
+      'lactosa': '🥛',
+      'dairy': '🥛',
+      'milk': '🥛',
+      
+      // Frutos secos
       'frutos secos': '🌰',
+      'frutos de cáscara': '🌰',
+      'frutos de cascara': '🌰',
+      'tree nuts': '🌰',
+      'nuts': '🌰',
+      'nueces': '🌰',
+      'walnuts': '🌰',
+      'almendras': '🌰',
+      'almonds': '🌰',
+      'avellanas': '🌰',
+      'hazelnuts': '🌰',
+      'anacardos': '🌰',
+      'cashews': '🌰',
+      'cashew': '🌰',
+      'pistachos': '🌰',
+      'pistachios': '🌰',
+      'pistachio': '🌰',
+      'macadamia': '🌰',
+      'pecans': '🌰',
+      'brazil nuts': '🌰',
+      
+      // Apio
       'apio': '🥬',
-      'mostaza': '🟡',
-      'sésamo': '⚪',
-      'sesamo': '⚪',
+      'celery': '🥬',
+      
+      // Mostaza
+      'mostaza': '🟨',
+      'mustard': '🟨',
+      
+      // Sésamo
+      'sésamo': '🔘',
+      'sesamo': '🔘',
+      'semillas de sésamo': '🔘',
+      'semillas de sesamo': '🔘',
+      'sesame': '🔘',
+      'sesame seeds': '🔘',
+      
+      // Sulfitos / Dióxido de azufre
       'sulfitos': '🍷',
+      'sulfito': '🍷',
+      'dióxido de azufre': '🍷',
+      'dioxido de azufre': '🍷',
+      'anhídrido sulfuroso': '🍷',
+      'sulphites': '🍷',
+      'sulfites': '🍷',
+      'sulphur dioxide': '🍷',
+      
+      // Altramuces
       'altramuces': '🌻',
+      'altramuz': '🌻',
+      'lupino': '🌻',
+      'lupinos': '🌻',
+      'lupin': '🌻',
+      'lupins': '🌻',
+      
+      // Moluscos
       'moluscos': '🦪',
-      'default': '⚠️'
+      'molusco': '🦪',
+      'molluscs': '🦪',
+      'mollusks': '🦪',
+      'mejillones': '🦪',
+      'mussels': '🦪',
+      'almejas': '🦪',
+      'clams': '🦪',
+      'ostras': '🦪',
+      'oysters': '🦪',
+      'calamares': '🦑',
+      'squid': '🦑',
+      'pulpo': '🐙',
+      'octopus': '🐙'
     };
     
-    const lowerName = name.toLowerCase();
-    return icons[lowerName] || icons['default'];
+    const lowerName = name.toLowerCase().trim();
+    
+    // Búsqueda exacta primero
+    if (icons[lowerName]) {
+      return icons[lowerName];
+    }
+    
+    // Búsqueda parcial - si el nombre contiene alguna palabra clave
+    for (const [key, icon] of Object.entries(icons)) {
+      if (lowerName.includes(key) || key.includes(lowerName)) {
+        return icon;
+      }
+    }
+    
+    // Default
+    return '⚠️';
   }
 
   // ================================
@@ -900,23 +1072,23 @@ export class CrearProducto implements OnInit, OnDestroy {
         return true;
       
       case 2:
-        // Permitir avanzar solo si hay una categoría seleccionada válida (no PREDETERMINADO)
-        return this.selectedCategoryId !== null && 
-               this.selectedCategoryId !== this.PREDETERMINADO_VALUE;
-      
-      case 3:
-        // Subcategoría es opcional, siempre se puede avanzar
-        return true;
-      
-      case 4:
-        // Alérgenos son opcionales, siempre se puede avanzar
-        return true;
-      
-      case 5:
+        // Detalles del producto (nombre, descripción, precio)
         const name = this.productForm.get('name');
         const description = this.productForm.get('description');
         const price = this.productForm.get('price');
         return !!(name?.valid && description?.valid && price?.valid);
+      
+      case 3:
+        // Categoría es opcional, siempre se puede avanzar
+        return true;
+      
+      case 4:
+        // Subcategoría es opcional, siempre se puede avanzar
+        return true;
+      
+      case 5:
+        // Alérgenos son opcionales, siempre se puede avanzar
+        return true;
       
       default:
         return false;

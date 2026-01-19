@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, PLATFORM_ID, HostListener } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil, forkJoin } from 'rxjs';
@@ -49,6 +49,9 @@ export class CartaPrincipalComponent implements OnInit, OnDestroy {
   selectedProduct: ProductResponse | null = null;
   businessId: number | null = null;
   isDarkMode = false;
+  isHeaderHidden = false;
+  private lastScrollTop = 0;
+  private scrollThreshold = 10;
 
   // Mapeo genérico de emojis por nombre de categoría
   private categoryEmojiMap: { [key: string]: string } = {
@@ -88,6 +91,35 @@ export class CartaPrincipalComponent implements OnInit, OnDestroy {
     'desayunos': '🥐',
     'desayuno': '🥐'
   };
+
+  @HostListener('window:scroll', [])
+  onWindowScroll(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    
+    const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const isMobile = window.innerWidth <= 768;
+    
+    if (!isMobile) {
+      this.isHeaderHidden = false;
+      return;
+    }
+    
+    // Evitar cambios pequeños de scroll
+    if (Math.abs(currentScrollTop - this.lastScrollTop) < this.scrollThreshold) {
+      return;
+    }
+    
+    // Scroll hacia abajo -> ocultar header
+    if (currentScrollTop > this.lastScrollTop && currentScrollTop > 60) {
+      this.isHeaderHidden = true;
+    } 
+    // Scroll hacia arriba -> mostrar header
+    else if (currentScrollTop < this.lastScrollTop) {
+      this.isHeaderHidden = false;
+    }
+    
+    this.lastScrollTop = currentScrollTop;
+  }
 
   ngOnInit(): void {
     this.layoutService.hideNavbar();
@@ -185,6 +217,12 @@ export class CartaPrincipalComponent implements OnInit, OnDestroy {
    * Filtra productos por categoría
    */
   filterByCategory(categoryId: number): void {
+    // Si la categoría ya está seleccionada, deseleccionar
+    if (this.selectedCategoryId === categoryId) {
+      this.clearFilters();
+      return;
+    }
+
     this.selectedCategoryId = categoryId;
     this.selectedSubcategoryId = null;
     this.searchTerm = '';
