@@ -8,7 +8,7 @@ import error404PageComponent from './pages/error/error404-page.component';
 import { Login } from './pages/pages-navbar/login/login';
 import { CreateBusiness } from './pages/pages-crear-negocio-y-producto/create-business/create-business';
 import { DetallesNegocioComponent } from './pages/pages-panel-control-user/detalles-negocio/detalles-negocio';
-import { PanelControlBuisiness } from './pages/pages-panel-control-user/panel-control-buisiness/panel-control-buisiness';
+import { PanelControlBusiness } from './pages/pages-panel-control-user/panel-control-business/panel-control-business';
 import { RegristoLogin } from './pages/pages-navbar/login/regristo-login/regristo-login';
 import { RecoveryPassword } from './pages/pages-navbar/login/recovery-password/recovery-password';
 import { EditarContacto } from './pages/pages-panel-control-user/editar-contacto/editar-contacto';
@@ -32,7 +32,7 @@ export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'crear-negocio', component: CreateBusiness },
   { path: 'negocio/:id', component: DetallesNegocioComponent },
-  { path: 'panel-control-buisiness/:businessId', component: PanelControlBuisiness },
+  { path: 'panel-control-business/:businessId', component: PanelControlBusiness },
   { path: 'registro', component: RegristoLogin },
   { path: 'recuperar-contraseña', component: RecoveryPassword },
   { path: 'panel/:businessId/editar-contacto', component: EditarContacto },
