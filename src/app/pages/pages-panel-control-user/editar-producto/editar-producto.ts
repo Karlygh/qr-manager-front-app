@@ -2,7 +2,7 @@ import { Component, inject, OnInit, OnDestroy, signal, computed } from '@angular
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, forkJoin, takeUntil, combineLatest, filter } from 'rxjs';
+import { Subject, forkJoin, takeUntil } from 'rxjs';
 
 // Services
 import { ProductosService } from '../../../services/productos.service';
@@ -115,35 +115,32 @@ export class EditarProducto implements OnInit, OnDestroy {
   }
 
 ngOnInit(): void {
-  // Obtener ambos parámetros de ruta: businessId y productId
-  this.route.paramMap.pipe(
-    filter(params => {
-      const busId = params.get('businessId');
-      const prodId = params.get('productId');
+  // Obtener parámetros de ruta: businessId (requerido) y productId (opcional en query params)
+  this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
+    const busId = params.get('businessId');
+    if (busId) {
+      this.businessId = Number(busId);
       
-      if (!busId) {
-        this.errorMessage.set('Falta el ID del negocio');
-        return false;
-      }
-      if (!prodId) {
-        this.errorMessage.set('Falta el ID del producto');
-        return false;
-      }
-      return true;
-    }),
-    filter(params => {
-      this.businessId = Number(params.get('businessId'));
-      this.productId = Number(params.get('productId'));
-      
-      if (this.businessId <= 0 || this.productId <= 0) {
-        this.errorMessage.set('IDs inválidos. Asegúrate de que sean mayores a 0.');
-        return false;
-      }
-      return true;
-    }),
-    takeUntil(this.destroy$)
-  ).subscribe(() => {
-    this.cargarDatos();
+      // Buscar productId en query params
+      this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(queryParams => {
+        const prodId = queryParams.get('productId');
+        
+        if (prodId) {
+          this.productId = Number(prodId);
+          // Solo cargar si tenemos ambos IDs válidos
+          if (this.businessId > 0 && this.productId > 0) {
+            this.cargarDatos();
+          } else {
+            this.errorMessage.set('IDs inválidos');
+          }
+        } else {
+          // Si no hay productId, redirigir a la lista de productos
+          this.router.navigate(['/panel', this.businessId, 'productos']);
+        }
+      });
+    } else {
+      this.errorMessage.set('Falta el ID del negocio');
+    }
   });
 }
   ngOnDestroy(): void {

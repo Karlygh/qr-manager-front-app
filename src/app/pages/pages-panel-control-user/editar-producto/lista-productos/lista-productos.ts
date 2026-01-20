@@ -50,10 +50,12 @@ export class ListaProductos implements OnInit {
   }
 
   editarProducto(producto: ProductResponse): void {
-    this.router.navigate(['/panel', this.businessId, 'editar-producto', producto.id]);
+    this.router.navigate(['/panel', this.businessId, 'editar-producto'], {
+      queryParams: { productId: producto.id }
+    });
   }
 
   volverAlPanel(): void {
-    this.router.navigate(['/panel-control-buisiness', this.businessId]);
+    this.router.navigate(['/panel-control-business', this.businessId]);
   }
 }
