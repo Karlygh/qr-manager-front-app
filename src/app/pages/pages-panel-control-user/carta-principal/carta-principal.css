@@ -426,15 +426,30 @@ body {
 }
 
 /* Botón Limpiar filtros */
-.filter-chip-clear {
-  background-color: var(--secondary-color) !important;
-  border-color: var(--secondary-color) !important;
-  color: #fff !important;
+.filter-chip.filter-chip-clear {
+  background-color: transparent;
+  border: 1px solid #06c167;
+  color: #1a1a1a;
+  box-shadow: none;
+  padding: 0.75rem 1rem;
 }
 
-.filter-chip-clear:hover {
-  background-color: #e63939 !important;
-  border-color: #e63939 !important;
+.filter-chip.filter-chip-clear:hover {
+  background-color: rgba(6, 193, 103, 0.05);
+  border-color: #06c167;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+}
+
+.dark-theme .filter-chip.filter-chip-clear {
+  border: 1px solid #1ed760;
+  color: #fff;
+}
+
+.dark-theme .filter-chip.filter-chip-clear:hover {
+  background-color: rgba(30, 215, 96, 0.05);
+  border-color: #1ed760;
+  box-shadow: var(--shadow-card);
 }
 
 .filter-chip-clear i {
@@ -494,16 +509,10 @@ body {
 }
 
 .sub-chip.active {
-  background-color: var(--text-dark);
-  border-color: var(--text-dark);
+  background-color: #05a356;
+  border: 1.5px solid #05a356;
   color: #fff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
-
-:root .sub-chip.active {
-  background-color: #05a356;
-  border-color: #05a356;
-  color: #fff;
 }
 
 /* ============================================
@@ -748,9 +757,9 @@ body {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  background-color: var(--text-dark);
-  color: #fff;
-  border: none;
+  background-color: transparent;
+  color: #1a1a1a;
+  border: 1px solid #06c167;
   padding: 0.875rem 1.5rem;
   border-radius: var(--radius-xl);
   font-weight: 600;
@@ -758,10 +767,20 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  box-shadow: var(--shadow-lg);
+  box-shadow: none;
   transition: all 0.3s ease;
   z-index: 1000;
   animation: slideUp 0.3s ease;
+  pointer-events: auto;
+}
+
+.btn-clear-filters-floating:not(:in-viewport) {
+  pointer-events: none;
+}
+
+.dark-theme .btn-clear-filters-floating {
+  color: #fff;
+  border: 1px solid #1ed760;
 }
 
 @keyframes slideUp {
@@ -776,7 +795,7 @@ body {
 }
 
 .btn-clear-filters-floating:hover {
-  background-color: #000;
+  background-color: rgba(255, 255, 255, 0.1);
   transform: translateY(-4px);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
 }
@@ -790,18 +809,19 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(255, 255, 255, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2000;
   padding: 1rem;
   animation: fadeIn 0.2s ease;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(2px);
 }
 
 .dark-theme .product-modal-overlay {
   background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
 }
 
 .product-modal {
@@ -868,7 +888,7 @@ body {
 }
 
 :root .modal-image-wrapper {
-  background-color: #ffffff;
+  background-color: #efede8;
 }
 
 .dark-theme .modal-image-wrapper {
@@ -887,7 +907,7 @@ body {
 }
 
 :root .modal-content-wrapper {
-  background-color: #ffffff;
+  background-color: #faf9f7;
 }
 
 .dark-theme .modal-content-wrapper {
@@ -923,7 +943,7 @@ body {
 }
 
 :root .modal-allergens {
-  background-color: #f0f9f6;
+  background-color: #d4edda;
   border-left: 4px solid #05a356;
 }
 
@@ -947,6 +967,59 @@ body {
   color: var(--primary-color);
   margin: 0;
   line-height: 1.5;
+  border: 1px solid #05a356;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+}
+
+.dark-theme .modal-allergens p {
+  border-color: #1ed760;
+}
+
+/* ============================================
+   MODAL SECTIONS - Diferenciación Visual
+   ============================================ */
+.modal-section {
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.modal-price-section {
+  background: linear-gradient(135deg, rgba(6, 193, 103, 0.08) 0%, rgba(6, 193, 103, 0.04) 100%);
+  border: 2px solid rgba(6, 193, 103, 0.2);
+  border-left: 4px solid #06c167;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.dark-theme .modal-price-section {
+  background: linear-gradient(135deg, rgba(30, 215, 96, 0.12) 0%, rgba(30, 215, 96, 0.06) 100%);
+  border: 2px solid rgba(30, 215, 96, 0.2);
+  border-left: 4px solid #1ed760;
+}
+
+.modal-description-section {
+  background: linear-gradient(135deg, rgba(6, 193, 103, 0.06) 0%, rgba(6, 193, 103, 0.035) 100%);
+  border: 3px solid rgba(6, 193, 103, 0.18);
+}
+
+
+.dark-theme .modal-description-section {
+  background: linear-gradient(135deg, rgba(200, 200, 200, 0.06) 0%, rgba(200, 200, 200, 0.03) 100%);
+  border: 2px solid rgba(200, 200, 200, 0.15);
+}
+
+.modal-allergens-section {
+  margin-bottom: 0;
+}
+
+.modal-allergens-section .modal-allergens {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  border-left: 0;
 }
 
 /* ============================================

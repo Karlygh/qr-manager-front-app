@@ -139,11 +139,13 @@ export class ProductosService {
 
   /**
    * Formatea el precio del producto
+  /**
+   * Formatea el precio del producto
    * @param price Precio numérico
    * @returns String con el precio formateado
    */
   formatPrice(price: number): string {
-    return `€${price.toFixed(2)}`;
+    return `${price.toFixed(2)}€`;
   }
 
   /**

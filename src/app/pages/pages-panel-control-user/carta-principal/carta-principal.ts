@@ -50,8 +50,10 @@ export class CartaPrincipalComponent implements OnInit, OnDestroy {
   businessId: number | null = null;
   isDarkMode = false;
   isHeaderHidden = false;
+  showClearButton = true;
   private lastScrollTop = 0;
   private scrollThreshold = 10;
+  private footerDistanceThreshold = 150; // Distancia en pixels del footer para ocultar el botón
 
   // Mapeo genérico de emojis por nombre de categoría
   private categoryEmojiMap: { [key: string]: string } = {
@@ -101,24 +103,34 @@ export class CartaPrincipalComponent implements OnInit, OnDestroy {
     
     if (!isMobile) {
       this.isHeaderHidden = false;
-      return;
-    }
-    
-    // Evitar cambios pequeños de scroll
-    if (Math.abs(currentScrollTop - this.lastScrollTop) < this.scrollThreshold) {
-      return;
-    }
-    
-    // Scroll hacia abajo -> ocultar header
-    if (currentScrollTop > this.lastScrollTop && currentScrollTop > 60) {
-      this.isHeaderHidden = true;
-    } 
-    // Scroll hacia arriba -> mostrar header
-    else if (currentScrollTop < this.lastScrollTop) {
-      this.isHeaderHidden = false;
+    } else {
+      // Evitar cambios pequeños de scroll
+      if (Math.abs(currentScrollTop - this.lastScrollTop) < this.scrollThreshold) {
+        return;
+      }
+      
+      // Scroll hacia abajo -> ocultar header
+      if (currentScrollTop > this.lastScrollTop && currentScrollTop > 60) {
+        this.isHeaderHidden = true;
+      } 
+      // Scroll hacia arriba -> mostrar header
+      else if (currentScrollTop < this.lastScrollTop) {
+        this.isHeaderHidden = false;
+      }
     }
     
     this.lastScrollTop = currentScrollTop;
+
+    // Detectar proximidad al footer para ocultar el botón flotante
+    const cartaWrapper = document.querySelector('.carta-wrapper');
+    if (cartaWrapper) {
+      const cartaRect = cartaWrapper.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const distanceToBottom = cartaRect.bottom - windowHeight;
+      
+      // Si la distancia al footer es menor que el threshold, ocultar el botón
+      this.showClearButton = distanceToBottom > this.footerDistanceThreshold;
+    }
   }
 
   ngOnInit(): void {

@@ -184,7 +184,7 @@
 
   <!-- Botón flotante "Limpiar filtros" -->
   <button
-    *ngIf="hasActiveFilters()"
+    *ngIf="hasActiveFilters() && showClearButton"
     class="btn-clear-filters-floating"
     (click)="clearFilters()">
     <i class="bi bi-x-circle"></i> Limpiar filtros
@@ -205,15 +205,22 @@
 
     <div class="modal-content-wrapper">
       <h2 class="modal-product-name">{{ selectedProduct.name }}</h2>
-      <p class="modal-product-price">{{ formatPrice(selectedProduct.price) }}</p>
 
-      <p class="modal-product-description" *ngIf="selectedProduct.description">
-        {{ selectedProduct.description }}
-      </p>
+      <div class="modal-section modal-description-section" *ngIf="selectedProduct.description">
+        <p class="modal-product-description">
+          {{ selectedProduct.description }}
+        </p>
+      </div>
 
-      <div class="modal-allergens" *ngIf="getAllergenNames(selectedProduct).length > 0">
-        <h4><i class="bi bi-info-circle"></i> Alérgenos</h4>
-        <p>{{ getAllergensText(selectedProduct) }}</p>
+      <div class="modal-section modal-price-section">
+        <p class="modal-product-price">{{ formatPrice(selectedProduct.price) }}</p>
+      </div>
+
+      <div class="modal-section modal-allergens-section" *ngIf="getAllergenNames(selectedProduct).length > 0">
+        <div class="modal-allergens">
+          <h4><i class="bi bi-info-circle"></i> Alérgenos</h4>
+          <p>{{ getAllergensText(selectedProduct) }}</p>
+        </div>
       </div>
     </div>
   </div>
