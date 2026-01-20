@@ -246,6 +246,14 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
     return this.businessData?.socialNetworks?.filter(n => n.name === 'Google').length || 0;
   }
 
+  hasProducts(): boolean {
+    return this.businessData?.products && this.businessData.products.length > 0 || false;
+  }
+
+  getProductsCount(): number {
+    return this.businessData?.products?.length || 0;
+  }
+
   refreshBusinessData(): void {
     if (this.businessId) {
       this.loadBusinessDetails(this.businessId);

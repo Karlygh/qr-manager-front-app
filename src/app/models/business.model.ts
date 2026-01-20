@@ -30,6 +30,15 @@ export interface SocialNetwork {
   url: string;
 }
 
+export interface Product {
+  id: number;
+  businessId: number;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl?: string;
+}
+
 // Interfaz Principal (Debe coincidir con la respuesta completa de la API)
 export interface Business {
   id: number; // Generalmente number($int64) en APIs, aunque tu ID de ruta es string/number
@@ -47,4 +56,5 @@ export interface Business {
   kitchenHours: Hour[];
   facilities: Facility[];
   socialNetworks: SocialNetwork[];
+  products: Product[];
 }

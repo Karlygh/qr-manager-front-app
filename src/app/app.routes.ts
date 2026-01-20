@@ -21,6 +21,8 @@ import { EditarRedesComponent } from './pages/pages-panel-control-user/editar-re
 import { CrearProducto } from './pages/pages-crear-negocio-y-producto/crear-producto/crear-producto';
 import { CartaPrincipalComponent } from './pages/pages-panel-control-user/carta-principal/carta-principal';
 import { GoogleOpiniones } from './pages/pages-panel-control-user/google-opiniones/google-opiniones';
+import { ListaProductos } from './pages/pages-panel-control-user/editar-producto/lista-productos/lista-productos';
+import { EditarProducto } from './pages/pages-panel-control-user/editar-producto/editar-producto';
 
 
 export const routes: Routes = [
@@ -36,15 +38,18 @@ export const routes: Routes = [
   { path: 'registro', component: RegristoLogin },
   { path: 'recuperar-contraseña', component: RecoveryPassword },
   { path: 'panel/:businessId/editar-contacto', component: EditarContacto },
-  { path: 'panel/:businessId/editar-wifi', component:EditarWifi},
-  { path: 'panel/:businessId/editar-instalaciones', component: EditarInstalaciones},
-  { path: 'panel/:businessId/editar-horario', component: EditarHorario},
-  { path: 'panel/:businessId/editar-campos-horario-apertura', component: EditarCamposHorarioApertura},
-  { path: 'panel/:businessId/editar-menu', component: EditarMenu},
-  { path: 'panel/:businessId/editar-redes', component:EditarRedesComponent},
-  { path: 'crear-producto',component:CrearProducto },
-  { path: 'carta-principal', component:CartaPrincipalComponent },
-  { path: 'google-reseñas/:businessId', component:GoogleOpiniones },
+  { path: 'panel/:businessId/editar-wifi', component: EditarWifi },
+  { path: 'panel/:businessId/editar-instalaciones', component: EditarInstalaciones },
+  { path: 'panel/:businessId/editar-horario', component: EditarHorario },
+  { path: 'panel/:businessId/editar-campos-horario-apertura', component: EditarCamposHorarioApertura },
+  { path: 'panel/:businessId/editar-menu', component: EditarMenu },
+  { path: 'panel/:businessId/editar-redes', component: EditarRedesComponent },
+  { path: 'panel/:businessId/productos', component: ListaProductos },
+  { path: 'panel/:businessId/editar-producto/:productId', component: EditarProducto },
+  { path: 'panel/:businessId/editar-producto', component: ListaProductos },
+  { path: 'crear-producto', component: CrearProducto },
+  { path: 'carta-principal', component: CartaPrincipalComponent },
+  { path: 'google-reseñas/:businessId', component: GoogleOpiniones },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: error404PageComponent }
 ];

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { ProductResponse } from '../shared/models/product.model';
 
 @Injectable({
@@ -221,4 +221,25 @@ export class ProductosService {
   reloadProducts(): void {
     this.getAllProducts().subscribe();
   }
+  /**
+ * Obtiene todos los productos de un negocio específico
+ * @param businessId ID del negocio
+ * @returns Observable con el array de productos del negocio
+ */
+getProductsByBusinessId(businessId: number): Observable<ProductResponse[]> {
+  this.loadingSubject.next(true);
+  this.errorSubject.next(null);
+  
+  return this.http.get<any>(`http://91.107.235.58:8081/api/v1/business/${businessId}/products`).pipe(
+    map((response) => {
+      // El endpoint devuelve BusinessWithProductsResponse, extraemos solo los productos
+      const products = response.products || [];
+      this.productsSubject.next(products);
+      this.loadingSubject.next(false);
+      console.log('✅ Productos del negocio cargados exitosamente:', products.length);
+      return products;
+    }),
+    catchError(this.handleError.bind(this))
+  );
+}
 }
