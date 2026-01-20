@@ -4,12 +4,12 @@ import { CommonModule } from '@angular/common';
 import { DetallesPanelControl } from './detalles-panel-control/detalles-panel-control';
 
 @Component({
-  selector: 'app-panel-control-buisiness',
+  selector: 'app-panel-control-business',
   standalone: true,
   imports: [RouterModule, CommonModule,DetallesPanelControl],
-  templateUrl: './panel-control-buisiness.html',
-  styleUrls: ['./panel-control-buisiness.css']
+  templateUrl: './panel-control-business.html',
+  styleUrls: ['./panel-control-business.css']
 })
-export class PanelControlBuisiness {
+export class PanelControlBusiness {
 
 }

@@ -47,9 +47,9 @@ export interface Business {
   phoneNumber: string;
   email: string;
   description: string;
-  imageLogo: string;
+  imageFile: string;
   createdAt: string; // Formato ISO 8601
-  
+
   // 💡 DATOS ANIDADOS CRUCIALES (Faltaban en tu modelo anterior)
   wifi: Wifi;
   openingHours: Hour[];

@@ -1,67 +1,75 @@
-import { Injectable, inject } from '@angular/core'; 
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'; 
+import { Observable } from 'rxjs';
+import { environments } from '../environments/environments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BusinessService {
 
-  // ✅ 1. Usar inject() para obtener el HttpClient
-  private http = inject(HttpClient); 
+  private http = inject(HttpClient);
 
-  // URL completa del endpoint de creación de negocio
-  private apiUrl = 'http://91.107.235.58:8081/api/v1/business';
+  // Base URL desde environment
+  private baseUrl = environments.baseUrl;
 
+  // Endpoints
+  private businessUrl = `${this.baseUrl}/business`;
+  private facilitiesUrl = `${this.baseUrl}/facilities`;
+  private wifiUrl = `${this.baseUrl}/wifi`;
 
-  // Función que envía el FormData al backend
-  createBusiness(formData: FormData) {
-    return this.http.post(this.apiUrl, formData);
+  // ----------------------
+  // BUSINESS
+  // ----------------------
+  createBusiness(formData: FormData): Observable<any> {
+    return this.http.post(this.businessUrl, formData);
   }
 
   getBusinessById(id: string | number): Observable<any> {
-    const url = `${this.apiUrl}/${id}`; 
-    return this.http.get(url);
+    return this.http.get(`${this.businessUrl}/${id}`);
   }
 
   updateBusiness(id: string | number, formData: FormData): Observable<any> {
-    const url = `${this.apiUrl}/${id}`;
-    return this.http.patch(url, formData);
+    return this.http.patch(`${this.businessUrl}/${id}`, formData);
   }
 
   getAllBusinesses(): Observable<any> {
-    return this.http.get(this.apiUrl);
+    return this.http.get(this.businessUrl);
   }
 
+  // ----------------------
+  // FACILITIES
+  // ----------------------
   createFacility(facilityData: { businessId: number; name: string }): Observable<any> {
-    return this.http.post('http://91.107.235.58:8081/api/v1/facilities', facilityData);
+    return this.http.post(this.facilitiesUrl, facilityData);
   }
 
   deleteFacility(facilityId: number): Observable<any> {
-    return this.http.delete(`http://91.107.235.58:8081/api/v1/facilities/${facilityId}`);
+    return this.http.delete(`${this.facilitiesUrl}/${facilityId}`);
   }
 
-  // WiFi methods
+  // ----------------------
+  // WIFI
+  // ----------------------
   getWifiByBusinessId(businessId: string): Observable<any> {
-    return this.http.get(`http://91.107.235.58:8081/api/v1/business/${businessId}/wifi`);
+    return this.http.get(`${this.businessUrl}/${businessId}/wifi`);
   }
 
   createWifi(wifiData: any): Observable<any> {
-    return this.http.post(`http://91.107.235.58:8081/api/v1/wifi`, wifiData);
+    return this.http.post(this.wifiUrl, wifiData);
   }
 
   updateWifi(businessId: string, wifiId: number, wifiData: any): Observable<any> {
-    return this.http.patch(`http://91.107.235.58:8081/api/v1/business/${businessId}/wifi/${wifiId}`, wifiData);
+    return this.http.patch(`${this.businessUrl}/${businessId}/wifi/${wifiId}`, wifiData);
   }
 
   deleteWifi(businessId: string, wifiId: number): Observable<any> {
-    // BUG DEL BACKEND: El endpoint DELETE devuelve 400 en lugar de 204
-    // El backend no puede encontrar el WiFi por businessId cuando intenta eliminarlo
-    // Documentación esperada: 204 (éxito) o 500 (error)
-    // Comportamiento actual: 400 "Error, no wifi could be retrieved by businessId"
-    const url = `http://91.107.235.58:8081/api/v1/business/${businessId}/wifi/${wifiId}`;
+    const url = `${this.businessUrl}/${businessId}/wifi/${wifiId}`;
+
+    // Logs para depuración
     console.log('DELETE WiFi URL:', url);
     console.log('DELETE WiFi params:', { businessId, wifiId });
+
     return this.http.delete(url);
   }
 }

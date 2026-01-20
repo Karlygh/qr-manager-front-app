@@ -32,7 +32,7 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
   private groupSchedulesByDay(schedules: any[]): GroupedSchedule[] {
     const dayOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     const grouped: { [key: string]: GroupedSchedule } = {};
-    
+
     schedules.forEach(schedule => {
       if (!grouped[schedule.day]) {
         grouped[schedule.day] = {
@@ -42,7 +42,7 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
           isSplit: false
         };
       }
-      
+
       if (schedule.intervals && schedule.intervals.length > 0) {
         schedule.intervals.forEach((interval: any) => {
           grouped[schedule.day].intervals.push({
@@ -50,11 +50,11 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
             closing: this.formatTime(interval.endTime)
           });
         });
-        
+
         grouped[schedule.day].isSplit = grouped[schedule.day].intervals.length > 1;
       }
     });
-    
+
     return dayOrder
       .filter(day => grouped[day])
       .map(day => grouped[day]);
@@ -82,14 +82,14 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
     phoneNumber: string;
     email: string;
     description: string;
-    imageLogo: File | null;
+    imageFile: File | string | null;
   } = {
     name: '',
     address: '',
     phoneNumber: '',
     email: '',
     description: '',
-    imageLogo: null
+    imageFile: null
   };
 
   constructor(
@@ -120,7 +120,7 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
           this.loadBusinessDetails(this.businessId);
         }
       };
-      
+
       window.addEventListener('visibilitychange', this.visibilityChangeListener);
     }
   }
@@ -141,14 +141,14 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
         console.log('✅ Business data loaded:', data);
         console.log('🍳 Kitchen hours in response:', data.kitchenHours);
         console.log('🏢 Opening hours in response:', data.openingHours);
-        
+
         this.businessData = data;
         this.kitchenHours = this.groupSchedulesByDay(data.kitchenHours || []);
         this.openingHours = this.groupSchedulesByDay(data.openingHours || []);
-        
+
         console.log('🔍 Kitchen hours procesados:', this.kitchenHours);
         console.log('🔍 Opening hours procesados:', this.openingHours);
-        
+
         this.isLoading = false;
       },
       error: (err) => {
@@ -183,7 +183,7 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
         phoneNumber: this.businessData.phoneNumber || '',
         email: this.businessData.email,
         description: this.businessData.description,
-        imageLogo: null
+        imageFile: this.businessData.imageFile
       };
       this.showModal = true;
     }
@@ -196,7 +196,7 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      this.editForm.imageLogo = file;
+      this.editForm.imageFile = file;
     }
   }
 
@@ -208,9 +208,9 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
       formData.append('phoneNumber', this.editForm.phoneNumber);
       formData.append('email', this.editForm.email);
       formData.append('description', this.editForm.description);
-      
-      if (this.editForm.imageLogo) {
-        formData.append('imageLogo', this.editForm.imageLogo);
+
+      if (this.editForm.imageFile) {
+        formData.append('imageFile', this.editForm.imageFile);
       }
 
       this.businessService.updateBusiness(this.businessId, formData).subscribe({

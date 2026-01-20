@@ -1,7 +1,7 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            
+
             <div *ngIf="isLoading" class="text-center p-5">
                 <div class="spinner-border color-primary" role="status"></div>
                 <p class="mt-3">Cargando datos de tu panel...</p>
@@ -13,11 +13,11 @@
             </div>
 
             <ng-container *ngIf="businessData && !isLoading">
-                
+
                 <header class="business-header mb-5 border-bottom pb-4 d-flex align-items-center">
-                    <img [src]="'http://localhost:8080' + businessData.imageLogo" 
-                         alt="Logo de {{ businessData.name }}" 
-                         class="img-thumbnail me-4 shadow-sm business-logo" 
+                    <img [src]="businessData.imageFile"
+                         alt="Logo de {{ businessData.name }}"
+                         class="img-thumbnail me-4 shadow-sm business-logo"
                          style="width: 100px; height: 100px; object-fit: cover;">
                     <div>
                         <h1 class="display-6 fw-bold color-success">{{ businessData.name }}</h1>
@@ -32,9 +32,9 @@
                 </header>
 
                 <h3 class="fw-bold mb-3 color-secondary border-bottom pb-2 text-center section-title" style="font-size: 2rem;">📋 ¿Qué quieres hacer hoy?</h3>
-                
+
                 <div class="row g-4">
-    
+
     <!-- Primera fila: 3 cards -->
     <div class="col-md-6 col-lg-4">
         <div class="card h-100 shadow-sm custom-card border-primary-start">
@@ -145,7 +145,7 @@
                     </div>
                 </div>
                 <a [routerLink]="['/google-reseñas', businessData.id]" class="btn btn-sm mt-3" [ngClass]="hasGoogleReviews() ? 'btn-primary' : 'custom-btn-secondary'">
-                    <i class="bi me-1" [ngClass]="hasGoogleReviews() ? 'bi-gear' : 'bi-pencil-square'"></i> 
+                    <i class="bi me-1" [ngClass]="hasGoogleReviews() ? 'bi-gear' : 'bi-pencil-square'"></i>
                     {{ hasGoogleReviews() ? 'Gestionar Google' : 'Ver/Editar Google' }}
                 </a>
             </div>
@@ -197,7 +197,7 @@
                         <tr *ngFor="let schedule of openingHours">
                             <td>
                                 <strong>{{ getDayName(schedule.day) }}</strong>
-                            </td> 
+                            </td>
                             <td>{{ getFormattedIntervals(schedule) }}</td>
                             <td>
                                 <span class="badge" [ngClass]="schedule.status ? 'custom-badge-success' : 'custom-badge-danger'">
@@ -230,7 +230,7 @@
                         <tr *ngFor="let schedule of kitchenHours">
                             <td>
                                 <strong>{{ getDayName(schedule.day) }}</strong>
-                            </td> 
+                            </td>
                             <td>{{ getFormattedIntervals(schedule) }}</td>
                             <td>
                                 <span class="badge" [ngClass]="schedule.status ? 'custom-badge-success' : 'custom-badge-danger'">
@@ -249,12 +249,12 @@
                         <i class="bi bi-pencil-square me-1"></i> Ver/Editar Horarios
                     </button>
                 </div>
-                
+
                 <h3 class="fw-bold mt-5 mb-3 color-secondary border-bottom pb-2">
                     🔗 Redes Sociales
                 </h3>
                 <div class="d-flex flex-wrap gap-3 align-items-center p-3 rounded" style="background-color: #f8f9fa;">
-                    
+
                     <a *ngIf="businessData && businessData.id" [routerLink]="['/panel', businessData.id, 'editar-redes']" class="btn btn-sm custom-btn-secondary me-3">
                         <i class="bi bi-gear me-1"></i> Administrar Redes
                     </a>
