@@ -1,3 +1,14 @@
+<<<<<<< HEAD
+=======
+/* ========================================= */
+/* 1. IMPORTACIÓN DE GOOGLE FONTS: Momo Trust Display */
+/* ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Momo+Trust+Display:wght@400;500;600;700&display=swap');
+
+/* ======================================== */
+/* 2. APLICACIÓN GLOBAL A TODO EL PROYECTO */
+/* ========================================= */
+>>>>>>> feature/carta-principal
 body {
   font-family: 'Momo Trust Display', sans-serif;
   background-color: #a2c9b5;
