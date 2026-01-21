@@ -3,6 +3,9 @@ import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/route
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BusinessService } from '../../../../services/business.service';
+import { CategoryService, Category } from '../../../../services/category.service';
+import { SubCategoryService, SubCategory } from '../../../../services/subcategory.service';
+import { ProductosService } from '../../../../services/productos.service';
 import { Business } from '../../../../models/business.model';
 
 interface GroupedSchedule {
@@ -28,6 +31,9 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
   businessData: Business | null = null;
   kitchenHours: GroupedSchedule[] = [];
   openingHours: GroupedSchedule[] = [];
+  products: any[] = [];
+  categories: Category[] = [];
+  subcategories: SubCategory[] = [];
 
   private groupSchedulesByDay(schedules: any[]): GroupedSchedule[] {
     const dayOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
@@ -95,7 +101,10 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private businessService: BusinessService
+    private businessService: BusinessService,
+    private categoryService: CategoryService,
+    private subcategoryService: SubCategoryService,
+    private productosService: ProductosService
   ) { }
 
   ngOnInit(): void {
@@ -141,6 +150,8 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
         console.log('✅ Business data loaded:', data);
         console.log('🍳 Kitchen hours in response:', data.kitchenHours);
         console.log('🏢 Opening hours in response:', data.openingHours);
+        console.log('🍽️ Products in response:', data.products);
+        console.log('📂 Categories in response:', data.categories);
 
         this.businessData = data;
         this.kitchenHours = this.groupSchedulesByDay(data.kitchenHours || []);
@@ -148,6 +159,9 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
 
         console.log('🔍 Kitchen hours procesados:', this.kitchenHours);
         console.log('🔍 Opening hours procesados:', this.openingHours);
+        
+        // Cargar productos y categorías por separado
+        this.loadProductsAndCategories(id);
 
         this.isLoading = false;
       },
@@ -161,6 +175,53 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
         console.error('❌ Error de la API al obtener negocio:', err);
         this.checkAvailableBusinesses();
       }
+    });
+  }
+
+  loadProductsAndCategories(businessId: string | number): void {
+    // Cargar productos
+    this.productosService.getProductsByBusinessId(Number(businessId)).subscribe({
+      next: (products) => {
+        this.products = products;
+        console.log('✅ Productos cargados:', products.length);
+        console.log('✅ Platos contados:', this.getDishesCount());
+      },
+      error: (err) => {
+        console.error('❌ Error al cargar productos:', err);
+        this.products = [];
+      }
+    });
+
+    // Cargar categorías
+    this.categoryService.getAllCategoriesByBusinessId(Number(businessId)).subscribe({
+      next: (categories) => {
+        this.categories = categories;
+        console.log('✅ Categorías cargadas:', categories.length);
+        console.log('✅ Categorías contadas:', this.getCategoriesCount());
+        
+        // Cargar todas las subcategorías para cada categoría
+        this.loadSubcategoriesForCategories(categories);
+      },
+      error: (err) => {
+        console.error('❌ Error al cargar categorías:', err);
+        this.categories = [];
+      }
+    });
+  }
+
+  private loadSubcategoriesForCategories(categories: Category[]): void {
+    this.subcategories = [];
+    
+    categories.forEach(category => {
+      this.subcategoryService.getAllSubCategoriesByCategoryId(category.id).subscribe({
+        next: (subcats) => {
+          this.subcategories.push(...subcats);
+          console.log(`✅ Subcategorías cargadas para categoría ${category.name}:`, subcats.length);
+        },
+        error: (err) => {
+          console.error(`❌ Error al cargar subcategorías para ${category.name}:`, err);
+        }
+      });
     });
   }
 
@@ -252,6 +313,22 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
 
   getProductsCount(): number {
     return this.businessData?.products?.length || 0;
+  }
+
+  getDishesCount(): number {
+    return this.products?.length || 0;
+  }
+
+  getCategoriesCount(): number {
+    return this.categories?.length || 0;
+  }
+
+  hasCategories(): boolean {
+    return this.categories && this.categories.length > 0 || false;
+  }
+
+  getSubcategoriesCount(): number {
+    return this.subcategories?.length || 0;
   }
 
   refreshBusinessData(): void {

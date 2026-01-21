@@ -23,6 +23,7 @@ import { CartaPrincipalComponent } from './pages/pages-panel-control-user/carta-
 import { GoogleOpiniones } from './pages/pages-panel-control-user/google-opiniones/google-opiniones';
 import { ListaProductos } from './pages/pages-panel-control-user/editar-producto/lista-productos/lista-productos';
 import { EditarProducto } from './pages/pages-panel-control-user/editar-producto/editar-producto';
+import { EditarCategoriasYSubcategorias } from './pages/pages-panel-control-user/editar-categorias-y-subcategorias/editar-categorias-y-subcategorias';
 
 
 export const routes: Routes = [
@@ -46,6 +47,7 @@ export const routes: Routes = [
   { path: 'panel/:businessId/editar-redes', component: EditarRedesComponent },
   { path: 'panel/:businessId/productos', component: ListaProductos },
   { path: 'panel/:businessId/editar-producto', component: EditarProducto },
+  { path: 'panel/:businessId/editar-categorias', component: EditarCategoriasYSubcategorias },
   { path: 'crear-producto', component: CrearProducto },
   { path: 'carta-principal', component: CartaPrincipalComponent },
   { path: 'google-reseñas/:businessId', component: GoogleOpiniones },

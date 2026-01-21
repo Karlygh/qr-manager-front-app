@@ -39,6 +39,13 @@ export interface Product {
   imageUrl?: string;
 }
 
+export interface Category {
+  id: number;
+  businessId: number;
+  name: string;
+  image?: string;
+}
+
 // Interfaz Principal (Debe coincidir con la respuesta completa de la API)
 export interface Business {
   id: number; // Generalmente number($int64) en APIs, aunque tu ID de ruta es string/number
@@ -57,4 +64,5 @@ export interface Business {
   facilities: Facility[];
   socialNetworks: SocialNetwork[];
   products: Product[];
+  categories?: Category[];
 }
