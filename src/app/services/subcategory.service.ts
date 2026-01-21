@@ -51,6 +51,17 @@ export class SubCategoryService {
   }
 
   /**
+   * Obtiene todas las subcategorías de un negocio
+   */
+  getAllSubCategoriesByBusinessId(businessId: number): Observable<SubCategory[]> {
+    return this.http.get<SubCategory[]>(`${this.baseUrl}/subcategory/business/${businessId}`)
+      .pipe(
+        retry(1),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
    * Crea una nueva subcategoría
    */
   createSubCategory(request: SubCategoryRequest): Observable<SubCategory> {

@@ -98,8 +98,8 @@
                 <div>
                     <h5 class="card-title color-info"><i class="bi bi-menu-button-wide me-2"></i>Menú/Carta</h5>
                     <ul class="list-unstyled small mt-3">
-                        <li><strong>Platos:</strong> 0 registrados</li>
-                        <li><strong>Categorías:</strong> 0 creadas</li>
+                        <li><strong>Platos:</strong> {{ getDishesCount() }} registrados</li>
+                        <li><strong>Categorías:</strong> {{ getCategoriesCount() }} creadas</li>
                     </ul>
                 </div>
                 <a [routerLink]="['/panel', businessData.id, 'editar-menu']" class="btn btn-sm custom-btn-secondary mt-3">
@@ -129,9 +129,6 @@
                 <div>
                     <h5 class="card-title" [ngClass]="hasGoogleReviews() ? 'color-primary' : 'color-info'">
                         <i class="bi" [ngClass]="hasGoogleReviews() ? 'bi-google text-primary' : 'bi-google'" class="me-2"></i>Google Reseñas
-                        <span *ngIf="hasGoogleReviews()" class="badge badge-configured ms-2 small">
-                            <i class="bi bi-check-circle-fill me-1"></i>Configurado
-                        </span>
                     </h5>
                     <p class="text-muted small mt-3" *ngIf="!hasGoogleReviews()">Gestiona y visualiza las reseñas de Google de tu restaurante.</p>
                     <div *ngIf="hasGoogleReviews()" class="mt-3">
@@ -177,6 +174,32 @@
                 <a [routerLink]="['/panel', businessData.id, 'editar-producto']" class="btn btn-sm mt-3" [ngClass]="hasProducts() ? 'btn-primary' : 'custom-btn-secondary'">
                     <i class="bi me-1" [ngClass]="hasProducts() ? 'bi-gear' : 'bi-pencil-square'"></i> 
                     {{ hasProducts() ? 'Gestionar Productos' : 'Ver/Editar Productos' }}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cuarta fila: Card de Categorías y Subcategorías -->
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm custom-card" [ngClass]="hasCategories() ? 'border-primary-start bg-light-blue' : 'border-info-start'">
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div>
+                    <h5 class="card-title" [ngClass]="hasCategories() ? 'color-primary' : 'color-info'">
+                        <i class="bi" [ngClass]="hasCategories() ? 'bi-tags text-primary' : 'bi-tags'" class="me-2"></i>Categorías & Subcategorías
+                    </h5>
+                    <p class="text-muted small mt-3" *ngIf="!hasCategories()">Gestiona las categorías y subcategorías de tu menú.</p>
+                    <div *ngIf="hasCategories()" class="mt-3">
+                        <p class="text-muted small mb-1">
+                            <i class="bi bi-folder me-1"></i>{{ getCategoriesCount() }} categoría(s)
+                        </p>
+                        <p class="text-muted small mb-0">
+                            <i class="bi bi-tags me-1"></i>{{ getSubcategoriesCount() }} subcategoría(s)
+                        </p>
+                    </div>
+                </div>
+                <a [routerLink]="['/panel', businessData.id, 'editar-categorias']" class="btn btn-sm mt-3" [ngClass]="hasCategories() ? 'btn-primary' : 'custom-btn-secondary'">
+                    <i class="bi me-1" [ngClass]="hasCategories() ? 'bi-gear' : 'bi-pencil-square'"></i> 
+                    {{ hasCategories() ? 'Gestionar Categorías' : 'Ver/Editar Categorías' }}
                 </a>
             </div>
         </div>
