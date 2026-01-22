@@ -8,14 +8,37 @@
   color: #2c3e50; 
 }
 
+/* TÍTULO PRINCIPAL - TAMAÑO MÁXIMO */
 .title-main {
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 3.5rem;
+  font-weight: 900;
   color: #0a3b20; 
-  background-color: #afd2bf;
-  padding:10px 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #afd2bf 0%, #8bc589 100%);
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+  line-height: 1.2;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+/* SUBTÍTULO - TAMAÑO GRANDE */
+.subtitle-main {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #0a3b20;
+  text-decoration: underline;
+  text-decoration-color: #4d9363;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 8px;
+}
+
+/* DESCRIPCIÓN - TAMAÑO MEDIO */
+.description-main {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #2d5a3d;
+  line-height: 1.6;
+  margin-top: 20px;
 }
 
 .lead {
@@ -23,29 +46,65 @@
   font-weight: 300;
   color: rgb(77, 147, 99);
 }
+
 h5 {
   color: #0a3b20;
   font-weight: 600;
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
+
+/*
+  ==========================================
+  SECCIÓN DE CARACTERÍSTICAS
+  ==========================================
+*/
+.features-section {
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.feature-card {
+  background: white;
+  border: 2px solid #e0e8e0;
+  border-radius: 12px;
+  padding: 30px 25px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.feature-card:hover {
+  border-color: #4d9363;
+  box-shadow: 0 10px 25px rgba(77, 147, 99, 0.15);
+  transform: translateY(-8px);
+  background: #f5f9f6;
+}
+
+.feature-icon {
+  font-size: 3.5rem;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.feature-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #0a3b20;
+  margin-bottom: 12px;
+}
+
+.feature-text {
+  font-size: 0.95rem;
+  color: #4d5f54;
+  line-height: 1.5;
+  margin: 0;
+}
 
 /*
   ==========================================
   Estilo de la Imagen del Mockup
   ==========================================
 */
-.menu-mockup-img {
-  max-width: 80%; 
-  height: auto;
-  border-radius: 15px; 
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
-  margin: 20px auto;
-  display: block;
-}
-.google-section .feature-card {
-  background-color: red;
-}
 
 /*
   ==========================================
@@ -79,33 +138,35 @@ h5 {
 */
 .card-title {
   color: #0a3b20;
-  font-weight: 700;
-  font-size: 2.5rem;
+  font-weight: 800;
+  font-size: 2.2rem;
   transition: color 0.3s ease;
   position: relative;
+  margin-bottom: 20px;
 }
 
 .card-title::after {
   content: '';
   position: absolute;
-  bottom: -8px;
+  bottom: -12px;
   left: 0;
   width: 60px;
-  height: 3px;
+  height: 4px;
   background: linear-gradient(90deg, #4d9363, #afd2bf);
   border-radius: 2px;
   transition: width 0.3s ease;
 }
 
 .card-title:hover::after {
-  width: 100px;
+  width: 100%;
 }
 
 .card-text {
-  font-size: 1.2rem;
-  margin-top: 2%;
+  font-size: 1rem;
+  margin-top: 15px;
   transition: color 0.3s ease;
-  color: rgb(11, 36, 146);
+  color: #2d5a3d;
+  line-height: 1.6;
 }
 
 .text-muted {
@@ -113,44 +174,45 @@ h5 {
   font-weight: 500;
 }
 
-
 .text-secondary {
   color: #2d5a3d ;
   font-weight: 500;
 }
 
 .list-unstyled li {
-  padding: 0.8rem 0;
-  font-size: 1.05rem;
+  padding: 12px 15px;
+  font-size: 0.95rem;
   font-weight: 500;
   color: #2d5a3d;
   transition: all 0.3s ease;
   border-radius: 8px;
-  padding-left: 1rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;
   cursor: pointer;
+  border-left: 4px solid transparent;
 }
 
 .list-unstyled li:hover {
-  background-color: #488ccc;
+  background-color: #e8f3ea;
   transform: translateX(8px);
   color: #0a3b20;
-  box-shadow: 0 2px 8px rgba(77, 147, 99, 0.1);
-  border: 1px solid #488ccc;
+  border-left: 4px solid #4d9363;
+  box-shadow: 0 2px 8px rgba(77, 147, 99, 0.15);
 }
 
 .menu-mockup-img {
-  
-   max-width: 100%;
+  max-width: 100%;
 }
 
 .menu-mockup-img:hover {
   transform: scale(1.05);
   box-shadow: 0 15px 35px rgba(10, 59, 32, 0.2);
 }
+
 .text-light-blue {
-  color: #1767e7; /* Azul más claro */
-  font-size: 1rem;
+  color: #1767e7;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.6;
 }
 
 
