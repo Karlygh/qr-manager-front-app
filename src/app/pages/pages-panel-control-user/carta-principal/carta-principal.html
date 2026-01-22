@@ -14,10 +14,42 @@
       </div>
       <span class="business-title fw-bold">{{ businessName }}</span>
     </div>
-    <!-- Toggle Modo Oscuro -->
-    <button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Activar modo claro' : 'Activar modo oscuro'">
-      <i class="bi" [ngClass]="isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill'"></i>
-    </button>
+    
+    <!-- Menú Hamburguesa -->
+    <div class="header-actions">
+      <button class="menu-hamburger" (click)="toggleMenu()" [attr.aria-label]="isMenuOpen ? 'Cerrar menú' : 'Abrir menú'">
+        <i class="bi" [ngClass]="isMenuOpen ? 'bi-x-lg' : 'bi-list'"></i>
+      </button>
+      
+      <!-- Menú desplegable -->
+      <div class="dropdown-menu" [class.active]="isMenuOpen">
+        <a [routerLink]="['/panel', businessId, 'ver-instalaciones']" class="dropdown-item" (click)="toggleMenu()">
+          <i class="bi bi-house-door"></i>
+          <span>Instalaciones</span>
+        </a>
+        <a [routerLink]="['/panel', businessId, 'ver-wifi']" class="dropdown-item" (click)="toggleMenu()">
+          <i class="bi bi-info-circle"></i>
+          <span>Wifi</span>
+        </a>
+        <a [routerLink]="['/panel', businessId, 'ver-horario']" class="dropdown-item" (click)="toggleMenu()">
+          <i class="bi bi-telephone"></i>
+          <span>Horarios</span>
+        </a>
+        <a [routerLink]="['/ver-google', businessId]" class="dropdown-item" (click)="toggleMenu()">
+          <i class="bi bi-gear"></i>
+          <span>Google Reseñas</span>
+        </a>
+        <a [routerLink]="['/panel', businessId, 'ver-redes']" class="dropdown-item" (click)="toggleMenu()">
+          <i class="bi bi-gear"></i>
+          <span>Redes Sociales</span>
+        </a>
+      </div>
+      
+      <!-- Toggle Modo Oscuro -->
+      <button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Activar modo claro' : 'Activar modo oscuro'">
+        <i class="bi" [ngClass]="isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill'"></i>
+      </button>
+    </div>
   </div>
 </header>
 
