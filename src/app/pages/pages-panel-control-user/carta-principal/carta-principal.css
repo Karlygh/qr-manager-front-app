@@ -141,108 +141,6 @@ body {
   color: var(--primary-color);
 }
 
-/* Menú Hamburguesa */
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  position: relative;
-}
-
-.menu-hamburger {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 2px solid var(--border-medium);
-  background-color: var(--bg-card);
-  color: var(--text-dark);
-  font-size: 1.25rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.menu-hamburger:hover {
-  background-color: var(--primary-light);
-  border-color: var(--primary-color);
-  color: var(--primary-color);
-  transform: scale(1.05);
-}
-
-.dark-theme .menu-hamburger {
-  border-color: var(--border-light);
-}
-
-.dark-theme .menu-hamburger:hover {
-  background-color: var(--primary-dark);
-  border-color: var(--primary-color);
-  color: var(--primary-color);
-}
-
-/* Menú desplegable */
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
-  min-width: 220px;
-  margin-top: 0.5rem;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-10px);
-  transition: all 0.3s ease;
-  z-index: 1050;
-}
-
-.dropdown-menu.active {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.875rem 1.25rem;
-  color: var(--text-dark);
-  text-decoration: none;
-  transition: all 0.2s ease;
-  border-left: 3px solid transparent;
-}
-
-.dropdown-item:hover {
-  background-color: var(--primary-light);
-  color: var(--primary-color);
-  border-left-color: var(--primary-color);
-  padding-left: 1.5rem;
-}
-
-.dropdown-item i {
-  font-size: 1.1rem;
-  width: 1.25rem;
-}
-
-.dark-theme .dropdown-menu {
-  background-color: var(--bg-card);
-  border-color: var(--border-light);
-  box-shadow: var(--shadow-lg);
-}
-
-.dark-theme .dropdown-item {
-  color: var(--text-dark);
-}
-
-.dark-theme .dropdown-item:hover {
-  background-color: rgba(30, 215, 96, 0.15);
-  color: var(--primary-color);
-}
-
 @media (max-width: 600px) {
   .business-header .container-fluid {
     padding-left: 1rem;
@@ -253,9 +151,6 @@ body {
   }
   .business-id {
     font-size: 0.95rem;
-  }
-  .dropdown-menu {
-    min-width: 200px;
   }
 }
 

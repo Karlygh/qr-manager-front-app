@@ -1,7 +1,6 @@
 import { Component, inject, OnInit, OnDestroy, PLATFORM_ID, HostListener } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { Subject, takeUntil, forkJoin } from 'rxjs';
 import { LayoutService } from '../../../services/layout.service';
 import { ProductosService } from '../../../services/productos.service';
@@ -17,7 +16,7 @@ interface CategoryWithIcon extends Category {
 @Component({
   selector: 'app-carta-principal',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   templateUrl: './carta-principal.html',
   styleUrls: ['./carta-principal.css']
 })
@@ -52,7 +51,6 @@ export class CartaPrincipalComponent implements OnInit, OnDestroy {
   isDarkMode = false;
   isHeaderHidden = false;
   showClearButton = true;
-  isMenuOpen = false;
   private lastScrollTop = 0;
   private scrollThreshold = 10;
   private footerDistanceThreshold = 150; // Distancia en pixels del footer para ocultar el botón
@@ -160,17 +158,6 @@ export class CartaPrincipalComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('carta-theme', this.isDarkMode ? 'dark' : 'light');
     }
-  }
-
-  toggleMenu(): void {
-    this.isMenuOpen = !this.isMenuOpen;
-  }
-
-  closeMenu(event?: Event): void {
-    if (event) {
-      event.preventDefault();
-    }
-    this.isMenuOpen = false;
   }
 
   private loadBusinessName(): void {
