@@ -1,4 +1,86 @@
-<app-encabezado></app-encabezado>
-<app-encabezado-ejemplos></app-encabezado-ejemplos>
-<app-qr-manager-info></app-qr-manager-info>
-<app-precios [mostrarFaqs]="false"></app-precios>
+<section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="container-fluid hero-container">
+        <div class="row align-items-center justify-content-between py-0">
+            
+            <!-- LADO DERECHO: Contenido -->
+            <div class="col-lg-6 col-md-12 hero-left d-flex flex-column justify-content-center ps-lg-5">
+                <div class="hero-badge mb-3 text-uppercase">CARTA DIGITAL QR MODERNA</div>
+                
+                <h1 class="hero-title">
+                    <span class="line"><span>Revoluciona tu</span></span>
+                    <span class="line"><span>Negocio Digital</span></span>
+                </h1>
+                
+                <p class="hero-description mt-4 mb-4">
+                    Transforma tu carta con nuestro sistema QR interactivo. Añade, edita o elimina productos fácilmente y conecta con tus clientes de forma moderna y atractiva.
+                </p>
+                
+                <!-- STATS REDISEÑADAS EN GRID -->
+                <div class="hero-stats-grid mb-5">
+                    <div class="stat-card">
+                        <div class="stat-circle">
+                            <span class="stat-number">100+</span>
+                        </div>
+                        <span class="stat-label">Platos</span>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-circle">
+                            <span class="stat-number">1H</span>
+                        </div>
+                        <span class="stat-label">Configura</span>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-circle">
+                            <span class="stat-number">100%</span>
+                        </div>
+                        <span class="stat-label">Controla</span>
+                    </div>
+                </div>
+              
+                <div class="cta-group">
+                    <a routerLink="/crear-negocio" class="cta-button primary text-uppercase">Registrar Negocio</a>
+                    <a routerLink="/precios" class="cta-button outline text-uppercase">Ver Planes</a>
+                </div>
+            </div>
+            
+            <!-- LADO IZQUIERDO: Galería de imágenes flotantes -->
+            <div class="col-lg-6 col-md-12 hero-right d-flex justify-content-center align-items-center position-relative">
+                <!-- Tags flotantes -->
+                <div class="floating-tags-container">
+                    <div class="floating-tag">Carta Premium</div>
+                    <div class="floating-tag">100% Personalizable</div>
+                    <div class="floating-tag">QR Inteligente</div>
+                </div>
+                
+                <div class="images-gallery">
+                    <!-- Imagen principal flotante -->
+                    <div class="gallery-item main-image active" data-index="0">
+                        <img src="../../../assets/mockup/cartadigitalcarrousel2.png" alt="Carta Digital">
+                    </div>
+                    
+                    <!-- Imágenes flotantes laterales -->
+                    <div class="gallery-item floating-image side-image-1" data-index="1">
+                        <img src="../../../assets/mockup/tablet-pasta.png" alt="Tablet Pasta">
+                    </div>
+                    
+                    <div class="gallery-item floating-image side-image-2" data-index="2">
+                        <img src="../../../assets/mockup/movil-carrousel-carta.png" alt="Móvil Carta">
+                    </div>
+                    
+                    <!-- Indicadores de galería -->
+                    <div class="gallery-indicators">
+                        <button class="indicator active" data-index="0"></button>
+                        <button class="indicator" data-index="1"></button>
+                        <button class="indicator" data-index="2"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<app-sectionqr-cartadigital></app-sectionqr-cartadigital>
+<app-actualiza-carta-digital></app-actualiza-carta-digital>
+<app-alergenos-carta-digital></app-alergenos-carta-digital>
+<app-nosotros-carta-digital></app-nosotros-carta-digital>

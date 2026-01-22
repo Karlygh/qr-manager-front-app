@@ -397,11 +397,11 @@
   
   .hero-carousel {
     max-width: 85%;
-    max-height: 750px;
+    max-height: 850px;
   }
   
   .hero-carousel img {
-    max-height: 400px;
+    max-height: 500px;
     width: 100%;
     height: auto;
     object-fit: contain;

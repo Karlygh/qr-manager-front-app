@@ -1,17 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink, RouterModule } from '@angular/router';
-import { SectionqrCartadigital } from './sectionqr-cartadigital/sectionqr-cartadigital';
-import { ActualizaCartaDigital } from './actualiza-carta-digital/actualiza-carta-digital';
-import { AlergenosCartaDigital } from './alergenos-carta-digital/alergenos-carta-digital';
-import { NosotrosCartaDigital } from "./nosotros-carta-digital/nosotros-carta-digital";
+import { RouterModule } from '@angular/router';
+import { Encabezado } from '../../home/encabezado/encabezado';
+import { EncabezadoEjemplos } from "../../home/encabezado-ejemplos/encabezado-ejemplos";
+import { QrManagerInfo } from '../../home/qr-manager-info/qr-manager-info';
+import { Precios } from '../precios/precios';
 
 @Component({
-  standalone: true, 
+  standalone: true,
   selector: 'app-carta-digital',
-  imports: [RouterLink, CommonModule, RouterModule, SectionqrCartadigital, ActualizaCartaDigital, AlergenosCartaDigital, NosotrosCartaDigital], 
+  imports: [
+    CommonModule,
+    RouterModule,
+    Encabezado,
+    EncabezadoEjemplos,
+    QrManagerInfo,Precios
+],
   templateUrl: './carta-digital.html',
   styleUrls: ['./carta-digital.css']
 })
-export class CartaDigital {
+export class CartaDigital { 
+  public title = "QR-MANAGER"
 }
