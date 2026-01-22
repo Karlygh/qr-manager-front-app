@@ -16,10 +16,12 @@ export class HomePageComponent implements OnInit, OnDestroy {
   currentImageIndex = 0;
   autoPlayInterval: any;
   private readonly AUTO_PLAY_DELAY = 2000;
+  private intersectionObserver?: IntersectionObserver;
 
   ngOnInit() {
     this.initGallery();
     this.startAutoPlay();
+    this.initScrollAnimations();
   }
 
   initGallery() {
@@ -83,7 +85,34 @@ export class HomePageComponent implements OnInit, OnDestroy {
     this.startAutoPlay();
   }
 
+  private initScrollAnimations() {
+    // Crear un Intersection Observer para detectar cuando los elementos entran en el viewport
+    this.intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    );
+
+    // Observar todos los elementos con la clase animate-on-scroll
+    const animateElements = document.querySelectorAll('.animate-on-scroll');
+    animateElements.forEach((element) => {
+      this.intersectionObserver?.observe(element);
+    });
+  }
+
   ngOnDestroy() {
     clearInterval(this.autoPlayInterval);
+    // Desconectar el observer cuando el componente se destruye
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
+    }
   }
 }
