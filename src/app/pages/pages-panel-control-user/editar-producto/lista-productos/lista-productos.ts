@@ -4,13 +4,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ProductosService } from '../../../../services/productos.service';
 import { CategoryService } from '../../../../services/category.service';
 import { ProductResponse } from '../../../../shared/models/product.model';
-import { AutoFitTextDirective } from '../../../../shared/directives/auto-fit-text.directive';
 import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-lista-productos',
   standalone: true,
-  imports: [CommonModule, AutoFitTextDirective],
+  imports: [CommonModule],
   templateUrl: './lista-productos.html',
   styleUrl: './lista-productos.css'
 })
@@ -27,6 +26,7 @@ export class ListaProductos implements OnInit {
   categoriesMap = signal<{ [key: number]: string }>({});
 
   ngOnInit(): void {
+    // Obtener businessId de la ruta
     this.route.paramMap.subscribe(params => {
       const id = params.get('businessId');
       if (id) {
@@ -40,13 +40,29 @@ export class ListaProductos implements OnInit {
     this.isLoading.set(true);
     this.error.set(null);
 
+    // Cargar productos y categorías en paralelo
     forkJoin({
       productos: this.productosService.getProductsByBusinessId(this.businessId),
       categorias: this.categoryService.getAllCategoriesByBusinessId(this.businessId)
     }).subscribe({
       next: (data) => {
-        this.productos.set(data.productos);
+        // Contar frecuencia de cada categoría
+        const frecuencia: { [key: number]: number } = {};
+        data.productos.forEach(p => {
+          const catId = p.categoryId ?? 0;
+          frecuencia[catId] = (frecuencia[catId] || 0) + 1;
+        });
 
+        // Ordenar: más productos en esa categoría → primero
+        const productosOrdenados = [...data.productos].sort((a, b) => {
+          const freqA = frecuencia[a.categoryId ?? 0] || 0;
+          const freqB = frecuencia[b.categoryId ?? 0] || 0;
+          return freqB - freqA;
+        });
+
+        this.productos.set(productosOrdenados);
+
+        // Crear mapa de categoryId => nombre de categoría
         const mapCategories: { [key: number]: string } = {};
         data.categorias.forEach(cat => {
           mapCategories[cat.id] = cat.name;

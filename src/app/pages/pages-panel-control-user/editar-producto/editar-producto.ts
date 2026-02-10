@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy, signal, computed } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal, computed, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -68,6 +68,29 @@ export class EditarProducto implements OnInit, OnDestroy {
   isSaving = signal(false);
   errorMessage = signal<string | null>(null);
 
+  // Scroll: mostrar/ocultar barra de acciones en móvil
+  showActionBar = signal(true);
+  private lastScrollY = 0;
+  private scrollThreshold = 10;
+
+  @HostListener('window:scroll')
+  onWindowScroll(): void {
+    const currentScrollY = window.scrollY;
+    const diff = currentScrollY - this.lastScrollY;
+
+    if (Math.abs(diff) < this.scrollThreshold) return;
+
+    if (diff > 0) {
+      // Scroll hacia abajo → ocultar
+      this.showActionBar.set(false);
+    } else {
+      // Scroll hacia arriba → mostrar
+      this.showActionBar.set(true);
+    }
+
+    this.lastScrollY = currentScrollY;
+  }
+
   // Subcategorías filtradas según categoría seleccionada
   subcategoriasFiltradas = computed(() => {
     const categoriaId = this.currentDrawer().type === 'categoria' 
@@ -114,35 +137,32 @@ export class EditarProducto implements OnInit, OnDestroy {
     return this.productoEditado.allergens.map(a => a.name).join(', ');
   }
 
-ngOnInit(): void {
-  // Obtener parámetros de ruta: businessId (requerido) y productId (opcional en query params)
-  this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
-    const busId = params.get('businessId');
-    if (busId) {
-      this.businessId = Number(busId);
-      
-      // Buscar productId en query params
-      this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(queryParams => {
-        const prodId = queryParams.get('productId');
+  ngOnInit(): void {
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
+      const busId = params.get('businessId');
+      if (busId) {
+        this.businessId = Number(busId);
         
-        if (prodId) {
-          this.productId = Number(prodId);
-          // Solo cargar si tenemos ambos IDs válidos
-          if (this.businessId > 0 && this.productId > 0) {
-            this.cargarDatos();
+        this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(queryParams => {
+          const prodId = queryParams.get('productId');
+          
+          if (prodId) {
+            this.productId = Number(prodId);
+            if (this.businessId > 0 && this.productId > 0) {
+              this.cargarDatos();
+            } else {
+              this.errorMessage.set('IDs inválidos');
+            }
           } else {
-            this.errorMessage.set('IDs inválidos');
+            this.router.navigate(['/panel', this.businessId, 'productos']);
           }
-        } else {
-          // Si no hay productId, redirigir a la lista de productos
-          this.router.navigate(['/panel', this.businessId, 'productos']);
-        }
-      });
-    } else {
-      this.errorMessage.set('Falta el ID del negocio');
-    }
-  });
-}
+        });
+      } else {
+        this.errorMessage.set('Falta el ID del negocio');
+      }
+    });
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -152,7 +172,6 @@ ngOnInit(): void {
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
-    // Cargar todo en paralelo
     forkJoin({
       producto: this.productosService.getProductById(this.productId),
       categorias: this.categoryService.getAllCategoriesByBusinessId(this.businessId),
@@ -164,7 +183,6 @@ ngOnInit(): void {
         this.categorias = data.categorias;
         this.alergenos = data.alergenos;
 
-        // Cargar todas las subcategorías de todas las categorías
         this.cargarTodasLasSubcategorias();
       },
       error: (err) => {
@@ -250,13 +268,11 @@ ngOnInit(): void {
     if (input.files && input.files[0]) {
       const file = input.files[0];
       
-      // Validar tipo de archivo
       if (!file.type.startsWith('image/')) {
         alert('Por favor selecciona una imagen válida');
         return;
       }
 
-      // Validar tamaño (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         alert('La imagen no puede superar los 5MB');
         return;
@@ -264,7 +280,6 @@ ngOnInit(): void {
 
       this.tempImagenFile = file;
 
-      // Crear preview
       const reader = new FileReader();
       reader.onload = (e) => {
         this.tempImagenPreview = e.target?.result as string;
@@ -311,13 +326,11 @@ ngOnInit(): void {
         break;
 
       case 'imagen':
-        // La imagen se guardará al hacer submit final
         break;
 
       case 'categoria':
         if (this.tempCategoriaId) {
           this.productoEditado.categoryId = this.tempCategoriaId;
-          // Resetear subcategoría si cambia la categoría
           this.productoEditado.subCategoryId = 0;
         }
         break;
@@ -351,7 +364,6 @@ ngOnInit(): void {
     this.isSaving.set(true);
     this.errorMessage.set(null);
 
-    // Construir FormData solo con campos modificados
     const formData = new FormData();
 
     if (this.productoOriginal && this.productoEditado.name !== this.productoOriginal.name) {
@@ -370,15 +382,14 @@ ngOnInit(): void {
       formData.append('image', this.tempImagenFile);
     }
 
-   if (this.productoOriginal && this.productoEditado.categoryId !== this.productoOriginal.categoryId) {
-  formData.append('categoryId', this.productoEditado.categoryId?.toString() || '');
-}
+    if (this.productoOriginal && this.productoEditado.categoryId !== this.productoOriginal.categoryId) {
+      formData.append('categoryId', this.productoEditado.categoryId?.toString() || '');
+    }
 
-if (this.productoOriginal && this.productoEditado.subCategoryId !== this.productoOriginal.subCategoryId) {
-  formData.append('subcategoryId', this.productoEditado.subCategoryId?.toString() || '');
-}
+    if (this.productoOriginal && this.productoEditado.subCategoryId !== this.productoOriginal.subCategoryId) {
+      formData.append('subcategoryId', this.productoEditado.subCategoryId?.toString() || '');
+    }
 
-    // Alérgenos - siempre enviar como string separado por comas
     const allergenIds = this.productoEditado.allergens?.map(a => a.id).join(',') || '';
     const originalAllergenIds = this.productoOriginal?.allergens?.map(a => a.id).join(',') || '';
     
@@ -386,7 +397,6 @@ if (this.productoOriginal && this.productoEditado.subCategoryId !== this.product
       formData.append('allergenIds', allergenIds);
     }
 
-    // Actualizar producto
     this.productosService.updateProduct(this.productId, formData)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -394,7 +404,6 @@ if (this.productoOriginal && this.productoEditado.subCategoryId !== this.product
           console.log('✅ Producto actualizado:', productoActualizado);
           this.isSaving.set(false);
           
-          // Navegar de vuelta a la lista
           this.router.navigate(['/panel', this.businessId, 'productos']);
         },
         error: (err) => {

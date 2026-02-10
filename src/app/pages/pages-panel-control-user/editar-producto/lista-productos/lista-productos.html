@@ -67,9 +67,6 @@
           <span 
             *ngIf="producto.categoryId && categoriesMap()[producto.categoryId]" 
             class="categoria-label"
-            appAutoFitText
-            [maxFontSize]="11"
-            [minFontSize]="6"
           >
             {{ categoriesMap()[producto.categoryId] }}
           </span>
