@@ -34,6 +34,15 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
   products: any[] = [];
   categories: Category[] = [];
   subcategories: SubCategory[] = [];
+  
+  // Propiedades para manejo de imagen
+  showImageOverlay: boolean = false;
+  isUploadingImage: boolean = false;
+  imageUploadError: string | null = null;
+  
+  // Constantes de validación
+  private readonly MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB en bytes
+  private readonly ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
   private groupSchedulesByDay(schedules: any[]): GroupedSchedule[] {
     const dayOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
@@ -348,5 +357,70 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
       'sunday': 'Domingo'
     };
     return dayNames[day] || day;
+  }
+
+  // ============================================
+  // MÉTODOS DE GESTIÓN DE IMAGEN DEL NEGOCIO
+  // ============================================
+
+  triggerImageInput(): void {
+    const imageInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    imageInput?.click();
+  }
+
+  onImageSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    
+    if (!file) return;
+
+    this.imageUploadError = null;
+
+    // Validar archivo
+    const validationError = this.validateImageFile(file);
+    if (validationError) {
+      this.imageUploadError = validationError;
+      return;
+    }
+
+    // Proceder con la carga
+    this.uploadBusinessImage(file);
+  }
+
+  private validateImageFile(file: File): string | null {
+    // Validar tipo de archivo
+    if (!this.ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      return `Formato de archivo no permitido. Usa: JPG, PNG, WebP o GIF.`;
+    }
+
+    // Validar tamaño de archivo
+    if (file.size > this.MAX_FILE_SIZE) {
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      return `El archivo es demasiado grande (${fileSizeMB}MB). Máximo permitido: 2MB.`;
+    }
+
+    return null;
+  }
+
+  private uploadBusinessImage(file: File): void {
+    if (!this.businessData || !this.businessId) return;
+
+    this.isUploadingImage = true;
+
+    const formData = new FormData();
+    formData.append('imageFile', file);
+
+    this.businessService.updateBusinessImage(this.businessId, formData).subscribe({
+      next: (updatedBusiness: Business) => {
+        this.businessData = updatedBusiness;
+        this.isUploadingImage = false;
+        this.showImageOverlay = false;
+        console.log('✅ Imagen del negocio actualizada exitosamente');
+      },
+      error: (err) => {
+        this.isUploadingImage = false;
+        console.error('❌ Error al actualizar imagen:', err);
+        this.imageUploadError = 'Error al cargar la imagen. Intenta nuevamente.';
+      }
+    });
   }
 }

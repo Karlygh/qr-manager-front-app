@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #e8f5e9 0%, #d4ede8 100%);
   padding: 1rem;
   padding-bottom: 6rem;
 }
@@ -18,16 +18,16 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, #e8f5e9 0%, #d4ede8 100%);
+  color: #064921;
   z-index: 100;
 }
 
 .spinner {
   width: 48px;
   height: 48px;
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
+  border: 4px solid rgba(6, 73, 33, 0.2);
+  border-top-color: #064921;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -39,7 +39,7 @@
 .btn-retry {
   padding: 0.75rem 1.5rem;
   background: white;
-  color: #667eea;
+  color: #064921;
   border: none;
   border-radius: 12px;
   font-weight: 600;
@@ -67,17 +67,17 @@
   justify-content: center;
   width: 48px;
   height: 48px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(160, 207, 177, 0.2);
   border: none;
   border-radius: 12px;
-  color: white;
+  color: #064921;
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
 }
 
 .btn-back:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(160, 207, 177, 0.3);
   transform: translateX(-2px);
 }
 
@@ -88,7 +88,7 @@
 .title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: white;
+  color: #064921;
   margin: 0;
 }
 
@@ -144,7 +144,7 @@
 .preview-precio {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #667eea;
+  color: #064921;
   margin: 0;
 }
 
@@ -186,7 +186,7 @@
 
 .edit-btn:hover {
   background: #edf2f7;
-  border-color: #667eea;
+  border-color: #a2c9b5;
   transform: translateX(4px);
 }
 
@@ -203,7 +203,7 @@
   justify-content: center;
   background: white;
   border-radius: 10px;
-  color: #667eea;
+  color: #064921;
 }
 
 .edit-btn-content {
@@ -239,7 +239,7 @@
 
 .edit-btn:hover .edit-btn-arrow {
   transform: translateX(4px);
-  color: #667eea;
+  color: #064921;
 }
 
 /* Action Buttons */
@@ -260,7 +260,7 @@
 .btn-save {
   flex: 1;
   padding: 1rem;
-  background: #667eea;
+  background: #064921;
   color: white;
   border: none;
   border-radius: 12px;
@@ -275,9 +275,9 @@
 }
 
 .btn-save:hover:not(.disabled) {
-  background: #5568d3;
+  background: #053a1a;
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 16px rgba(6, 73, 33, 0.4);
 }
 
 .btn-save:active:not(.disabled) {
@@ -285,9 +285,9 @@
 }
 
 .btn-save.disabled {
-  background: #cbd5e0;
+  background: #064921;
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: 0.35;
 }
 
 .saving-text {
@@ -438,7 +438,7 @@
 .field-textarea:focus,
 .field-select:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #a2c9b5;
   background: white;
 }
 
@@ -474,14 +474,14 @@
   gap: 0.75rem;
   padding: 3rem 1rem;
   background: #f7fafc;
-  border: 2px dashed #cbd5e0;
+  border: 2px dashed #a2c9b5;
   border-radius: 12px;
   transition: all 0.3s ease;
   color: #a0aec0;
 }
 
 .upload-placeholder:hover {
-  border-color: #667eea;
+  border-color: #064921;
   background: #edf2f7;
 }
 
@@ -522,13 +522,13 @@
 }
 
 .allergen-item:hover {
-  border-color: #cbd5e0;
+  border-color: #a2c9b5;
   background: #edf2f7;
 }
 
 .allergen-item.selected {
-  background: #e6f0ff;
-  border-color: #667eea;
+  background: #e8f5e9;
+  border-color: #064921;
 }
 
 .allergen-checkbox {
@@ -544,8 +544,8 @@
 }
 
 .allergen-item.selected .allergen-checkbox {
-  background: #667eea;
-  border-color: #667eea;
+  background: #064921;
+  border-color: #064921;
   color: white;
 }
 
@@ -564,7 +564,7 @@
 .btn-drawer-confirm {
   width: 100%;
   padding: 1rem;
-  background: #667eea;
+  background: #064921;
   color: white;
   border: none;
   border-radius: 12px;
@@ -575,9 +575,9 @@
 }
 
 .btn-drawer-confirm:hover {
-  background: #5568d3;
+  background: #053a1a;
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 16px rgba(6, 73, 33, 0.4);
 }
 
 .btn-drawer-confirm:active {
@@ -587,23 +587,30 @@
 /* Responsive - Desktop */
 @media (min-width: 768px) {
   .drawer {
-    left: auto;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    max-width: 500px;
-    max-height: 100vh;
-    border-radius: 0;
-    transform: translateX(100%);
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    opacity: 0;
+    max-width: 520px;
+    width: 90%;
+    max-height: 80vh;
+    border-radius: 16px;
+    pointer-events: none;
+    transition: transform 0.3s ease, opacity 0.3s ease;
   }
 
   .drawer.open {
-    transform: translateX(0);
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .container {
     max-width: 800px;
     margin: 0 auto;
+    padding: 1.5rem;
   }
 
   .action-buttons {

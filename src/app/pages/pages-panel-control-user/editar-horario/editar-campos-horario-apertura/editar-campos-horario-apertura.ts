@@ -226,7 +226,7 @@ export class EditarCamposHorarioApertura implements OnInit {
         // Reagrupar con los nuevos datos
         this.groupSchedulesByDay(updatedHours);
         this.showSuccess('Todos los horarios guardados correctamente');
-        setTimeout(() => this.router.navigate(['/panel-control-buisiness', this.businessId]), 1500);
+        setTimeout(() => this.router.navigate(['/panel-control-business', this.businessId]), 1500);
       },
       error: (error) => {
         console.error('Error saving all schedules:', error);
@@ -252,7 +252,7 @@ export class EditarCamposHorarioApertura implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/panel-control-buisiness', this.businessId]);
+    this.router.navigate(['/panel-control-business', this.businessId]);
   }
 
   getDayName(day: string): string {

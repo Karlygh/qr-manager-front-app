@@ -15,10 +15,37 @@
             <ng-container *ngIf="businessData && !isLoading">
 
                 <header class="business-header mb-5 border-bottom pb-4 d-flex align-items-center">
-                    <img [src]="businessData.imageFile"
-                         alt="Logo de {{ businessData.name }}"
-                         class="img-thumbnail me-4 shadow-sm business-logo"
-                         style="width: 100px; height: 100px; object-fit: cover;">
+                    <!-- Contenedor de imagen con overlay -->
+                    <div class="business-image-container me-4 position-relative"
+                         (mouseenter)="showImageOverlay = true"
+                         (mouseleave)="showImageOverlay = false">
+                        <img [src]="businessData.imageFile"
+                             alt="Logo de {{ businessData.name }}"
+                             class="img-thumbnail shadow-sm business-logo"
+                             style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;">
+                        
+                        <!-- Overlay con botón de cámara -->
+                        <div class="image-overlay" 
+                             [ngClass]="{ 'show': showImageOverlay }"
+                             (click)="triggerImageInput()">
+                            <button type="button" 
+                                    class="btn btn-light btn-sm rounded-circle"
+                                    title="Cambiar imagen"
+                                    [disabled]="isUploadingImage">
+                                <span *ngIf="!isUploadingImage" class="fs-6">📷</span>
+                                <span *ngIf="isUploadingImage" class="spinner-border spinner-border-sm" role="status"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Input file oculto -->
+                    <input #imageInput 
+                           type="file" 
+                           accept="image/*" 
+                           class="d-none"
+                           (change)="onImageSelected($event)"
+                           [disabled]="isUploadingImage">
+
                     <div>
                         <h1 class="display-6 fw-bold color-success">{{ businessData.name }}</h1>
                         <p class="lead ">{{ businessData.description }}</p>
@@ -30,6 +57,13 @@
                         </div>
                     </div>
                 </header>
+
+                <!-- Mensaje de error en carga de imagen -->
+                <div *ngIf="imageUploadError" class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
+                    <i class="bi bi-exclamation-circle me-2"></i>
+                    <strong>Aviso:</strong> {{ imageUploadError }}
+                    <button type="button" class="btn-close" (click)="imageUploadError = null"></button>
+                </div>
 
                 <h3 class="fw-bold mb-3 color-secondary border-bottom pb-2 text-center section-title" style="font-size: 2rem;">📋 ¿Qué quieres hacer hoy?</h3>
 

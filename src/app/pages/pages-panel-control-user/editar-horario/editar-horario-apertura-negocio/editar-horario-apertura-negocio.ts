@@ -262,7 +262,7 @@ export class EditarHorarioAperturaNegocio implements OnInit {
         this.groupSchedulesByDay(updatedHours);
         this.showSuccess('Todos los horarios guardados correctamente');
         setTimeout(() => {
-          this.router.navigate(['/panel-control-buisiness', this.businessId]);
+          this.router.navigate(['/panel-control-business', this.businessId]);
         }, 1500);
       },
       error: (error) => {
@@ -293,7 +293,7 @@ export class EditarHorarioAperturaNegocio implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/panel-control-buisiness', this.businessId]);
+    this.router.navigate(['/panel-control-business', this.businessId]);
   }
 
   getDayName(day: string): string {

@@ -187,13 +187,13 @@ export class EditarInstalaciones implements OnInit {
   
   saveChanges(): void {
     if (this.businessId) {
-      this.router.navigate(['/panel-control-buisiness', this.businessId]);
+      this.router.navigate(['/panel-control-business', this.businessId]);
     }
   }
 
   goBack(): void {
     if (this.businessId) {
-      this.router.navigate(['/panel-control-buisiness', this.businessId]);
+      this.router.navigate(['/panel-control-business', this.businessId]);
     }
   }
 }

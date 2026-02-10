@@ -61,6 +61,67 @@
     transform: scale(1.05);
 }
 
+/* ============================================
+   Estilos para Overlay de Imagen Interactiva
+   ============================================ */
+
+.business-image-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(32, 201, 151, 0.85);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border: 3px solid #20c997;
+}
+
+.image-overlay.show {
+    opacity: 1;
+}
+
+.image-overlay button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.image-overlay button:hover:not(:disabled) {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.image-overlay button:disabled {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+.image-overlay .spinner-border-sm {
+    color: #20c997;
+}
+
+.image-upload-error {
+    color: #842029;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
 /* --- Estilos de Tarjetas (Cards) --- */
 .custom-card {
     border: 1px solid #dee2e6; 

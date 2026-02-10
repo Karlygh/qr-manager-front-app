@@ -234,3 +234,49 @@ p.lead {
        padding: 0.5rem;
    }
 }
+
+/* ========================================
+   ESTILOS PARA LABELS DINÁMICOS
+   ======================================== */
+
+/**
+ * Label incompleto - Se muestra cuando el campo está vacío
+ * Transición suave entre estados completo/incompleto
+ */
+.label-incomplete {
+    font-weight: 500;
+    font-style: italic;
+    transition: all 0.3s ease;
+    opacity: 0.75;
+}
+
+.label-incomplete.text-danger {
+    color: #dc3545 !important;
+    letter-spacing: 0.5px;
+}
+
+.label-incomplete.text-muted {
+    color: #6c757d !important;
+}
+
+/**
+ * Label completo - Se muestra cuando el campo tiene valor
+ */
+.label-complete {
+    font-weight: 600;
+    color: #105f34;
+    transition: all 0.3s ease;
+}
+
+/**
+ * Helpers - Se ocultan cuando el campo tiene valor
+ */
+.helper-text {
+    font-size: 0.85rem;
+    transition: opacity 0.2s ease;
+}
+
+/* Animación de desaparición del helper */
+.helper-text.d-none {
+    display: none !important;
+}

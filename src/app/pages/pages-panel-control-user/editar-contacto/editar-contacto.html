@@ -12,6 +12,11 @@
                 <strong>Error:</strong> {{ error }}
             </div>
 
+            <div *ngIf="successMessage && !isLoading" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                {{ successMessage }}
+            </div>
+
             <ng-container *ngIf="businessData && !isLoading">
 
                 <header class="business-header mb-5 d-flex align-items-center">
@@ -34,13 +39,17 @@
                         <form [formGroup]="contactForm" (ngSubmit)="saveContact()">
                             <div class="mb-3">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <label for="name" class="form-label fw-bold mb-0">Nombre del Negocio *</label>
-                                    <span class="text-muted small">Nombre comercial de tu negocio</span>
+                                    <label for="name" class="form-label fw-bold mb-0" [ngClass]="getLabelClass('name')">
+                                        {{ contactForm.get('name') | formLabel: fieldConfig['name'].label }}
+                                        <span *ngIf="fieldConfig['name'].required" class="text-danger ms-1">*</span>
+                                    </label>
+                                    <span [ngClass]="getHelperClass('name')" class="small">{{ fieldConfig['name'].helper }}</span>
                                 </div>
                                 <input type="text"
                                        id="name"
                                        class="form-control"
                                        formControlName="name"
+                                       [placeholder]="fieldConfig['name'].placeholder"
                                        [class.is-invalid]="contactForm.get('name')?.invalid && contactForm.get('name')?.touched">
                                 <div *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched" class="invalid-feedback">
                                     <small *ngIf="contactForm.get('name')?.errors?.['required']">El nombre es obligatorio</small>
@@ -50,14 +59,16 @@
 
                             <div class="mb-3">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <label for="description" class="form-label fw-bold mb-0">Descripción</label>
-                                    <span class="text-muted small ms-2">Breve descripción de tu negocio ( Ej: Bar de copas )</span>
+                                    <label for="description" class="form-label fw-bold mb-0" [ngClass]="getLabelClass('description')">
+                                        {{ contactForm.get('description') | formLabel: fieldConfig['description'].label }}
+                                    </label>
+                                    <span [ngClass]="getHelperClass('description')" class="small">{{ fieldConfig['description'].helper }}</span>
                                 </div>
                                 <textarea id="description"
                                           class="form-control"
                                           formControlName="description"
                                           rows="2"
-                                          placeholder="Descripción del negocio"
+                                          [placeholder]="fieldConfig['description'].placeholder"
                                           [class.is-invalid]="contactForm.get('description')?.invalid && contactForm.get('description')?.touched"></textarea>
                                 <div *ngIf="contactForm.get('description')?.invalid && contactForm.get('description')?.touched" class="invalid-feedback">
                                     <small *ngIf="contactForm.get('description')?.errors?.['minlength']">Mínimo 5 caracteres</small>
@@ -66,14 +77,18 @@
 
                             <div class="mb-3">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <label for="email" class="form-label fw-bold mb-0">Email *</label>
-                                    <span class="text-muted small">Email de contacto principal</span>
+                                    <label for="email" class="form-label fw-bold mb-0" [ngClass]="getLabelClass('email')">
+                                        {{ contactForm.get('email') | formLabel: fieldConfig['email'].label }}
+                                        <span *ngIf="fieldConfig['email'].required" class="text-danger ms-1">*</span>
+                                    </label>
+                                    <span [ngClass]="getHelperClass('email')" class="small">{{ fieldConfig['email'].helper }}</span>
                                 </div>
                                 <input type="email"
                                        id="email"
                                        class="form-control"
                                        formControlName="email"
                                        autocomplete="off"
+                                       [placeholder]="fieldConfig['email'].placeholder"
                                        [class.is-invalid]="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
                                 <div *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched" class="invalid-feedback">
                                     <small *ngIf="contactForm.get('email')?.errors?.['required']">El email es obligatorio</small>
@@ -83,14 +98,16 @@
 
                             <div class="mb-3">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <label for="phoneNumber" class="form-label fw-bold mb-0">Teléfono</label>
-                                    <span class="text-muted small ms-mobile">Número de contacto</span>
+                                    <label for="phoneNumber" class="form-label fw-bold mb-0" [ngClass]="getLabelClass('phoneNumber')">
+                                        {{ contactForm.get('phoneNumber') | formLabel: fieldConfig['phoneNumber'].label }}
+                                    </label>
+                                    <span [ngClass]="getHelperClass('phoneNumber')" class="small">{{ fieldConfig['phoneNumber'].helper }}</span>
                                 </div>
                                 <input type="tel"
                                        id="phoneNumber"
                                        class="form-control"
                                        formControlName="phoneNumber"
-                                       placeholder="Ej: +1234567890"
+                                       [placeholder]="fieldConfig['phoneNumber'].placeholder"
                                        [class.is-invalid]="contactForm.get('phoneNumber')?.invalid && contactForm.get('phoneNumber')?.touched">
                                 <div *ngIf="contactForm.get('phoneNumber')?.invalid && contactForm.get('phoneNumber')?.touched" class="invalid-feedback">
                                     <small *ngIf="contactForm.get('phoneNumber')?.errors?.['minlength']">Mínimo 9 caracteres</small>
@@ -100,20 +117,24 @@
 
                             <div class="mb-3">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <label for="address" class="form-label fw-bold mb-0">Dirección</label>
-                                    <span class="text-muted small ms-5 ">Dirección física del establecimiento</span>
+                                    <label for="address" class="form-label fw-bold mb-0" [ngClass]="getLabelClass('address')">
+                                        {{ contactForm.get('address') | formLabel: fieldConfig['address'].label }}
+                                    </label>
+                                    <span [ngClass]="getHelperClass('address')" class="small">{{ fieldConfig['address'].helper }}</span>
                                 </div>
                                 <textarea id="address"
                                           class="form-control"
                                           formControlName="address"
                                           rows="3"
-                                          placeholder="Dirección completa del negocio"></textarea>
+                                          [placeholder]="fieldConfig['address'].placeholder"></textarea>
                             </div>
 
                             <div class="mb-4">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <label for="imageLogo" class="form-label fw-bold mb-0">Logo del Negocio</label>
-                                    <span class="text-muted small">Imagen representativa de tu marca</span>
+                                    <label for="imageLogo" class="form-label fw-bold mb-0" [ngClass]="getLabelClass('imageLogo')">
+                                        {{ selectedFile ? fieldConfig['imageLogo'].label : 'Sin completar' }}
+                                    </label>
+                                    <span class="text-muted small">{{ fieldConfig['imageLogo'].helper }}</span>
                                 </div>
                                 <input type="file"
                                        id="imageLogo"

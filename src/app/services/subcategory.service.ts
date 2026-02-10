@@ -63,9 +63,12 @@ export class SubCategoryService {
 
   /**
    * Crea una nueva subcategoría
+   * Envía el request como JSON, NO como FormData
    */
   createSubCategory(request: SubCategoryRequest): Observable<SubCategory> {
-    return this.http.post<SubCategory>(`${this.baseUrl}/subcategory`, request, this.httpOptions)
+    const jsonRequest = JSON.stringify(request);
+    
+    return this.http.post<SubCategory>(`${this.baseUrl}/subcategory`, jsonRequest, this.httpOptions)
       .pipe(
         catchError(this.handleError)
       );
@@ -73,11 +76,15 @@ export class SubCategoryService {
 
   /**
    * Actualiza una subcategoría por ID
+   * Envía el request como JSON, NO como FormData
    */
   updateSubCategoryById(subCategoryId: number, request: SubCategoryRequest): Observable<SubCategory> {
+    // Asegurar que se envía como JSON, no FormData
+    const jsonRequest = JSON.stringify(request);
+    
     return this.http.patch<SubCategory>(
       `${this.baseUrl}/subcategory/${subCategoryId}`, 
-      request, 
+      jsonRequest, 
       this.httpOptions
     ).pipe(
       catchError(this.handleError)

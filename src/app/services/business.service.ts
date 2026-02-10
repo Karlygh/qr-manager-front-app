@@ -33,6 +33,10 @@ export class BusinessService {
     return this.http.patch(`${this.businessUrl}/${id}`, formData);
   }
 
+  updateBusinessImage(id: string | number, formData: FormData): Observable<any> {
+    return this.http.patch(`${this.businessUrl}/${id}`, formData);
+  }
+
   getAllBusinesses(): Observable<any> {
     return this.http.get(this.businessUrl);
   }

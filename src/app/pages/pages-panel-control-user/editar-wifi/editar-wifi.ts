@@ -87,7 +87,7 @@ export class EditarWifi implements OnInit {
         next: (updatedWifi) => {
           this.wifiData = updatedWifi;
           this.isSaving = false;
-          this.router.navigate(['/panel-control-buisiness', this.businessId]);
+          this.router.navigate(['/panel-control-business', this.businessId]);
         },
         error: (err) => {
           console.error('Error updating WiFi:', err);
@@ -100,7 +100,7 @@ export class EditarWifi implements OnInit {
         next: (newWifi) => {
           this.wifiData = newWifi;
           this.isSaving = false;
-          this.router.navigate(['/panel-control-buisiness', this.businessId]);
+          this.router.navigate(['/panel-control-business', this.businessId]);
         },
         error: (err) => {
           console.error('Error creating WiFi:', err);
@@ -132,7 +132,7 @@ export class EditarWifi implements OnInit {
         this.wifiForm = { name: '', password: '' };
         this.showCreateForm = false;
         this.closeDeleteModal();
-        this.router.navigate(['/panel-control-buisiness', this.businessId]);
+        this.router.navigate(['/panel-control-business', this.businessId]);
       },
       error: (err) => {
         console.error('Error deleting WiFi:', err);
@@ -148,7 +148,7 @@ export class EditarWifi implements OnInit {
 
   goBack(): void {
     if (this.businessId) {
-      this.router.navigate(['/panel-control-buisiness', this.businessId]);
+      this.router.navigate(['/panel-control-business', this.businessId]);
     }
   }
 }

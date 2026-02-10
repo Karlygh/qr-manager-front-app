@@ -1,3 +1,13 @@
+/* CONTENEDOR PRINCIPAL */
+.contact-page {
+  background-color: #a2c9b5;
+}
+
+.overlay {
+  width: 100%;
+  min-height: 100vh;
+}
+
 /* ESTILOS FORMULARIO */
 .form-control {
   border-radius: 12px;
@@ -193,12 +203,17 @@ h4{
 
 /* Contenedor del mapa */
 .map-container {
+    display: block;
+    width: 100%;
     height: 400px;
+    position: relative;
+    overflow: hidden;
     /* Para que el iframe o mapa ocupe todo el espacio y las esquinas redondeadas se apliquen */
 }
 
 .map-container iframe {
     /* Aseguramos que el iframe llene el contenedor */
+    display: block;
     width: 100%;
     height: 100%;
     border: 0;

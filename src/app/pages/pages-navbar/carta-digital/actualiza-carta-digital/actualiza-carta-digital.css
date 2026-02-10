@@ -263,3 +263,140 @@ h5 {
     width: 100% !important;
   }
 }
+
+/*
+  ==========================================
+  Media Queries para Pantallas Ultrawide
+  ==========================================
+*/
+
+/* Pantallas grandes >= 1920px (Full HD+) */
+@media (min-width: 1920px) {
+  .title-main {
+    font-size: 2.2rem;
+    padding: 20px 30px;
+    line-height: 1.25;
+  }
+  
+  .subtitle-main {
+    font-size: 1.3rem;
+  }
+  
+  .description-main {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-top: 15px;
+  }
+
+  h5 {
+    font-size: 1.5rem;
+  }
+
+  .feature-title {
+    font-size: 1.2rem;
+  }
+
+  .card-title {
+    font-size: 1.75rem;
+  }
+
+  /* Ajustar espaciado de la sección header */
+  #menu-update-section-header {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  #menu-update-section-header .mb-5 {
+    margin-bottom: 1.5rem !important;
+  }
+
+  #menu-update-section-header .mb-4 {
+    margin-bottom: 1rem !important;
+  }
+}
+
+/* Pantallas ultrawide >= 2560px (2K/4K) - Para tu monitor de 34" */
+@media (min-width: 2560px) {
+  .title-main {
+    font-size: 1.8rem;
+    padding: 18px 28px;
+    line-height: 1.3;
+  }
+  
+  .subtitle-main {
+    font-size: 1.15rem;
+  }
+  
+  .description-main {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    margin-top: 12px;
+  }
+
+  h5 {
+    font-size: 1.35rem;
+  }
+
+  .feature-title {
+    font-size: 1.1rem;
+  }
+
+  .feature-text {
+    font-size: 0.88rem;
+  }
+
+  .card-title {
+    font-size: 1.55rem;
+  }
+
+  .card-text {
+    font-size: 0.92rem;
+  }
+
+  .lead {
+    font-size: 1rem;
+  }
+
+  /* Ajustar espaciado de la sección header para ultrawide */
+  #menu-update-section-header {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+
+  #menu-update-section-header .mb-5 {
+    margin-bottom: 1.25rem !important;
+  }
+
+  #menu-update-section-header .mb-4 {
+    margin-bottom: 0.85rem !important;
+  }
+
+  #menu-update-section-header .mb-3 {
+    margin-bottom: 0.75rem !important;
+  }
+
+  /* Reducir padding del container */
+  #menu-update-section-header .container {
+    max-width: 85%;
+  }
+}
+
+/* Extra: Pantallas muy grandes >= 3440px (34" ultrawide) */
+@media (min-width: 3440px) {
+  .title-main {
+    font-size: 1.6rem;
+    padding: 16px 24px;
+  }
+  
+  .subtitle-main {
+    font-size: 1.05rem;
+  }
+  
+  .description-main {
+    font-size: 0.9rem;
+  }
+
+  #menu-update-section-header .container {
+    max-width: 75%;
+  }
+}

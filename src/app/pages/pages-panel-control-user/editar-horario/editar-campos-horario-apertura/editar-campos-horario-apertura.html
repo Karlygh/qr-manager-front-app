@@ -38,7 +38,7 @@
         <!-- Lista de horarios para este día -->
         <div class="schedules-list">
           @for (schedule of daySchedules[day]; track schedule; let i = $index) {
-            <div class="schedule-item">
+            <div class="schedule-item" [class.schedule-item-second]="i === 1">
               <div class="schedule-number">Horario {{ i + 1 }}</div>
 
               <div class="time-inputs">

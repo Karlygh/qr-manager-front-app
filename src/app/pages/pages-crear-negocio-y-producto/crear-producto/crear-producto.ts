@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil, finalize, catchError, of, forkJoin } from 'rxjs';
@@ -37,9 +37,10 @@ export class CrearProducto implements OnInit, OnDestroy {
   private readonly productService = inject(ProductosService);
   private readonly allergenService = inject(AllergenService);
   private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
   private readonly destroy$ = new Subject<void>();
 
-  private readonly BUSINESS_ID = 1;
+  private businessId: number = 1; // Valor por defecto
   private readonly MESSAGE_DURATION = 5000;
   readonly PREDETERMINADO_VALUE = -1; // Valor especial para "Predeterminado"
 
@@ -105,8 +106,17 @@ export class CrearProducto implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.logInfo('Componente inicializado');
-    this.loadInitialData();
+    // Obtener businessId de la ruta si está disponible
+    this.activatedRoute.paramMap.subscribe(params => {
+      const routeBusinessId = params.get('businessId');
+      if (routeBusinessId) {
+        this.businessId = parseInt(routeBusinessId, 10);
+        this.logInfo(`Business ID obtenido de la ruta: ${this.businessId}`);
+      }
+      // Actualizar el formulario con el businessId obtenido
+      this.productForm.patchValue({ businessId: this.businessId });
+      this.loadInitialData();
+    });
   }
 
   ngOnDestroy(): void {
@@ -123,7 +133,7 @@ export class CrearProducto implements OnInit, OnDestroy {
       name: ['', [Validators.required, Validators.maxLength(100)]],
       description: ['', [Validators.required, Validators.maxLength(500)]],
       price: ['', [Validators.required, Validators.min(0)]],
-      businessId: [this.BUSINESS_ID]
+      businessId: [this.businessId]
     });
 
     this.logInfo('Formulario inicializado', this.productForm.value);
@@ -133,7 +143,7 @@ export class CrearProducto implements OnInit, OnDestroy {
     this.logInfo('Cargando categorías...');
     this.hasApiError = false;
 
-    this.categoryService.getAllCategoriesByBusinessId(this.BUSINESS_ID)
+    this.categoryService.getAllCategoriesByBusinessId(this.businessId)
       .pipe(
         takeUntil(this.destroy$),
         catchError(error => {
@@ -330,7 +340,7 @@ export class CrearProducto implements OnInit, OnDestroy {
   private createCategory(name: string): void {
     this.logInfo('Creando categoría', { name });
 
-    this.categoryService.createCategory(this.BUSINESS_ID, name)
+    this.categoryService.createCategory(this.businessId, name)
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => this.isLoading = false),
@@ -1040,7 +1050,7 @@ export class CrearProducto implements OnInit, OnDestroy {
     this.productForm.reset({
       categoryId: this.PREDETERMINADO_VALUE,
       subcategoryId: null,
-      businessId: this.BUSINESS_ID
+      businessId: this.businessId
     });
     
     this.selectedImage = null;
@@ -1058,8 +1068,12 @@ export class CrearProducto implements OnInit, OnDestroy {
   }
 
   goToDashboard(): void {
-    this.logInfo('Navegando al dashboard');
-    this.router.navigate(['/dashboard']);
+    this.logInfo('Navegando al panel de control del negocio');
+    if (this.businessId) {
+      this.router.navigate(['/panel-control-business', this.businessId]);
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 
   // ================================

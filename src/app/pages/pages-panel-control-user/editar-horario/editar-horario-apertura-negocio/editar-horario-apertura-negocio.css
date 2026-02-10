@@ -152,6 +152,11 @@ h2 {
   padding: 15px;
 }
 
+.schedule-item-second {
+  background: #f0f8f5;
+  border: 1px solid #d0e8e0;
+}
+
 .schedule-number {
   font-weight: 600;
   color: #555;
