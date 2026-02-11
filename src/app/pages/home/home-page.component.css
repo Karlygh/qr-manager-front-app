@@ -1,9 +1,7 @@
-
-
-/* ========== SECCIÓN HERO ==========*/
+/* ========== SECCIÓN HERO ========== */
 .hero {
     position: relative;
-    min-height: 100vh;
+    min-height: 100svh;      /* svh: más fiable en móvil (evita el salto de barra del navegador) */
     width: 100%;
     display: flex;
     align-items: center;
@@ -12,8 +10,8 @@
     background-position: center;
     color: #ffffff;
     overflow: hidden;
-    padding-top: 0;
-    padding-bottom: 60px;
+    padding-top: clamp(60px, 8vh, 100px);
+    padding-bottom: clamp(40px, 6vh, 80px);
 }
 
 .hero-bg {
@@ -35,32 +33,34 @@
     z-index: 5;
     width: 100%;
     max-width: 100%;
-    padding: 0 20px;
+    padding: 0 clamp(16px, 3vw, 60px);
 }
 
+/* ========== COLUMNAS DEL LAYOUT ========== */
 .hero-left {
     position: relative;
     z-index: 5;
-    padding-right: 40px;
+    padding-right: clamp(0px, 3vw, 50px);
 }
 
 .hero-right {
     position: relative;
     z-index: 5;
-    padding-left: 40px;
+    padding-left: clamp(0px, 2vw, 40px);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-/* ========== TIPOGRAFÍA ==========*/
+/* ========== BADGE ========== */
 .hero-badge {
     display: inline-block;
-    font-size: 0.85rem;
+    font-size: clamp(0.65rem, 1vw, 0.9rem);
     font-weight: 700;
     letter-spacing: 2px;
     color: #75c298;
-    padding: 8px 16px;
+    padding: clamp(5px, 0.8vh, 10px) clamp(10px, 1.5vw, 18px);
     border: 2px solid #75c298;
     border-radius: 25px;
     background-color: rgba(117, 194, 152, 0.1);
@@ -79,12 +79,14 @@
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
 }
 
+/* ========== TÍTULO ========== */
+/* clamp(mín, preferido, máx) — escala suave entre 320px y 2560px */
 .hero-title {
-    font-size: 3.5rem;
+    font-size: clamp(1.75rem, 3.5vw + 0.5rem, 5rem);
     font-weight: 800;
     line-height: 1.15;
     color: #ffffff;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
     text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
     letter-spacing: -1px;
 }
@@ -110,31 +112,28 @@
     color: #ffffff;
 }
 
+/* ========== DESCRIPCIÓN ========== */
 .hero-description {
-    font-size: 1.15rem;
+    font-size: clamp(0.875rem, 1vw + 0.25rem, 1.2rem);
     line-height: 1.7;
     color: #e0e0e0;
-    margin-bottom: 2rem;
-    max-width: 550px;
-    background: linear-gradient(
-        135deg,
-        rgba(117, 194, 152, 0.1),
-        rgba(160, 160, 160, 0.05)
-    );
-    padding: 24px 28px;
+    margin-bottom: clamp(1.25rem, 2.5vh, 2rem);
+    max-width: 600px;
+    background: linear-gradient(135deg, rgba(117, 194, 152, 0.1), rgba(160, 160, 160, 0.05));
+    padding: clamp(14px, 2vh, 28px) clamp(16px, 2.5vw, 30px);
     border-left: 4px solid #75c298;
     border-radius: 8px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
 
-/* ========== STATS REDISEÑADAS ==========*/
+/* ========== STATS ========== */
 .hero-stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 2rem;
-    max-width: 350px;
+    gap: clamp(8px, 1.5vw, 24px);
+    margin-bottom: clamp(1.25rem, 2.5vh, 2rem);
+    max-width: clamp(260px, 35vw, 420px);
 }
 
 .stat-card {
@@ -145,17 +144,13 @@
 }
 
 .stat-circle {
-    width: 70px;
-    height: 70px;
+    width: clamp(52px, 5.5vw, 100px);
+    height: clamp(52px, 5.5vw, 100px);
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background: linear-gradient(
-        135deg,
-        rgba(117, 194, 152, 0.2),
-        rgba(117, 194, 152, 0.05)
-    );
+    background: linear-gradient(135deg, rgba(117, 194, 152, 0.2), rgba(117, 194, 152, 0.05));
     border: 2px solid #75c298;
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 15px rgba(117, 194, 152, 0.15);
@@ -164,22 +159,18 @@
 .stat-card:hover .stat-circle {
     transform: scale(1.15) translateY(-5px);
     box-shadow: 0 12px 30px rgba(117, 194, 152, 0.35);
-    background: linear-gradient(
-        135deg,
-        rgba(117, 194, 152, 0.3),
-        rgba(117, 194, 152, 0.15)
-    );
+    background: linear-gradient(135deg, rgba(117, 194, 152, 0.3), rgba(117, 194, 152, 0.15));
 }
 
 .stat-number {
-    font-size: 1.5rem;
+    font-size: clamp(1rem, 1.5vw, 2.2rem);
     font-weight: 800;
     color: #75c298;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .stat-label {
-    font-size: 0.75rem;
+    font-size: clamp(0.65rem, 0.75vw, 0.85rem);
     font-weight: 600;
     color: #a8a8a8;
     text-align: center;
@@ -188,20 +179,20 @@
     white-space: nowrap;
 }
 
-/* ========== BOTONES CTA ==========*/
+/* ========== BOTONES CTA ========== */
 .cta-group {
     display: flex;
-    gap: 15px;
+    gap: clamp(10px, 1.5vw, 18px);
     flex-wrap: wrap;
     margin-bottom: 20px;
 }
 
 .cta-button {
-    padding: 14px 28px;
+    padding: clamp(10px, 1.2vh, 16px) clamp(18px, 2.5vw, 32px);
     border-radius: 8px;
     text-decoration: none;
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: clamp(0.75rem, 0.85vw, 1rem);
     letter-spacing: 1px;
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-flex;
@@ -211,7 +202,7 @@
     overflow: hidden;
     border: 2px solid transparent;
     white-space: nowrap;
-    height: 52px;
+    height: clamp(42px, 5vh, 56px);
     cursor: pointer;
 }
 
@@ -282,24 +273,22 @@
     transform: translateY(-2px) scale(1.05);
 }
 
-/* ========== GALERÍA DE IMÁGENES ==========*/
+/* ========== GALERÍA DE IMÁGENES ========== */
 .images-gallery {
     position: relative;
     width: 100%;
-    max-width: 600px;
-    height: 500px;
+    max-width: clamp(300px, 45vw, 750px);
+    height: clamp(320px, 42vh, 560px);
     display: flex;
     align-items: center;
     justify-content: center;
     perspective: 1000px;
-    gap: 30px;
+    gap: clamp(12px, 2vw, 35px);
     margin: 0 auto;
 }
 
 .gallery-item {
     position: relative;
-    width: 280px;
-    height: 380px;
     border-radius: 12px;
     overflow: hidden;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -323,13 +312,12 @@
     filter: brightness(1.15);
 }
 
-/* Posicionamiento y animación de imágenes flotantes */
+/* --- Imagen principal --- */
 .main-image {
     z-index: 10;
     opacity: 0.4;
-    transform: scale(0.95);
-    width: 300px;
-    height: 400px;
+    width: clamp(120px, 16vw, 300px);
+    height: clamp(200px, 27vw, 420px);
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     pointer-events: auto;
@@ -342,40 +330,12 @@
     opacity: 1;
     box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
     filter: brightness(1.1);
-    animation: floatImage 4s ease-in-out infinite;
-    animation-delay: 0s;
 }
 
-@keyframes floatImage {
-    0%, 100% {
-        transform: scale(1) translateY(0px);
-    }
-    50% {
-        transform: scale(1) translateY(-20px);
-    }
-}
-
-@keyframes floatImage2 {
-    0%, 100% {
-        transform: scale(1) translateY(0px);
-    }
-    50% {
-        transform: scale(1) translateY(-15px);
-    }
-}
-
-@keyframes floatImage3 {
-    0%, 100% {
-        transform: scale(1) translateY(0px);
-    }
-    50% {
-        transform: scale(1) translateY(-25px);
-    }
-}
-
+/* --- Imágenes laterales --- */
 .side-image-1 {
-    width: 220px;
-    height: 300px;
+    width: clamp(90px, 12vw, 240px);
+    height: clamp(150px, 20vw, 370px);
     z-index: 9;
     opacity: 0.4;
     transform: scale(0.95);
@@ -393,13 +353,11 @@
     box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
     filter: brightness(1.1);
     z-index: 11;
-    animation: floatImage2 4.5s ease-in-out infinite;
-    animation-delay: 0.3s;
 }
 
 .side-image-2 {
-    width: 220px;
-    height: 300px;
+    width: clamp(90px, 12vw, 240px);
+    height: clamp(155px, 21vw, 390px);
     z-index: 9;
     opacity: 0.4;
     transform: scale(0.95);
@@ -417,24 +375,38 @@
     box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
     filter: brightness(1.1);
     z-index: 11;
-    animation: floatImage3 3.8s ease-in-out infinite;
-    animation-delay: 0.6s;
 }
 
-/* ========== INDICADORES DE GALERÍA ==========*/
+/* ========== ANIMACIONES FLOTANTES ========== */
+@keyframes floatImage {
+    0%, 100% { transform: scale(1) translateY(0px); }
+    50%       { transform: scale(1) translateY(-20px); }
+}
+
+@keyframes floatImage2 {
+    0%, 100% { transform: scale(1) translateY(0px); }
+    50%       { transform: scale(1) translateY(-15px); }
+}
+
+@keyframes floatImage3 {
+    0%, 100% { transform: scale(1) translateY(0px); }
+    50%       { transform: scale(1) translateY(-25px); }
+}
+
+/* ========== INDICADORES DE GALERÍA ========== */
 .gallery-indicators {
     position: absolute;
-    bottom: -60px;
+    bottom: -50px;
     left: 50%;
     transform: translateX(-50%);
-    display: none;
-    gap: 12px;
+    display: none;   /* Ocultos en desktop (las 3 imágenes son visibles) */
+    gap: 10px;
     z-index: 15;
 }
 
 .indicator {
-    width: 12px;
-    height: 12px;
+    width: 11px;
+    height: 11px;
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.4);
     border: 2px solid transparent;
@@ -453,24 +425,28 @@
     transform: scale(1.2);
 }
 
-/* ========== TAGS FLOTANTES ==========*/
+/* ========== TAGS FLOTANTES ========== */
 .floating-tags-container {
-    position: absolute;
-    left: -180px;
-    top: 50%;
-    transform: translateY(-50%);
     display: flex;
-    flex-direction: column;
-    gap: 15px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: clamp(6px, 1vw, 14px);
     z-index: 20;
+    width: 100%;
+    max-width: 100%;
+    padding: clamp(8px, 1vh, 16px) 0;
+    box-sizing: border-box;
+    margin-top: clamp(16px, 2vh, 30px);
 }
 
 .floating-tag {
     background: linear-gradient(135deg, rgba(117, 194, 152, 0.95), rgba(117, 194, 152, 0.8));
     color: #0a3b20;
-    padding: 8px 16px;
+    padding: clamp(6px, 0.8vh, 10px) clamp(10px, 1.2vw, 18px);
     border-radius: 20px;
-    font-size: 0.85rem;
+    font-size: clamp(0.7rem, 0.8vw, 0.9rem);
     font-weight: 600;
     letter-spacing: 0.5px;
     white-space: nowrap;
@@ -485,572 +461,138 @@
     box-shadow: 0 8px 25px rgba(117, 194, 152, 0.6);
 }
 
-/* ========================================
-   RESPONSIVE DESIGN
-======================================== */
+/* ============================================================
+   RESPONSIVE — Solo cambios estructurales de layout.
+   Valores de tamaño ya gestionados por clamp() arriba.
+   ============================================================ */
 
-/* Tablets y Desktops Medianos (hasta 1699px) */
-@media (max-width: 1699.98px) {
-    .hero-right {
-        flex-direction: column;
-        gap: 40px;
-        align-items: center;
-        width: 100%;
-        padding: 0 20px;
-    }
-
-    .floating-tags-container {
-        position: relative;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px;
-        z-index: 5;
-        width: calc(100% - 40px);
-        max-width: 500px;
-        padding: 15px;
-        transform: none;
-        left: 0;
-        top: 0;
-        order: 2;
-        box-sizing: border-box;
-        overflow: hidden;
-    }
-
-    .images-gallery {
-        order: 1;
-    }
-
-    .floating-tag {
-        padding: 10px 16px;
-        font-size: 0.85rem;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-}
-
-/* Desktop Ultra Grande (1700px+) - Tags a la izquierda */
-@media (min-width: 1700px) {
-    .hero-title {
-        font-size: 4rem;
-    }
-
-    .hero-description {
-        font-size: 1.25rem;
-    }
-
-    .hero-stats-grid {
-        gap: 30px;
-    }
-
-    .stat-circle {
-        width: 100px;
-        height: 100px;
-    }
-
-    .stat-number {
-        font-size: 2.2rem;
-    }
-
-    .images-gallery {
-        height: 500px;
-        max-width: 850px;
+/* TV / Ultrawide: 2000px+ */
+@media (min-width: 2000px) {
+    .hero-container {
+        max-width: 2200px;
         margin: 0 auto;
     }
 
-    .gallery-item {
-        width: 300px;
-        height: 400px;
-    }
-
-    .side-image-1 {
-        width: 240px;
-        height: 500px;
-        display: block ;
-    }
-
-    .side-image-2 {
-        width: 240px;
-        height: 550px;
-        display: block ;
-    }
-
-    .hero-right {
-        flex-direction: row;
-        position: relative;
-    }
-
+    /* En pantallas muy grandes los tags van en columna */
     .floating-tags-container {
-        position: absolute;
-        left: -180px;
-        top: 50%;
-        transform: translateY(-50%);
         flex-direction: column;
-        gap: 15px;
-        margin-top: 0;
-        width: auto;
-        order: auto;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .images-gallery {
+        margin-bottom: 0;
     }
 }
 
-/* Desktop Mediano (992px - 1199px) - Tags centrados como en 1200-1699 */
+/* Desktop grande: 1200px – 1999px → layout horizontal, sin cambios estructurales */
+/* clamp() lo maneja todo */
+
+/* Desktop mediano: 992px – 1199px */
 @media (min-width: 992px) and (max-width: 1199.98px) {
     .hero {
-        padding-top: 70px;
-        padding-bottom: 50px;
-    }
-
-    .hero-left {
-        padding-right: 30px;
-    }
-
-    .hero-right {
-        flex-direction: column;
-        gap: 30px;
-        align-items: center;
-        width: 100%;
-        padding: 0 20px;
-    }
-
-    .hero-title {
-        font-size: 3rem;
-    }
-
-    .hero-description {
-        font-size: 1rem;
-    }
-
-    .hero-stats-grid {
-        gap: 20px;
-    }
-
-    .stat-circle {
-        width: 80px;
-        height: 80px;
-    }
-
-    .stat-number {
-        font-size: 1.8rem;
-    }
-
-    .images-gallery {
-        height: 420px;
-        max-width: 700px;
-        margin: 0 auto;
-        order: 1;
-    }
-
-    .gallery-item {
-        width: 260px;
-        height: 350px;
-    }
-
-    .side-image-1 {
-        width: 200px;
-        height: 350px;
-        display: block !important;
-    }
-
-    .side-image-2 {
-        width: 200px;
-        height: 390px;
-        display: block !important;
-    }
-
-    .floating-tags-container {
-        position: relative;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 10px;
-        z-index: 5;
-        width: calc(100% - 40px);
-        max-width: 450px;
-        padding: 12px;
-        transform: none;
-        left: 0;
-        top: 0;
-        order: 2;
-        box-sizing: border-box;
-        overflow: hidden;
-    }
-
-    .floating-tag {
-        padding: 8px 14px;
-        font-size: 0.8rem;
-        white-space: nowrap;
-        flex-shrink: 0;
+        padding-top: clamp(60px, 8vh, 90px);
+        padding-bottom: clamp(40px, 5vh, 60px);
     }
 }
 
-/* Tablet (768px - 991px) */
+
+/* ---- Breakpoint estructural: < 992px → layout vertical (texto arriba, galería abajo) ---- */
 @media (max-width: 991.98px) {
     .hero {
-        padding-top: 50px;
-        padding-bottom: 30px;
+        padding-top: clamp(50px, 7vh, 80px);
+        padding-bottom: clamp(30px, 5vh, 60px);
     }
 
+    /* Texto arriba */
     .hero-left {
         order: 1;
         text-align: center;
-        padding: 0 20px;
+        padding: 0 clamp(12px, 4vw, 30px);
     }
 
+    /* Galería abajo */
     .hero-right {
         order: 2;
-        margin-bottom: 40px;
         width: 100%;
+        margin-top: clamp(16px, 3vh, 30px);
+        margin-bottom: clamp(60px, 10vh, 90px);
         padding: 0;
     }
 
-    .hero-title {
-        font-size: 2.8rem;
-    }
-
     .hero-description {
-        font-size: 1rem;
         max-width: 100%;
     }
 
     .hero-stats-grid {
-        gap: 15px;
-        max-width: 450px;
-        margin: 0 auto 1.5rem;
-    }
-
-    .stat-circle {
-        width: 70px;
-        height: 70px;
-    }
-
-    .stat-number {
-        font-size: 1.5rem;
+        max-width: clamp(260px, 60vw, 420px);
+        margin: 0 auto clamp(1rem, 2vh, 1.5rem);
     }
 
     .cta-group {
         justify-content: center;
     }
 
+    /* Galería en fila horizontal, las 3 imágenes visibles a la vez */
     .images-gallery {
-        height: 350px;
-        max-width: 350px;
-        margin: 0 auto;
-        gap: 10px;
-    }
-
-    .gallery-item {
-        width: 200px;
-        height: 280px;
-        position: absolute;
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    .gallery-item.active {
-        opacity: 1;
-        position: relative;
-        pointer-events: auto;
-    }
-
-    .main-image.active,
-    .side-image-1.active,
-    .side-image-2.active {
-        position: relative;
-        opacity: 1;
-        transform: scale(1);
-        pointer-events: auto;
-    }
-
-    .floating-tags-container {
-        position: relative;
         flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        margin: 20px auto 0;
-        flex-wrap: wrap;
-        gap: 10px;
-        transform: none;
-        width: calc(100% - 40px);
-        max-width: 400px;
-        padding: 10px;
-        box-sizing: border-box;
-        display: flex;
-    }
-
-    .floating-tag {
-        padding: 6px 12px;
-        font-size: 0.75rem;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-
-    .gallery-indicators {
-        bottom: -50px;
-    }
-}
-
-
-/* Móvil Grande (576px - 767px) */
-@media (max-width: 767.98px) {
-    .hero {
-        padding-top: 40px;
-        padding-bottom: 20px;
-        min-height: auto;
-    }
-
-    .hero-left {
-        order: 1;
-        text-align: center;
-        padding: 0 15px;
-    }
-
-    .hero-right {
-        order: 2;
-        width: 100%;
-        margin-bottom: 30px;
-        padding: 0;
-    }
-
-    .hero-title {
-        font-size: 2.2rem;
-        margin-bottom: 1rem;
-    }
-
-    .hero-badge {
-        font-size: 0.75rem;
-        padding: 6px 12px;
-    }
-
-    .hero-description {
-        font-size: 0.95rem;
-        padding: 16px 20px;
-        margin-bottom: 1.5rem;
-    }
-
-    .hero-stats-grid {
-        gap: 12px;
-        margin-bottom: 1.5rem;
-        padding: 0 10px;
-    }
-
-    .stat-circle {
-        width: 60px;
-        height: 60px;
-    }
-
-    .stat-number {
-        font-size: 1.3rem;
-    }
-
-    .stat-label {
-        font-size: 0.8rem;
-    }
-
-    .cta-button {
-        width: 100%;
-        height: 46px;
-    }
-
-    .cta-group {
-        flex-direction: column;
-        padding: 0 10px;
-    }
-
-    .images-gallery {
-        height: 300px;
-        max-width: 280px;
+        align-items: flex-end;
+        gap: clamp(6px, 2vw, 16px);
+        max-width: clamp(280px, 80vw, 450px);
         margin: 0 auto;
-        gap: 10px;
+        padding-bottom: clamp(40px, 6vh, 60px);
+        height: auto;
     }
 
+    /* En tablet/móvil todas las imágenes se ven sin el efecto activo/inactivo */
     .gallery-item {
-        width: 200px;
-        height: 270px;
-        position: absolute;
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    .gallery-item.active {
+        position: static;
         opacity: 1;
-        position: relative;
         pointer-events: auto;
-    }
-
-    .main-image.active,
-    .side-image-1.active,
-    .side-image-2.active {
-        position: relative;
-        opacity: 1;
-        transform: scale(1);
-        pointer-events: auto;
-    }
-
-    .floating-tags-container {
-        position: relative;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        margin: 15px auto 0;
-        flex-wrap: wrap;
-        gap: 6px;
-        transform: none;
-        width: calc(100% - 30px);
-        max-width: 300px;
-        padding: 8px;
-        box-sizing: border-box;
-        display: flex;
-    }
-
-    .floating-tag {
-        padding: 6px 12px;
-        font-size: 0.75rem;
-        white-space: nowrap;
         flex-shrink: 0;
+        filter: brightness(1) !important;
     }
 
-    .gallery-indicators {
-        bottom: -45px;
-    }
-}
-@media (max-width: 575.98px) {
-    .hero {
-        padding-top: 30px;
-        padding-bottom: 20px;
-        min-height: auto;
-    }
-
-    .hero-left {
-        order: 1;
-        text-align: center;
-        padding: 0 10px;
-    }
-
-    .hero-right {
-        order: 2;
-        width: 100%;
-        margin-bottom: 25px;
-        padding: 0;
-    }
-
-    .hero-title {
-        font-size: 1.8rem;
-        margin-bottom: 0.8rem;
-    }
-
-    .hero-badge {
-        font-size: 0.7rem;
-        padding: 5px 10px;
-    }
-
-    .hero-description {
-        font-size: 0.9rem;
-        padding: 12px 16px;
-        margin-bottom: 1.2rem;
-    }
-
-    .hero-stats-grid {
-        gap: 10px;
-        margin-bottom: 1.2rem;
-        padding: 0 5px;
-    }
-
-    .stat-circle {
-        width: 50px;
-        height: 50px;
-    }
-
-    .stat-number {
-        font-size: 1.1rem;
-    }
-
-    .stat-label {
-        font-size: 0.7rem;
-    }
-
-    .cta-button {
-        width: 100%;
-        height: 42px;
-        font-size: 0.8rem;
-    }
-
-    .cta-group {
-        flex-direction: column;
-        padding: 0 5px;
-    }
-
-    .images-gallery {
-        height: 250px;
-        max-width: 240px;
-        margin: 0 auto;
-        gap: 10px;
-    }
-
-    .gallery-item {
-        width: 170px;
-        height: 230px;
-        position: absolute;
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    .gallery-item.active {
-        opacity: 1;
-        position: relative;
-        pointer-events: auto;
-    }
-
-    .main-image.active,
-    .side-image-1.active,
-    .side-image-2.active {
-        position: relative;
-        opacity: 1;
-        transform: scale(1);
-        pointer-events: auto;
-    }
-
+    .main-image,
     .side-image-1,
     .side-image-2 {
-        display: block;
+        animation-duration: 4s;
     }
 
-    .floating-tags-container {
+    .main-image.active,
+    .side-image-1.active,
+    .side-image-2.active {
         position: static;
-        flex-direction: row;
-        justify-content: center;
-        margin-top: 12px;
-        flex-wrap: wrap;
-        gap: 5px;
-        transform: none;
+        opacity: 1;
+        pointer-events: auto;
+        filter: brightness(1);
     }
 
-    .floating-tag {
-        padding: 5px 10px;
-        font-size: 0.7rem;
-    }
-
-    .indicator {
-        width: 9px;
-        height: 9px;
+    /* Indicadores visibles en móvil/tablet */
+    .gallery-indicators {
+        display: flex;
+        bottom: 8px;
+        z-index: 25;
     }
 }
 
-/* Accesibilidad */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+/* Móvil pequeño: < 576px — ajuste de padding extra solamente */
+@media (max-width: 575.98px) {
+    .hero-left {
+        padding: 0 clamp(8px, 3vw, 16px);
+    }
+
+    .cta-group {
+        flex-direction: column;
+        padding: 0 clamp(8px, 3vw, 16px);
+    }
+
+    .cta-button {
+        width: 100%;
     }
 }
 
-/* ===== ANIMACIONES ON SCROLL ===== */
+/* ========== ANIMACIONES ON SCROLL ========== */
 .animate-on-scroll {
     opacity: 1;
     transform: translateY(0);
@@ -1062,16 +604,21 @@
     transform: translateY(0);
 }
 
-/* ===== EFECTO FLOTANTE PARA IMÁGENES ===== */
+/* ========== FLOAT PARA DESKTOP ========== */
 .floating-image {
     animation: float 3s ease-in-out infinite;
 }
 
 @keyframes float {
-    0%, 100% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-15px);
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-15px); }
+}
+
+/* ========== ACCESIBILIDAD ========== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }
