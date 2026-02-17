@@ -1,201 +1,218 @@
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   CREATE BUSINESS COMPONENT - ESTILOS
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-
-/* Azul para Títulos y Bordes de Alerta */
-.text-primary {
-    color: #0d6eff !important; 
-}
-.border-primary {
-    border-color: #0d6eff !important; 
-}
-
-/* Verde Oscuro para el botón principal */
-.btn-success {
-    background-color: #105f34; 
-    border-color: #105f34;
-    color: white; 
-}
-
-/* Ajuste para los checks de la lista en la alerta de confianza */
-.text-success {
-    color: #105f34 !important; 
-}
-
-/* Fondo de página ligero */
+/* 🏠 CONTENEDOR PRINCIPAL */
 .container {
-    background-color: #f8f9fa; 
-    min-height: 100vh;
+  background-color: var(--color-bg-light);
+  min-height: 100vh;
 }
 
-/* 2. Panel del Formulario (Look & Feel) */
+/* 📝 PANEL DEL FORMULARIO */
 .form-panel {
-    background-color: white;
-    
-    box-shadow: 0 10px 30px rgba(106, 164, 134, 0.2); 
-    border-radius: 18px; 
-    border: 1px solid #e0e0e0; 
-    padding: 3rem !important; 
+  background-color: var(--color-bg-white);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-light);
+  padding: 3rem;
 }
 
-/* Títulos de Sección (Fieldset/Legend) */
+/* 🔖 LEYENDAS Y TÍTULOS */
 legend {
-    font-size: 1.4rem; 
-    color: #105f34 !important; 
-    border-bottom: 2px solid #6aa486; 
-    padding-bottom: 8px;
-    margin-bottom: 20px !important;
-    font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--color-success);
+  border-bottom: 2px solid var(--color-success-light);
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+  font-weight: 700;
 }
 
-/* Etiquetas de campo */
+h1, h2, h3 {
+  color: var(--color-primary);
+}
+
+/* 📌 ETIQUETAS DE CAMPO */
 .form-label {
-    font-weight: 600; 
-    color: #34495e;
-    margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+  display: block;
 }
 
-/* 3. Estilo de Inputs y Placeholders */
+.text-danger {
+  color: var(--color-danger);
+}
 
+/* 📥 INPUTS Y CONTROLES */
 .form-control {
-    border-radius: 10px; 
-    padding: 0.75rem 1rem;
-    border: 1px solid #ccc;
-    transition: all 0.2s;
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  transition: all 0.2s ease;
 }
 
-/* REQUERIDO: Placeholder más pequeño y discreto */
 .form-control::placeholder {
-    color: #999;
-    font-size: 0.85rem; 
-    font-style: italic;
+  color: #999;
+  font-size: 0.85rem;
+  font-style: italic;
 }
 
-/* Foco de Input (Azul Brillante para Feedback) */
 .form-control:focus {
-    border-color: #0d6eff; 
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 255, 0.3); 
-    background-color: #fafff8; 
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 255, 0.3);
+  background-color: var(--color-bg-form);
+  outline: none;
 }
 
-/* Input Inválido */
 .form-control.is-invalid {
-    border-color: #dc3545; 
-    background-color: #fff7f7;
+  border-color: var(--color-danger);
+  background-color: var(--color-bg-error);
 }
 
-/* Área de Carga de Logo */
+.form-control.is-invalid:focus {
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+/* 🎯 MENSAJES DE ERROR */
+.invalid-feedback {
+  color: var(--color-danger);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+[role="alert"] {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 📤 ZONA DE CARGA DE LOGO */
 .logo-upload-box {
-    border-style: dashed !important;
-    border-color: #6aa486 !important; 
-    background-color: #f6fdf9; 
-    transition: border-color 0.3s;
-    border-radius: 10px;
+  border: 2px dashed var(--color-success-light);
+  background-color: var(--color-bg-success);
+  border-radius: var(--radius-sm);
+  transition: all 0.3s ease;
+  padding: 2rem 1rem;
 }
 
 .logo-upload-box:hover {
-    border-color: #105f34 !important; 
+  border-color: var(--color-success);
+  background-color: #f2fef9;
 }
 
-/* 4. Efectos del Botón de Envío */
+.logo-upload-box small {
+  font-size: 0.8rem;
+}
+
+/* 🔘 BOTÓN PRINCIPAL */
+.btn-success {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+  color: var(--color-bg-white);
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.btn-success:hover:not(:disabled) {
+  background-color: var(--color-success-dark);
+  border-color: var(--color-success-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-success:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-success:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
 
 .transition-hover {
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.btn-success:hover {
-    background-color: #0c4d2b; 
-    border-color: #0c4d2b;
-    transform: translateY(-4px); 
-    /* Sombra para el botón */
-    box-shadow: 0 10px 20px rgba(16, 95, 52, 0.5); 
+/* ⏳ SPINNER DE CARGA */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15em;
 }
 
-/* 5. Ajuste de Alerta (texto de confianza) */
-.alert-info {
-    border-color: #0d6eff ; 
-    background-color: #f7faff;
-}
-.text-info {
-    color: #7c3268 ; 
-}
-.success-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
+/* 🎀 ALERTA INFORMATIVA */
+.alert-light {
+  border-color: var(--color-primary);
+  background-color: var(--color-bg-alert);
 }
 
-.success-card {
-  background: white;
-  max-width: 400px;
-  animation: zoomIn 0.4s ease;
+.alert-light i {
+  color: var(--color-primary);
 }
 
-@keyframes zoomIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-.success-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.65);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  backdrop-filter: blur(3px);
-  z-index: 9999;
+/* 🎯 ACCESIBILIDAD - Reducir movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .form-control,
+  .form-control:focus,
+  .btn-success,
+  .logo-upload-box,
+  [role="alert"] {
+    transition: none;
+  }
+
+  .logo-upload-box:hover {
+    transform: none;
+  }
+
+  .btn-success:hover:not(:disabled) {
+    transform: none;
+  }
 }
 
-.success-modal {
-  background: #fff;
-  padding: 40px 30px;
-  border-radius: 20px;
-  text-align: center;
-  max-width: 420px;
-  width: 90%;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+/* 📱 RESPONSIVE - Tablets y menores */
+@media (max-width: 768px) {
+  .form-panel {
+    padding: 2rem;
+  }
+
+  legend {
+    font-size: 1.2rem;
+  }
+
+  .form-control-lg {
+    padding: 0.6rem 0.8rem;
+  }
 }
 
-.icon-circle {
-  width: 90px;
-  height: 90px;
-  background: linear-gradient(135deg, #28a745, #5ddc89);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto 15px;
-}
+/* 📱 RESPONSIVE - Móviles */
+@media (max-width: 576px) {
+  .form-panel {
+    padding: 1.5rem;
+  }
 
-.icon-circle i {
-  font-size: 48px;
-  color: white;
-}
+  legend {
+    font-size: 1rem;
+  }
 
-.loader {
-  margin: 20px auto 0;
-  width: 40px;
-  height: 40px;
-  border: 4px solid #e9ecef;
-  border-top: 4px solid #28a745;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
+  .display-5 {
+    font-size: 2rem;
+  }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+  .btn {
+    font-size: 0.95rem;
+  }
 
-.animate-pop {
-  animation: pop 0.4s ease;
-}
-
-@keyframes pop {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  .logo-upload-box {
+    padding: 1rem 0.75rem;
+  }
 }

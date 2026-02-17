@@ -3,6 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environments } from '../environments/environments';
 
+export interface BusinessCreationResponse {
+  id: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -21,8 +25,8 @@ export class BusinessService {
   // ----------------------
   // BUSINESS
   // ----------------------
-  createBusiness(formData: FormData): Observable<any> {
-    return this.http.post(this.businessUrl, formData);
+  createBusiness(formData: FormData): Observable<BusinessCreationResponse> {
+    return this.http.post<BusinessCreationResponse>(this.businessUrl, formData);
   }
 
   getBusinessById(id: string | number): Observable<any> {

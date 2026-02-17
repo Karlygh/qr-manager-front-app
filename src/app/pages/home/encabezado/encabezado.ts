@@ -1,16 +1,12 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-encabezado',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule
-  ],
+  imports: [RouterLink],
   templateUrl: './encabezado.html',
-  styleUrls: ['./encabezado.css']
+  styleUrls: ['./encabezado.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Encabezado {
-}
+export class Encabezado {}

@@ -23,6 +23,7 @@
               }
             ],
             "styles": [
+              "src/assets/styles/theme.css",
               "src/styles.css"
             ],
             "server": "src/main.server.ts",

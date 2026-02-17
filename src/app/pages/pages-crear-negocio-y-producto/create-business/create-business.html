@@ -3,14 +3,19 @@
     <div class="col-lg-8 col-md-10">
       
       <header class="text-center mb-5">
-        <h2 class="display-5 fw-bold text-primary">🚀 ¡Crea tu Espacio de Gestión!</h2>
+        <h1 class="display-5 fw-bold text-primary">🚀 ¡Crea tu Espacio de Gestión!</h1>
         <p class="lead text-muted">Para desbloquear todas las funcionalidades de control de clientes, inventario y operaciones, necesitamos la información fundamental de tu negocio.</p>
-        
       </header>
 
-      <form [formGroup]="businessForm" (submit)="onSubmit()" class="form-panel p-4 p-md-5 shadow-lg border-0 rounded-3 row g-4">
+      <form 
+        [formGroup]="businessForm" 
+        (ngSubmit)="onSubmit()" 
+        class="form-panel p-4 p-md-5 shadow-lg border-0 rounded-3 row g-4"
+        novalidate
+        aria-label="Formulario de creación de negocio"
+      >
           <div class="alert alert-light border-start border-5 border-primary text-primary text-start mt-4 p-3" role="alert">
-        <i class="bi bi-info-circle-fill me-2 text-primary"></i> 
+        <i class="bi bi-info-circle-fill me-2 text-primary" aria-hidden="true"></i> 
         <small class="text-primary">Al registrar tu negocio, iniciarás la configuración inicial de tu Panel de Control. Podrás acceder para empezar con tu negocio. Los datos son 100% confidenciales.</small>
 </div>
         
@@ -18,23 +23,55 @@
             <legend class="fw-bold mb-3 text-secondary">1. Identidad de Marca</legend>
 
             <div class="col-12 mb-3">
-              <label class="form-label">Nombre del Negocio *</label>
-              <input type="text" formControlName="name" class="form-control form-control-lg" required 
-                     [ngClass]="{'is-invalid': nameControl?.invalid && (nameControl?.dirty || nameControl?.touched)}">
+              <label for="name-input" class="form-label">
+                {{ constants.FORM_LABELS.BUSINESS_NAME }} <span class="text-danger" aria-label="requerido">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="name-input"
+                formControlName="name" 
+                class="form-control form-control-lg" 
+                required 
+                [ngClass]="{'is-invalid': nameControl?.invalid && (nameControl?.dirty || nameControl?.touched)}"
+                aria-required="true"
+                [attr.aria-describedby]="nameControl?.invalid && (nameControl?.dirty || nameControl?.touched) ? 'name-error' : null"
+              >
               
-              <div *ngIf="nameControl?.invalid && (nameControl?.dirty || nameControl?.touched)" class="invalid-feedback">
-                  <div *ngIf="nameControl?.errors?.['required']">El nombre del negocio es obligatorio.</div>
-                  <div *ngIf="nameControl?.errors?.['minlength']">Debe tener al menos 3 caracteres.</div>
+              <div 
+                *ngIf="nameControl?.invalid && (nameControl?.dirty || nameControl?.touched)" 
+                id="name-error"
+                class="invalid-feedback d-block"
+                role="alert"
+              >
+                  <div *ngIf="nameControl?.errors?.['required']">{{ constants.ERROR_MESSAGES.REQUIRED_FIELD }}</div>
+                  <div *ngIf="nameControl?.errors?.['minlength']">{{ constants.ERROR_MESSAGES.MIN_LENGTH_NAME }}</div>
               </div>
             </div>
 
             <div class="col-12">
-              <label class="form-label">Una breve descripción</label>
-              <textarea formControlName="description" class="form-control" rows="3" placeholder="Describe a qué se dedica tu negocio (ej: Venta de café y postres)."
-                [ngClass]="{'is-invalid': descriptionControl?.invalid && (descriptionControl?.dirty || descriptionControl?.touched)}"></textarea>
+              <label for="description-input" class="form-label">
+                {{ constants.FORM_LABELS.DESCRIPTION }} <span class="text-danger" aria-label="requerido">*</span>
+              </label>
+              <textarea 
+                id="description-input"
+                formControlName="description" 
+                class="form-control" 
+                rows="3" 
+                placeholder="Describe a qué se dedica tu negocio (ej: Venta de café y postres)."
+                required
+                [ngClass]="{'is-invalid': descriptionControl?.invalid && (descriptionControl?.dirty || descriptionControl?.touched)}"
+                aria-required="true"
+                [attr.aria-describedby]="descriptionControl?.invalid && (descriptionControl?.dirty || descriptionControl?.touched) ? 'description-error' : null"
+              ></textarea>
               
-              <div *ngIf="descriptionControl?.invalid && (descriptionControl?.dirty || descriptionControl?.touched)" class="invalid-feedback">
-                  <div *ngIf="descriptionControl?.errors?.['minlength']">La descripción debe tener al menos 5 caracteres.</div>
+              <div 
+                *ngIf="descriptionControl?.invalid && (descriptionControl?.dirty || descriptionControl?.touched)" 
+                id="description-error"
+                class="invalid-feedback d-block"
+                role="alert"
+              >
+                  <div *ngIf="descriptionControl?.errors?.['required']">{{ constants.ERROR_MESSAGES.REQUIRED_FIELD }}</div>
+                  <div *ngIf="descriptionControl?.errors?.['minlength']">{{ constants.ERROR_MESSAGES.MIN_LENGTH_DESC }}</div>
               </div>
             </div>
         </fieldset>
@@ -44,29 +81,84 @@
             
             <div class="row g-4">
                 <div class="col-md-6 col-12">
-                  <label class="form-label">Email Principal *</label>
-                  <input type="email" formControlName="email" class="form-control" placeholder="contacto@minegocio.com" required
-                         [ngClass]="{'is-invalid': emailControl?.invalid && (emailControl?.dirty || emailControl?.touched)}">
+                  <label for="email-input" class="form-label">
+                    {{ constants.FORM_LABELS.EMAIL }} <span class="text-danger" aria-label="requerido">*</span>
+                  </label>
+                  <input 
+                    type="email" 
+                    id="email-input"
+                    formControlName="email" 
+                    class="form-control" 
+                    placeholder="contacto@minegocio.com" 
+                    required
+                    [ngClass]="{'is-invalid': emailControl?.invalid && (emailControl?.dirty || emailControl?.touched)}"
+                    aria-required="true"
+                    [attr.aria-describedby]="emailControl?.invalid && (emailControl?.dirty || emailControl?.touched) ? 'email-error' : null"
+                  >
                   
-                  <div *ngIf="emailControl?.invalid && (emailControl?.dirty || emailControl?.touched)" class="invalid-feedback">
-                      <div *ngIf="emailControl?.errors?.['required']">El email es obligatorio.</div>
-                      <div *ngIf="emailControl?.errors?.['email']">Debe ser un email con formato válido.</div>
+                  <div 
+                    *ngIf="emailControl?.invalid && (emailControl?.dirty || emailControl?.touched)" 
+                    id="email-error"
+                    class="invalid-feedback d-block"
+                    role="alert"
+                  >
+                      <div *ngIf="emailControl?.errors?.['required']">{{ constants.ERROR_MESSAGES.REQUIRED_FIELD }}</div>
+                      <div *ngIf="emailControl?.errors?.['email']">{{ constants.ERROR_MESSAGES.INVALID_EMAIL }}</div>
                   </div>
                 </div>
 
                 <div class="col-md-6 col-12">
-                  <label class="form-label">Teléfono</label>
-                  <input type="text" formControlName="phoneNumber" class="form-control" placeholder="9 dígitos, sin prefijo"
-                    [ngClass]="{'is-invalid': phoneNumberControl?.invalid && (phoneNumberControl?.dirty || phoneNumberControl?.touched)}">
+                  <label for="phone-input" class="form-label">
+                    {{ constants.FORM_LABELS.PHONE }} <span class="text-danger" aria-label="requerido">*</span>
+                  </label>
+                  <input 
+                    type="tel" 
+                    id="phone-input"
+                    formControlName="phoneNumber" 
+                    class="form-control" 
+                    placeholder="9 dígitos, sin prefijo"
+                    required
+                    [ngClass]="{'is-invalid': phoneNumberControl?.invalid && (phoneNumberControl?.dirty || phoneNumberControl?.touched)}"
+                    aria-required="true"
+                    [attr.aria-describedby]="phoneNumberControl?.invalid && (phoneNumberControl?.dirty || phoneNumberControl?.touched) ? 'phone-error' : null"
+                    pattern="[0-9]{9}"
+                  >
                   
-                  <div *ngIf="phoneNumberControl?.invalid && (phoneNumberControl?.dirty || phoneNumberControl?.touched)" class="invalid-feedback">
-                      <div *ngIf="phoneNumberControl?.errors?.['minlength'] || phoneNumberControl?.errors?.['maxLength']">El teléfono debe tener exactamente 9 dígitos.</div>
+                  <div 
+                    *ngIf="phoneNumberControl?.invalid && (phoneNumberControl?.dirty || phoneNumberControl?.touched)" 
+                    id="phone-error"
+                    class="invalid-feedback d-block"
+                    role="alert"
+                  >
+                      <div *ngIf="phoneNumberControl?.errors?.['required']">{{ constants.ERROR_MESSAGES.REQUIRED_FIELD }}</div>
+                      <div *ngIf="phoneNumberControl?.errors?.['invalidPhone']">{{ constants.ERROR_MESSAGES.INVALID_PHONE }}</div>
                   </div>
                 </div>
 
                 <div class="col-12">
-                  <label class="form-label">Dirección</label>
-                  <input type="text" formControlName="address" class="form-control" placeholder="Ej: Calle Gran Vía 10, Madrid, España">
+                  <label for="address-input" class="form-label">
+                    {{ constants.FORM_LABELS.ADDRESS }} <span class="text-danger" aria-label="requerido">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    id="address-input"
+                    formControlName="address" 
+                    class="form-control" 
+                    placeholder="Ej: Calle Gran Vía 10, Madrid, España"
+                    required
+                    [ngClass]="{'is-invalid': addressControl?.invalid && (addressControl?.dirty || addressControl?.touched)}"
+                    aria-required="true"
+                    [attr.aria-describedby]="addressControl?.invalid && (addressControl?.dirty || addressControl?.touched) ? 'address-error' : null"
+                  >
+                  
+                  <div 
+                    *ngIf="addressControl?.invalid && (addressControl?.dirty || addressControl?.touched)" 
+                    id="address-error"
+                    class="invalid-feedback d-block"
+                    role="alert"
+                  >
+                      <div *ngIf="addressControl?.errors?.['required']">{{ constants.ERROR_MESSAGES.REQUIRED_FIELD }}</div>
+                  </div>
                 </div>
             </div>
         </fieldset>
@@ -75,14 +167,35 @@
           <legend class="fw-bold mb-3 text-secondary">3. Personalización (Logo)</legend>
           
           <div class="logo-upload-box text-center p-4 border border-dashed rounded-3">
-            <p class="mb-1 text-muted">Sube tu logo para personalizar tu sistema.</p>
-            <input type="file" (change)="onFileChange($event)" class="form-control">
+            <p class="mb-1 text-muted">{{ constants.FORM_LABELS.LOGO }}</p>
+            <input 
+              type="file" 
+              (change)="onFileChange($event)" 
+              class="form-control"
+              accept=".jpg,.jpeg,.png,.gif,.webp"
+              aria-label="Selecciona un archivo de imagen para el logo"
+            >
+            <small class="text-muted d-block mt-2">
+              Máximo 5MB. Formatos: JPG, PNG, GIF, WebP
+            </small>
           </div>
         </fieldset>
 
         <div class="col-12 mt-4">
-          <button type="submit" [disabled]="businessForm.invalid" class="btn btn-success btn-lg w-100 shadow-sm transition-hover">
-            <i class="bi bi-rocket-takeoff me-2"></i> Crear y Acceder al Sistema
+          <button 
+            type="submit" 
+            [disabled]="businessForm.invalid || isLoading()" 
+            class="btn btn-success btn-lg w-100 shadow-sm transition-hover"
+            [attr.aria-busy]="isLoading()"
+          >
+            <span *ngIf="!isLoading()">
+              <i class="bi bi-rocket-takeoff me-2" aria-hidden="true"></i> 
+              Crear y Acceder al Sistema
+            </span>
+            <span *ngIf="isLoading()">
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Creando...
+            </span>
           </button>
         </div>
 
@@ -91,16 +204,8 @@
   </div>
 </div>
 
-
-<!-- ✅ MODAL PROFESIONAL -->
-<div *ngIf="businessCreated" class="success-overlay">
-  <div class="success-modal animate-pop">
-    <div class="icon-circle">
-      <i class="bi bi-patch-check-fill"></i>
-    </div>
-    <h3>¡Negocio creado con éxito!</h3>
-    <p>Estamos preparando tu panel de control.<br>
-       Serás redirigido en unos segundos...</p>
-    <div class="loader"></div>
-  </div>
-</div>
+<!-- Modal de éxito -->
+<app-business-success-modal 
+  [isVisible]="businessCreated()"
+  (redirectNeeded)="onRedirectToPanel()"
+></app-business-success-modal>

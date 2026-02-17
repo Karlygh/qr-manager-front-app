@@ -1,63 +1,77 @@
+/* ====================================
+   0. VARIABLES CSS
+   ==================================== */
+
+:host {
+  --color-panel-bg: #105f34;
+  --color-white: #fff;
+  --color-subtitle-text: #265433;
+  --color-subtitle-bg: #b7f1c7;
+  --color-border-heading: #99cfb1;
+  --color-feature-bg: rgba(255, 255, 255, 0.1);
+  --color-feature-bg-hover: rgba(255, 255, 255, 0.2);
+  --shadow-phone: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
 .recafy-panel {
-  background-color: #105f34;
-  color: #fff;
+  background-color: var(--color-panel-bg);
+  color: var(--color-white);
   position: relative;
 }
 
-  .device-wrapper {
-    position: relative;
-  }
+.device-wrapper {
+  position: relative;
+}
 
-  /* === IMÁGENES === */
-  .monitor {
-    transition: transform 0.4s ease, box-shadow 0.3s ease;
-    border-radius: 10px;
-  }
+.monitor {
+  transition: transform 0.4s ease, box-shadow 0.3s ease;
+  border-radius: 10px;
+}
 
 .phone {
   position: absolute;
   bottom: -40px;
-  right: -35px; /* 💡 fuerza el desplazamiento más a la derecha */
+  right: -35px; 
   width: 33%;
-  border: 2px solid #fff; /* borde más fino */
+  border: 2px solid var(--color-white); 
   border-radius: 20px;
   transform: rotate(3deg);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-phone);
   transition: all 0.3s ease;
   z-index: 3;
 }
+
 .phone:hover {
   transform: rotate(0deg) scale(1.02);
 }
 
-  .device-wrapper:hover .monitor {
-    transform: translateY(-5px);
-  }
+.device-wrapper:hover .monitor {
+  transform: translateY(-5px);
+}
 
-  .device-wrapper:hover .phone {
-    transform: translateY(-8px) rotate(0deg);
-  }
+.device-wrapper:hover .phone {
+  transform: translateY(-8px) rotate(0deg);
+}
 
-  /* === FEATURE BOX === */
-  .feature-box {
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 1rem 1.2rem;
-    backdrop-filter: blur(8px);
-    transition: all 0.3s ease;
-  }
+.feature-box {
+  display: flex;
+  align-items: center;
+  background: var(--color-feature-bg);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
 
   .feature-box:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--color-feature-bg-hover);
     transform: translateY(-4px);
   }
 
   .icon-box {
     width: 45px;
     height: 45px;
-    background: #fff;
+    background: var(--color-white);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -68,12 +82,11 @@
   }
 
   .highlight-subtitle {
-    color: #265433;
+    color: var(--color-subtitle-text);
     letter-spacing: 0.05em;
     transition: all 0.3s ease;
-    background-color:#b7f1c7;
+    background-color: var(--color-subtitle-bg);
     padding: 3px;
-    
   }
 
   .highlight-subtitle:hover {
@@ -81,10 +94,9 @@
     text-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
   }
 
-  /* === BOTÓN === */
   .btn-light {
-    color: #105f34 !important;
-    background: #fff;
+    color: var(--color-panel-bg);
+    background: var(--color-white);
     transition: all 0.3s ease;
   }
 
@@ -100,13 +112,13 @@
   .hover-grow:hover {
     transform: scale(1.05);
   }
+
   h2 {
-        font-family: 'Momo Trust Display', sans-serif;
-        letter-spacing: 0.12em;
-        border-bottom: 1px solid #99cfb1;
+    font-family: 'Momo Trust Display', sans-serif;
+    letter-spacing: 0.12em;
+    border-bottom: 1px solid var(--color-border-heading);
   }
 
-  /* === RESPONSIVE === */
   @media (max-width: 768px) {
     .phone {
       position: relative;
@@ -117,15 +129,16 @@
       margin-top: 1.5rem;
     }
   }
+
   @media (max-width: 767px) {
-  .phone {
-    border-width: 0;
-    box-shadow: none;
+    .phone {
+      border-width: 0;
+      box-shadow: none;
+    }
   }
 
-}
-@media (min-width: 992px) {
-  .pc-move {
-    transform: translateX(-30px);
+  @media (min-width: 992px) {
+    .pc-move {
+      transform: translateX(-30px);
+    }
   }
-}
