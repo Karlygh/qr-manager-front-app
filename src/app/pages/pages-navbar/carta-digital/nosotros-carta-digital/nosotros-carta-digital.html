@@ -7,53 +7,29 @@
 
     <div class="row g-4">
 
-      <!-- ITEM 1 -->
-      <div class="col-md-4">
+      <!-- TARJETAS DINÁMICAS -->
+      <div 
+        *ngFor="let card of cards; let i = index"
+        class="col-md-4"
+        role="article"
+        [attr.aria-label]="'Característica ' + (i + 1) + ': ' + card.title"
+      >
         <div class="qr-card h-100">
+          <!-- CONTENIDO -->
           <div class="qr-card-body">
-            <h4 class="qr-card-title">Se adapta a cualquier negocio</h4>
+            <h3 class="qr-card-title">{{ card.title }}</h3>
             <p class="qr-card-text">
-              Desde pequeños locales hasta grandes cadenas, QR-Manager funciona para cualquier tipo de restaurante.
+              {{ card.description }}
             </p>
           </div>
-          <img 
-            src="../../assets/mockup/QR-MANAGER.jpg"
-            class="qr-card-img"
-            alt="QR-Manager adaptado a negocios"
-          >
-        </div>
-      </div>
 
-      <!-- ITEM 2 -->
-      <div class="col-md-4">
-        <div class="qr-card h-100">
-          <div class="qr-card-body">
-            <h4 class="qr-card-title">Tan fácil que lo usarás desde el primer minuto</h4>
-            <p class="qr-card-text">
-              Una plataforma intuitiva, clara y rápida. Valorada con 9/10 por su facilidad de uso.
-            </p>
-          </div>
+          <!-- IMAGEN -->
           <img 
-            src="../../assets/mockup/movil-gemini-carta-digital.png"
+            [src]="card.imageUrl"
+            [alt]="card.imageAlt"
             class="qr-card-img"
-            alt="Interfaz sencilla QR-Manager"
-          >
-        </div>
-      </div>
-
-      <!-- ITEM 3 -->
-      <div class="col-md-4">
-        <div class="qr-card h-100">
-          <div class="qr-card-body">
-            <h4 class="qr-card-title">Soporte rápido y humano</h4>
-            <p class="qr-card-text">
-              Más del 95% de las consultas se responden en menos de 24 horas. Siempre tendrás ayuda cuando la necesites.
-            </p>
-          </div>
-          <img 
-            src="../../assets/mockup/operador.jpg"
-            class="qr-card-img"
-            alt="Soporte QR-Manager"
+            (error)="handleImageError($event)"
+            loading="lazy"
           >
         </div>
       </div>

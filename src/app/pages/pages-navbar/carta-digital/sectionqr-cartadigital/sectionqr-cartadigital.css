@@ -75,18 +75,19 @@
 
 /* HOVER EFFECT: Cambio de color del botón */
 .cta-button.primary:hover {
-    background-color:#d9e377;
+    background-color:#c5d966;
     border-color: var(--color-accent);
     transform: translateY(-5px); /* Pequeño levantamiento */
-    box-shadow: 0 5px 15px rgba(239, 239, 239, 0.2);
-    padding: 40px;
+    box-shadow: 0 8px 20px rgba(16, 95, 52, 0.15);
 }
+
 p.step-description {
     color: #d7f6e6;
     font-size: 1rem;
     line-height: 1.5;
     margin-top: 0.5rem;
 }
+
 h3.step-title {
     margin-top: 1rem;
     margin-bottom: 0.5rem;
@@ -95,16 +96,22 @@ h3.step-title {
     padding: 0.5rem 0.5rem;
     border-radius: 5px;
 }
+
 h2.section-title {
     color: #d7f6e6;
     font-weight: 700;
     margin-bottom: 2rem;
     text-align: center;
 }
-span{
+
+.highlight-steps {
     color: #d9e377;
-    
+    font-size: 4rem;
+    display: block;
+    font-weight: 900;
+    margin-top: 0.5rem;
 }
+
 .section-subtitle {
     color: #105f34;
     text-align: center;
@@ -112,11 +119,64 @@ span{
     padding: 0.5rem 0.5rem;
     border-radius: 15px;
 }
+
 /* Media Queries: Ajustes menores */
 /* Bootstrap ya maneja la rejilla con row-cols-md-2 y row-cols-lg-4 */
-@media (max-width: 576px) {
-    /* Ajuste en móvil para el título */
+@media (max-width: 991.98px) {
     .section-title {
         font-size: 2rem;
+    }
+    
+    .highlight-steps {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .section-title {
+        font-size: 1.75rem;
+    }
+    
+    .highlight-steps {
+        font-size: 2.25rem;
+    }
+    
+    .step-card {
+        padding: 1.5rem !important;
+    }
+    
+    .step-description {
+        font-size: 0.9rem;
+    }
+    
+    .step-number {
+        width: 55px;
+        height: 55px;
+        font-size: 1.8rem;
+    }
+    
+    .cta-button.primary {
+        width: 100%;
+        padding: 14px 20px;
+    }
+}
+
+@media (max-width: 479px) {
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .highlight-steps {
+        font-size: 1.75rem;
+    }
+    
+    .step-card {
+        padding: 1rem !important;
+    }
+    
+    .step-number {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
     }
 }

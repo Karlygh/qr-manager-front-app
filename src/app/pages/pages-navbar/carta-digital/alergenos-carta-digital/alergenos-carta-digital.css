@@ -1,56 +1,171 @@
+/* ========================================
+   ALÉRGENOS CARTA DIGITAL - ESTILOS
+   Usa las variables del Design System global
+   ======================================== */
 
-/* Contenedor principal */
+/* ========================================
+   TARJETA PRINCIPAL
+   ======================================== */
 .feature-card {
-  border-radius: 20px;
-  transition: transform .3s ease, box-shadow .3s ease;
+  border-radius: var(--radius-md);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: var(--color-bg-white);
+  border: 1px solid var(--color-border-light);
 }
 
 .feature-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+  box-shadow: var(--shadow-md);
 }
 
-/* Imagen */
+/* ========================================
+   TÍTULOS Y TEXTOS
+   ======================================== */
+.allergen-title {
+  color: var(--color-green-dark);
+  font-size: 2.5rem;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.allergen-title:hover {
+  color: var(--color-accent-blue);
+}
+
+.allergen-description {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  transition: color 0.3s ease;
+}
+
+.allergen-highlight {
+  color: var(--color-accent-blue);
+  font-size: 1rem;
+  line-height: 1.6;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+/* ========================================
+   LISTA CON HOVER INTERACTIVO
+   ======================================== */
+.hover-list-item {
+  padding: var(--spacing-sm) 0;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--color-green-text);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+  border-left: 3px solid transparent;
+}
+
+.hover-list-item:hover {
+  color: var(--color-accent-blue);
+  transform: translateX(5px);
+  background-color: var(--color-bg-green-hover);
+  border-left-color: var(--color-green-medium);
+  box-shadow: 0 2px 8px rgba(77, 147, 99, 0.15);
+}
+
+/* ========================================
+   IMAGEN CON ZOOM
+   ======================================== */
 .hover-img {
-  transition: transform .4s ease, box-shadow .4s ease;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
 }
 
 .hover-img:hover {
   transform: scale(1.05);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+  box-shadow: var(--shadow-lg);
 }
 
-/* Lista con hover */
-.hover-list-item {
-  padding: 8px 0;
-  font-size: 1.05rem;
-  transition: color .3s ease, transform .3s ease;
+/* ========================================
+   ACCESIBILIDAD - Reducir movimiento
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .feature-card,
+  .hover-list-item,
+  .hover-img,
+  .allergen-title {
+    transition: none;
+  }
+
+  .feature-card:hover,
+  .hover-list-item:hover,
+  .hover-img:hover {
+    transform: none;
+  }
 }
 
-.hover-list-item:hover {
-  color: #0d6efd;
-  transform: translateX(5px);
-    background-color: #d7f6e6;
+/* ========================================
+   RESPONSIVE - Tablets (768px - 1024px)
+   ======================================== */
+@media (max-width: 991.98px) {
+  .allergen-title {
+    font-size: 2rem;
+  }
 
+  .allergen-description {
+    font-size: 1rem;
+  }
+
+  .allergen-highlight {
+    font-size: 0.95rem;
+  }
 }
 
-/* Texto */
-.text-info {
-  color: #488ccc;
+/* ========================================
+   RESPONSIVE - Móviles (< 768px)
+   ======================================== */
+@media (max-width: 767.98px) {
+  .feature-card {
+    padding: var(--spacing-lg) !important;
+  }
+
+  .allergen-title {
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .allergen-description {
+    font-size: 0.95rem;
+  }
+
+  .allergen-highlight {
+    font-size: 0.9rem;
+    margin-top: var(--spacing-md);
+  }
+
+  .hover-list-item {
+    font-size: 0.95rem;
+    padding: var(--spacing-sm) var(--spacing-sm);
+  }
 }
 
-.text-primary {
-  color: #0d6efd ;
-}
-h3{
-    color: #0a3b20 ;
-    font-size:2.5rem ;
+/* ========================================
+   RESPONSIVE - Pantallas muy grandes (> 1920px)
+   ======================================== */
+@media (min-width: 1920px) {
+  .allergen-title {
+    font-size: 2.2rem;
+  }
 
-}
-.text-cha {
-    color: rgb(11, 36, 146) ;
-}
-.text-cho {
-    color: #0d6efd ;
-    font-size:1rem;
+  .allergen-description {
+    font-size: 1.1rem;
+  }
+
+  .allergen-highlight {
+    font-size: 1.05rem;
+  }
+
+  .hover-list-item {
+    font-size: 1.1rem;
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
 }

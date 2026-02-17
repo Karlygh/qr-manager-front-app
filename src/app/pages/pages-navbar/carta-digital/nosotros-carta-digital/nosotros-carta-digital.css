@@ -1,74 +1,175 @@
-/* Espaciado superior/inferior */
+/* ========================================
+   NOSOTROS CARTA DIGITAL - ESTILOS
+   Usa las variables del Design System global
+   ======================================== */
+
+/* ========================================
+   SECCIÓN PRINCIPAL
+   ======================================== */
 .padding-section-large {
-  padding: 90px 0;
+  padding: var(--spacing-xl);
+  padding-top: 90px;
+  padding-bottom: 90px;
 }
 
-/* Fondo general de la sección */
 .section-qrmanager {
-  background: #f5f7fa;
-}
-h2{
-    color:#0a3b20;
+  background: var(--color-bg-light);
 }
 
-/* Título principal */
 .section-title {
   font-size: 2.4rem;
-  font-weight: 700;
- 
+  font-weight: var(--font-weight-bold);
+  color: var(--color-green-dark);
   letter-spacing: -0.5px;
+  transition: color var(--transition-base);
 }
 
-/* Tarjetas */
+/* ========================================
+   TARJETAS
+   ======================================== */
 .qr-card {
-  background: #ffffff;
-  border-radius: 14px;
+  background: var(--color-bg-white);
+  border-radius: var(--radius-md);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform .3s ease, box-shadow .3s ease;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--color-border-light);
 }
 
 .qr-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
-  background-color: #d7f6e6;
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  background-color: var(--color-bg-green-hover);
 }
 
-/* Contenido de la tarjeta */
+/* ========================================
+   CONTENIDO DE LA TARJETA
+   ======================================== */
 .qr-card-body {
   padding: 25px;
+  flex-grow: 1;
 }
 
 .qr-card-title {
   font-size: 1.2rem;
-  font-weight: 700;
-  color: #1b1b1b;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-green-dark);
   margin-bottom: 10px;
+  line-height: 1.4;
+  transition: color var(--transition-base);
+}
+
+.qr-card:hover .qr-card-title {
+  color: var(--color-accent-blue);
 }
 
 .qr-card-text {
   font-size: 0.95rem;
-  color: #555;
+  color: var(--color-text-secondary);
   line-height: 1.5;
 }
 
-/* Imagen */
+/* ========================================
+   IMAGEN
+   ======================================== */
 .qr-card-img {
   width: 100%;
   height: 210px;
   object-fit: cover;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--color-border-light);
+  transition: transform var(--transition-base);
 }
 
-/* Responsive refinado */
-@media (max-width: 768px) {
+.qr-card:hover .qr-card-img {
+  transform: scale(1.02);
+}
+
+/* ========================================
+   ACCESIBILIDAD - Reducir movimiento
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .qr-card,
+  .qr-card-title,
+  .qr-card-img {
+    transition: none;
+  }
+
+  .qr-card:hover,
+  .qr-card:hover .qr-card-title,
+  .qr-card:hover .qr-card-img {
+    transform: none;
+  }
+}
+
+/* ========================================
+   RESPONSIVE - Tablets (768px - 991px)
+   ======================================== */
+@media (max-width: 991.98px) {
+  .padding-section-large {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+
   .section-title {
     font-size: 2rem;
+    margin-bottom: 2rem;
   }
-  
+
   .qr-card-img {
     height: 180px;
+  }
+}
+
+/* ========================================
+   RESPONSIVE - Móviles (< 768px)
+   ======================================== */
+@media (max-width: 767.98px) {
+  .padding-section-large {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .qr-card-body {
+    padding: 1.25rem;
+  }
+
+  .qr-card-title {
+    font-size: 1.05rem;
+  }
+
+  .qr-card-text {
+    font-size: 0.9rem;
+  }
+
+  .qr-card-img {
+    height: 150px;
+  }
+}
+
+/* ========================================
+   RESPONSIVE - Pantallas muy grandes (> 1920px)
+   ======================================== */
+@media (min-width: 1920px) {
+  .section-title {
+    font-size: 2.8rem;
+  }
+
+  .qr-card-title {
+    font-size: 1.35rem;
+  }
+
+  .qr-card-text {
+    font-size: 1rem;
+  }
+
+  .qr-card-img {
+    height: 250px;
   }
 }

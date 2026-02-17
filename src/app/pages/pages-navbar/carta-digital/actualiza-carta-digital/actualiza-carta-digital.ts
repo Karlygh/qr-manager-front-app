@@ -8,5 +8,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./actualiza-carta-digital.css']
 })
 export class ActualizaCartaDigital {
-imageUrl = '../../assets/mockup/actualiza-comida.jpg';
+  readonly imageUrl = 'assets/mockup/actualiza-comida.jpg';
+  readonly googleReviewsUrl = 'assets/mockup/reseñagoogle.png';
+
+  handleImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    img.style.display = 'none';
+  }
 }

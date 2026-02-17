@@ -199,7 +199,7 @@ No escribir código hasta que el usuario confirme el plan.
 - Cambiar versiones de dependencias
 - Reescribir arquitectura
 - Convertir a una librería externa sin justificación
-- **Modificar propiedades de diseño CSS** (tamaños, colores en valores hardcodeados si afectan diseño, posiciones, media queries)
+- **Modificar propiedades de diseño CSS** (tamaños, colores en valores hardcodeados si afectan diseño si no NO TOCAR IMPORTANTISIMO, posiciones, media queries)
 - **Alterar metadata de decoradores sin necesidad**
 - **Cambiar estructura HTML** (salvo simplificación de directivas)
 

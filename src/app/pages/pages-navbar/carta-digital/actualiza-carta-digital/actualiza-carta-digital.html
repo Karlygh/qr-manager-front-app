@@ -6,11 +6,17 @@
         <h1 class="title-main mb-4">La Carta Digital QR que tu restaurante necesita</h1>
         <p class="subtitle-main mb-3">¡Comienza en 2 minutos! Regístrate GRATIS</p>
         <p class="description-main">
-          No es un PDF: ⚡️ Actualización en tiempo real | 📱 Interactiva | 📊 Conecta con tus clientes
+          No es un PDF: <span role="img" aria-label="rayo">⚡️</span> Actualización en tiempo real | <span role="img" aria-label="móvil">📱</span> Interactiva | <span role="img" aria-label="gráfico">📊</span> Conecta con tus clientes
         </p>
       </div>
       <div class="col-lg-6 text-center">
-        <img [src]="imageUrl" alt="Editor de menú NordQR en un móvil" class="img-fluid menu-mockup-img">
+        <img 
+          [src]="imageUrl" 
+          alt="Editor de menú NordQR en un móvil" 
+          class="img-fluid menu-mockup-img"
+          (error)="handleImageError($event)"
+          loading="lazy"
+        >
       </div>
     </div>
   </div>
@@ -23,7 +29,7 @@
       <!-- Característica 1 -->
       <div class="col-md-6 col-lg-4">
         <div class="feature-card h-100">
-          <div class="feature-icon">⭐</div>
+          <span class="feature-icon" role="img" aria-label="estrella">⭐</span>
           <h3 class="feature-title">Gestión al instante</h3>
           <p class="feature-text">Añade, elimina o edita platos y precios en segundos.</p>
         </div>
@@ -32,7 +38,7 @@
       <!-- Característica 2 -->
       <div class="col-md-6 col-lg-4">
         <div class="feature-card h-100">
-          <div class="feature-icon">📈</div>
+          <span class="feature-icon" role="img" aria-label="gráfico ascendente">📈</span>
           <h3 class="feature-title">Aumenta la Venta</h3>
           <p class="feature-text">Destaca ofertas del día y platos estrella al momento.</p>
         </div>
@@ -41,7 +47,7 @@
       <!-- Característica 3 -->
       <div class="col-md-6 col-lg-4">
         <div class="feature-card h-100">
-          <div class="feature-icon">💰</div>
+          <span class="feature-icon" role="img" aria-label="dinero">💰</span>
           <h3 class="feature-title">Ahorro Garantizado</h3>
           <p class="feature-text">Elimina costes de impresión de menús diarios y errores de personal.</p>
         </div>
@@ -50,7 +56,7 @@
       <!-- Característica 4 -->
       <div class="col-md-6 col-lg-4">
         <div class="feature-card h-100">
-          <div class="feature-icon">🥜</div>
+          <span class="feature-icon" role="img" aria-label="cacahuete - alérgenos">🥜</span>
           <h3 class="feature-title">Seguridad Total</h3>
           <p class="feature-text">Indica alérgenos y opciones para dietas especiales de forma clara.</p>
         </div>
@@ -59,7 +65,7 @@
       <!-- Característica 5 -->
       <div class="col-md-6 col-lg-4">
         <div class="feature-card h-100">
-          <div class="feature-icon">🧑‍💻</div>
+          <span class="feature-icon" role="img" aria-label="persona con ordenador">🧑‍💻</span>
           <h3 class="feature-title">Moderniza tu imagen</h3>
           <p class="feature-text">Proyecta innovación y calidad a tus comensales.</p>
         </div>
@@ -68,7 +74,7 @@
       <!-- Característica 6 -->
       <div class="col-md-6 col-lg-4">
         <div class="feature-card h-100">
-          <div class="feature-icon">📊</div>
+          <span class="feature-icon" role="img" aria-label="gráfico de barras">📊</span>
           <h3 class="feature-title">Datos de Valor</h3>
           <p class="feature-text">Analiza los platos más vistos para optimizar tu oferta.</p>
         </div>
@@ -84,9 +90,11 @@
     <!-- Imagen a la izquierda -->
     <div class="col-md-4 text-center text-md-start">
       <img 
-        src="../../assets/mockup/reseñagoogle.png" 
+        [src]="googleReviewsUrl" 
         alt="Visualización de reseñas de Google en el menú digital" 
-        class="menu-mockup-img ms-md-5"
+        class="menu-mockup-img google-reviews-img ms-md-5"
+        (error)="handleImageError($event)"
+        loading="lazy"
       >
     </div>
 
@@ -101,9 +109,9 @@
       </p>
 
       <ul class="list-unstyled text-success mt-5">
-        <li>✅ Visualización en tiempo real de reseñas</li>
-        <li>✅ Fácil integración con tu perfil de Google</li>
-        <li>✅ Mejora la interacción y fidelización de tus clientes</li>
+        <li><span role="img" aria-label="check">✅</span> Visualización en tiempo real de reseñas</li>
+        <li><span role="img" aria-label="check">✅</span> Fácil integración con tu perfil de Google</li>
+        <li><span role="img" aria-label="check">✅</span> Mejora la interacción y fidelización de tus clientes</li>
       </ul>
     </div>
 

@@ -4,7 +4,7 @@
   ==========================================
 */
 #menu-update-section-header {
-  background-color: #c7eed4; 
+  background-color: var(--color-bg-green-light, #c7eed4); 
   color: #2c3e50; 
 }
 
@@ -12,7 +12,7 @@
 .title-main {
   font-size: 3.5rem;
   font-weight: 900;
-  color: #0a3b20; 
+  color: var(--color-green-dark, #0a3b20); 
   background: linear-gradient(135deg, #afd2bf 0%, #8bc589 100%);
   padding: 30px 40px;
   border-radius: 15px;
@@ -25,9 +25,9 @@
 .subtitle-main {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #0a3b20;
+  color: var(--color-green-dark, #0a3b20);
   text-decoration: underline;
-  text-decoration-color: #4d9363;
+  text-decoration-color: var(--color-green-medium, #4d9363);
   text-decoration-thickness: 3px;
   text-underline-offset: 8px;
 }
@@ -36,7 +36,7 @@
 .description-main {
   font-size: 1.25rem;
   font-weight: 500;
-  color: #2d5a3d;
+  color: var(--color-green-text, #2d5a3d);
   line-height: 1.6;
   margin-top: 20px;
 }
@@ -44,11 +44,11 @@
 .lead {
   font-size: 1.15rem;
   font-weight: 300;
-  color: rgb(77, 147, 99);
+  color: var(--color-green-medium, #4d9363);
 }
 
 h5 {
-  color: #0a3b20;
+  color: var(--color-green-dark, #0a3b20);
   font-weight: 600;
   font-size: 2rem;
 }
@@ -74,10 +74,10 @@ h5 {
 }
 
 .feature-card:hover {
-  border-color: #4d9363;
+  border-color: var(--color-green-medium, #4d9363);
   box-shadow: 0 10px 25px rgba(77, 147, 99, 0.15);
   transform: translateY(-8px);
-  background: #f5f9f6;
+  background: var(--color-bg-green-card, #f5f9f6);
 }
 
 .feature-icon {
@@ -89,13 +89,13 @@ h5 {
 .feature-title {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #0a3b20;
+  color: var(--color-green-dark, #0a3b20);
   margin-bottom: 12px;
 }
 
 .feature-text {
   font-size: 0.95rem;
-  color: #4d5f54;
+  color: var(--color-green-soft, #4d5f54);
   line-height: 1.5;
   margin: 0;
 }
@@ -113,6 +113,7 @@ h5 {
 */
 .card-body {
   overflow-x: hidden;
+  padding: var(--spacing-md, 1rem);
 }
 
 .card-body .row {
@@ -122,12 +123,12 @@ h5 {
 
 .card-body .col-md-4,
 .card-body .col-md-8 {
-  padding-left: 45px;
-  padding-right: 15px;
+  padding-left: var(--spacing-lg, 1.5rem);
+  padding-right: var(--spacing-md, 1rem);
 }
 
 .card-body .col-md-4 {
-  padding-right: 30px; 
+  padding-right: var(--spacing-lg, 1.5rem); 
 }
 
 
@@ -137,7 +138,7 @@ h5 {
   ==========================================
 */
 .card-title {
-  color: #0a3b20;
+  color: var(--color-green-dark, #0a3b20);
   font-weight: 800;
   font-size: 2.2rem;
   transition: color 0.3s ease;
@@ -152,7 +153,7 @@ h5 {
   left: 0;
   width: 60px;
   height: 4px;
-  background: linear-gradient(90deg, #4d9363, #afd2bf);
+  background: linear-gradient(90deg, var(--color-green-medium, #4d9363), #afd2bf);
   border-radius: 2px;
   transition: width 0.3s ease;
 }
@@ -165,17 +166,17 @@ h5 {
   font-size: 1rem;
   margin-top: 15px;
   transition: color 0.3s ease;
-  color: #2d5a3d;
+  color: var(--color-green-text, #2d5a3d);
   line-height: 1.6;
 }
 
 .text-muted {
-  color: #4d9363 ;
+  color: var(--color-green-medium, #4d9363);
   font-weight: 500;
 }
 
 .text-secondary {
-  color: #2d5a3d ;
+  color: var(--color-green-text, #2d5a3d);
   font-weight: 500;
 }
 
@@ -183,7 +184,7 @@ h5 {
   padding: 12px 15px;
   font-size: 0.95rem;
   font-weight: 500;
-  color: #2d5a3d;
+  color: var(--color-green-text, #2d5a3d);
   transition: all 0.3s ease;
   border-radius: 8px;
   margin-bottom: 8px;
@@ -192,10 +193,10 @@ h5 {
 }
 
 .list-unstyled li:hover {
-  background-color: #e8f3ea;
+  background-color: var(--color-bg-green-hover, #e8f3ea);
   transform: translateX(8px);
-  color: #0a3b20;
-  border-left: 4px solid #4d9363;
+  color: var(--color-green-dark, #0a3b20);
+  border-left: 4px solid var(--color-green-medium, #4d9363);
   box-shadow: 0 2px 8px rgba(77, 147, 99, 0.15);
 }
 
@@ -209,7 +210,7 @@ h5 {
 }
 
 .text-light-blue {
-  color: #1767e7;
+  color: var(--color-accent-blue, #1767e7);
   font-size: 0.95rem;
   font-weight: 500;
   line-height: 1.6;
@@ -233,11 +234,12 @@ h5 {
   }
 }
 
+/* Estilos para imagen de Google Reviews en tablets */
 @media (min-width: 768px) and (max-width: 1200px) {
-  img[src*="reseñagoogle.png"] {
-    max-width: 110% !important;
+  .google-reviews-img {
+    max-width: 110%;
     width: 110%;
-    margin-right: 80px !important;
+    margin-right: 80px;
     margin-left: 50px;
   }
 }
@@ -250,17 +252,11 @@ h5 {
     margin-top: 15px;
   }
 }
-@media (min-width: 768px) and (max-width: 1024px) {
-  img[src*="./assets/reseñagoogle.png"] {
-    max-width: 100% !important;
-    width: 100%;
 
-  }
-}
-@media (max-width: 575px) {
-  img[src*="actualiza-comida.jpg"] {
-    max-width: 100% !important;
-    width: 100% !important;
+@media (min-width: 768px) and (max-width: 1024px) {
+  .google-reviews-img {
+    max-width: 100%;
+    width: 100%;
   }
 }
 
