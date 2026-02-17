@@ -60,8 +60,8 @@ export class CartaPrincipalComponent implements OnInit, OnDestroy {
   // Mapeo genérico de emojis por nombre de categoría
   private categoryEmojiMap: { [key: string]: string } = {
     'entrantes': '🍽️',
-    'principales': '🍖',
-    'platos principales': '🍖',
+    'principales': '🖖',
+    'platos principales': '🖖',
     'carnes': '🥩',
     'pescados': '🐟',
     'pescado': '🐟',
@@ -72,8 +72,8 @@ export class CartaPrincipalComponent implements OnInit, OnDestroy {
     'vino': '🍷',
     'cervezas': '🍺',
     'cerveza': '🍺',
-    'postres': '🍰',
-    'postre': '🍰',
+    'postres': '🰐',
+    'postre': '🰐',
     'cafés': '☕',
     'café': '☕',
     'ensaladas': '🥗',
@@ -84,7 +84,7 @@ export class CartaPrincipalComponent implements OnInit, OnDestroy {
     'pasta': '🍝',
     'hamburguesas': '🍔',
     'hamburguesa': '🍔',
-    'tapas': '🍢',
+    'tapas': '🢢',
     'raciones': '🍲',
     'sopas': '🍜',
     'sopa': '🍜',
@@ -202,13 +202,14 @@ export class CartaPrincipalComponent implements OnInit, OnDestroy {
 
   /**
    * Carga todos los datos en paralelo (productos + categorías)
+   * CORREGIDO: Ahora utiliza getProductsByBusinessId() para traer solo los productos del negocio actual
    */
   private loadAllData(): void {
     this.isLoading = true;
     this.errorMessage = null;
 
     forkJoin({
-      products: this.productosService.getAllProducts(),
+      products: this.productosService.getProductsByBusinessId(this.businessId!),
       categories: this.categoryService.getAllCategoriesByBusinessId(this.businessId!)
     })
       .pipe(takeUntil(this.destroy$))

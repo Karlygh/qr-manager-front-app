@@ -1,137 +1,184 @@
+/* =============================================
+   DETALLES DE NEGOCIO - UI PROFESIONAL
+   Paleta: Verde corporativo #2d7c5f
+   ============================================= */
+
+/* Contenedor principal */
+.detalles-container {
+  padding: 40px 20px;
+  min-height: 100vh;
+  background-color: #effaf4;
+}
+
+/* Mensaje de carga */
+.loading-message {
+  text-align: center;
+  color: #2d7c5f;
+  font-size: 1rem;
+  padding: 20px;
+}
+
+/* Tarjeta principal */
 .negocio-card {
-  border-radius: 20px;
-  background: #c9f2d1;
-  border: none;
-  max-width: 900px;
-  margin: auto;
+  max-width: 700px;
+  margin: 0 auto;
+  background-color: #e8f5f0;
+  border: 1px solid #d0e6dd;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-/* CABECERA */
-.negocio-header {
-  background: #b7eac0;
-  border-bottom: 2px solid #7bbf82;
-  padding: 1.5rem;
+/* Encabezado */
+.card-header {
+  background-color: #2d7c5f;
+  padding: 24px;
+  text-align: center;
 }
 
-.negocio-header h3 {
-  margin: 0;
-  color: #063f01;
-  font-size: 1.8rem;
-  letter-spacing: 1px;
+.header-title {
+  margin: 0 0 10px 0;
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
 }
 
-/* ID bonito */
+/* Badge ID */
 .id-badge {
   display: inline-block;
-  margin-top: 6px;
-  background: #063f01;
-  color: #fff;
-  padding: 4px 12px;
+  background-color: #e8f5f0;
+  color: #2d7c5f;
+  padding: 6px 14px;
   border-radius: 20px;
   font-size: 0.85rem;
+  font-weight: 500;
 }
 
-/* NOMBRE PRINCIPAL */
+/* Cuerpo de la tarjeta */
+.card-body {
+  padding: 32px;
+}
+
+/* Nombre del negocio */
 .business-name {
   text-align: center;
-  font-size: 2rem;
-  color: #063f01;
-  margin: 20px 0;
+  font-size: 1.75rem;
+  color: #333333;
+  font-weight: 600;
+  margin: 0 0 28px 0;
 }
 
-/* BLOQUES DE INFORMACIÓN */
+/* Bloques de información */
 .info-block {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
-/* Etiquetas */
+/* Labels */
 .label {
   display: block;
-  font-size: 0.9rem;
-  color: #063f01;
-  font-weight: 600;
-  margin-bottom: 4px;
+  font-size: 0.8rem;
+  color: #2d7c5f;
+  font-weight: 400;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
 }
 
 /* Valores */
 .value {
-  font-size: 1.05rem;
-  color: #1f1f1f;
-  background: #d1fad0;
-  padding: 8px 12px;
-  border-radius: 10px;
+  font-size: 1rem;
+  color: #333333;
+  font-weight: 400;
+  background-color: #ffffff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin: 0;
+  border: 1px solid #e0e0e0;
 }
 
-/* Dirección más destacada */
-.address {
-  font-weight: 600;
-}
-
-/* Separador */
+/* Divisor */
 .divider {
-  height: 2px;
-  background: #7bbf82;
-  margin: 20px 0;
-  border-radius: 2px;
+  height: 1px;
+  background-color: #d0e6dd;
+  margin: 28px 0;
 }
 
-/* Sección */
+/* Título de sección */
 .section-title {
-  color: #063f01;
-  font-size: 1.2rem;
-  margin-bottom: 15px;
+  color: #2d7c5f;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0 0 20px 0;
+}
+
+/* Grid de contacto */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
 /* Texto apagado */
 .muted {
-  color: #6c757d;
+  color: #888888;
 }
 
-/* Nota */
-.footer-note {
-  font-size: 0.85rem;
+/* Contenedor del botón */
+.action-container {
   text-align: center;
-  color: #4c664d;
+  margin-top: 32px;
 }
 
-/* Hover */
-.negocio-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  transition: 0.3s ease;
-}
+/* Botón panel */
 .btn-panel {
-  background: #063f01;
-  color: #fff;
-  padding: 10px 22px;
-  border-radius: 30px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.3s ease;
   display: inline-block;
+  background-color: #2d7c5f;
+  color: #ffffff;
+  padding: 14px 32px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
 }
 
 .btn-panel:hover {
-  background: #0a5c02;
-  transform: translateY(-2px);
-}
-/* Animación de llamada de atención */
-.btn-panel {
-  animation: pulseMove 2s infinite;
+  background-color: #246b51;
+  color: #ffffff;
 }
 
-@keyframes pulseMove {
-  0% {
-    transform: translateY(0);
-    box-shadow: 0 0 0 0 rgba(6, 63, 1, 0.5);
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+
+@media (max-width: 600px) {
+  .detalles-container {
+    padding: 20px 16px;
   }
-  50% {
-    transform: translateY(-4px);
-    box-shadow: 0 0 0 10px rgba(6, 63, 1, 0);
+
+  .card-header {
+    padding: 20px;
   }
-  100% {
-    transform: translateY(0);
-    box-shadow: 0 0 0 0 rgba(6, 63, 1, 0);
+
+  .header-title {
+    font-size: 1.25rem;
+  }
+
+  .card-body {
+    padding: 24px 20px;
+  }
+
+  .business-name {
+    font-size: 1.4rem;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .btn-panel {
+    width: 100%;
+    padding: 14px 20px;
   }
 }

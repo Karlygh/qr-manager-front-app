@@ -1,15 +1,18 @@
-<div class="container py-5">
-  <div *ngIf="cargando" class="alert alert-info">
-    Cargando detalles del negocio con ID: <strong>{{ negocioId }}</strong>...
+<div class="detalles-container">
+  
+  <div *ngIf="cargando" class="loading-message">
+    Cargando detalles del negocio...
   </div>
 
-  <div *ngIf="!cargando && negocio" class="card negocio-card shadow-sm">
+  <div *ngIf="!cargando && negocio" class="negocio-card">
 
-    <div class="card-header negocio-header text-center">
-      <h3>Negocio Creado con Éxito</h3>
+    <!-- Encabezado -->
+    <div class="card-header">
+      <h3 class="header-title">Detalles del Negocio</h3>
       <span class="id-badge">ID: {{ negocio.id }}</span>
     </div>
 
+    <!-- Contenido -->
     <div class="card-body">
 
       <!-- Nombre del negocio -->
@@ -23,43 +26,37 @@
 
       <div class="divider"></div>
 
+      <!-- Datos de contacto -->
       <h5 class="section-title">Datos de contacto</h5>
 
-      <div class="row">
-        <div class="col-12 col-md-6">
-          <div class="info-block">
-            <span class="label">Email</span>
-            <p class="value">{{ negocio.email }}</p>
-          </div>
+      <div class="contact-grid">
+        <div class="info-block">
+          <span class="label">Email</span>
+          <p class="value">{{ negocio.email }}</p>
         </div>
 
-        <div class="col-12 col-md-6">
-          <div class="info-block">
-            <span class="label">Teléfono</span>
-            <p class="value" *ngIf="negocio.phoneNumber; else noPhone">
-              {{ negocio.phoneNumber }}
-            </p>
-            <ng-template #noPhone>
-              <p class="value muted">No especificado</p>
-            </ng-template>
-          </div>
+        <div class="info-block">
+          <span class="label">Teléfono</span>
+          <p class="value" *ngIf="negocio.phoneNumber; else noPhone">
+            {{ negocio.phoneNumber }}
+          </p>
+          <ng-template #noPhone>
+            <p class="value muted">No especificado</p>
+          </ng-template>
         </div>
       </div>
 
-      <div class="info-block mt-3">
+      <div class="info-block">
         <span class="label">Dirección</span>
-        <p class="value address">{{ negocio.address }}</p>
+        <p class="value">{{ negocio.address }}</p>
       </div>
-      
-      <div class="text-center mt-4">
-        <a [routerLink]="['/panel-control-business', negocio.id]" class="btn btn-panel">
+
+      <!-- Botón -->
+      <div class="action-container">
+        <a [routerLink]="['/panel-control-business', negocio.id]" class="btn-panel">
           Ir al Panel de Control
         </a>
-        </div>
-
-      <p class="footer-note mt-4">
-        Los datos se obtienen mediante el ID presente en la URL.
-      </p>
+      </div>
 
     </div>
   </div>
