@@ -24,11 +24,6 @@ import { GoogleOpiniones } from './pages/pages-panel-control-user/google-opinion
 import { ListaProductos } from './pages/pages-panel-control-user/editar-producto/lista-productos/lista-productos';
 import { EditarProducto } from './pages/pages-panel-control-user/editar-producto/editar-producto';
 import { EditarCategoriasYSubcategorias } from './pages/pages-panel-control-user/editar-categorias-y-subcategorias/editar-categorias-y-subcategorias';
-import { InstalacionesClientes } from './pages/info-clientes/instalaciones-clientes/instalaciones-clientes';
-import { WifiClientes } from './pages/info-clientes/wifi-clientes/wifi-clientes';
-import { RedessocialesClientes } from './pages/info-clientes/redessociales-clientes/redessociales-clientes';
-import { HorariosClientes } from './pages/info-clientes/horarios-clientes/horarios-clientes';
-import { GoogleClientes } from './pages/info-clientes/google-clientes/google-clientes';
 
 
 export const routes: Routes = [
@@ -56,11 +51,11 @@ export const routes: Routes = [
   { path: 'crear-producto', component: CrearProducto },
   { path: 'carta-principal', component: CartaPrincipalComponent },
   { path: 'google-reseñas/:businessId', component: GoogleOpiniones },
-  { path: 'ver-instalaciones', component:InstalacionesClientes },
-  { path: 'ver-wifi', component:WifiClientes },
-  { path: 'ver-redes', component:RedessocialesClientes},
-  { path: 'ver-horario', component:HorariosClientes},
-  { path: 'ver-google', component:GoogleClientes},
+  { path: 'panel/:businessId/ver-instalaciones', component: EditarInstalaciones },
+  { path: 'panel/:businessId/ver-wifi', component: EditarWifi },
+  { path: 'panel/:businessId/ver-redes', component: EditarRedesComponent },
+  { path: 'panel/:businessId/ver-horario', component: EditarHorario },
+  { path: 'panel/:businessId/ver-google', component: GoogleOpiniones },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: error404PageComponent }
 ];

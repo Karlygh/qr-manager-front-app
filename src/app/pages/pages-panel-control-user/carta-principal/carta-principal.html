@@ -35,8 +35,8 @@
           <i class="bi bi-telephone"></i>
           <span>Horarios</span>
         </a>
-        <a [routerLink]="['/ver-google', businessId]" class="dropdown-item" (click)="toggleMenu()">
-          <i class="bi bi-gear"></i>
+        <a [routerLink]="['/panel', businessId, 'ver-google']" class="dropdown-item" (click)="toggleMenu()">
+          <i class="bi bi-google"></i>
           <span>Google Reseñas</span>
         </a>
         <a [routerLink]="['/panel', businessId, 'ver-redes']" class="dropdown-item" (click)="toggleMenu()">

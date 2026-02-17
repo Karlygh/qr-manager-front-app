@@ -70,17 +70,17 @@
                            type="url" 
                            [(ngModel)]="network.url" 
                            [ngModelOptions]="{standalone: true}" 
-                           class="form-control editing-input flex-grow-1">
+                           class="form-control editing-input grow">
                     
                     <span *ngIf="isEditing && isMarkedForDeletion(network.id)"
-                          class="deleted-url-display flex-grow-1">
+                          class="deleted-url-display grow">
                         {{ network.url }} <span class="deletion-badge">(Se eliminará)</span>
                     </span>
                     
                     <a *ngIf="!isEditing" 
                        [href]="network.url" 
                        target="_blank" 
-                       class="network-url-display flex-grow-1">
+                       class="network-url-display grow">
                         {{ network.url }}
                     </a>
 
