@@ -1,6 +1,22 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Component, signal } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+
+interface FooterLink {
+  label: string;
+  path: string;
+}
+
+interface MenuSection {
+  title: string;
+  links: FooterLink[];
+  showContact?: boolean;
+}
+
+interface SocialLink {
+  platform: string;
+  url: string;
+  icon: string;
+}
 
 interface ContactItem {
   label: string;
@@ -10,23 +26,23 @@ interface ContactItem {
 @Component({
   selector: 'shared-footer',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.css'
 })
 export class FooterComponent {
-  private router = inject(Router);
-
   // Año actual para el copyright
-  currentYear = new Date().getFullYear();
+  currentYear = signal(new Date().getFullYear());
 
   // Redes sociales
-  facebook = 'https://www.facebook.com/profile.php?id=1000000000000';
-  twitter = 'https://www.twitter.com';
-  instagram = 'https://www.instagram.com/cleancoderscadiz';
+  readonly socialItems: SocialLink[] = [
+    { platform: 'Facebook', url: 'https://www.facebook.com/profile.php?id=1000000000000', icon: 'fab fa-facebook-f' },
+    { platform: 'Twitter', url: 'https://www.twitter.com', icon: 'fab fa-twitter' },
+    { platform: 'Instagram', url: 'https://www.instagram.com/cleancoderscadiz', icon: 'fab fa-instagram' }
+  ];
 
   // Items de contacto dinámicos
-  contactItems: ContactItem[] = [
+  readonly contactItems = signal<ContactItem[]>([
     { 
       label: 'cleancoderscadiz@gmail.com', 
       url: 'mailto:cleancoderscadiz@gmail.com' 
@@ -35,10 +51,27 @@ export class FooterComponent {
       label: '+34 123 456 789', 
       url: 'tel:+34123456789' 
     }
-  ];
+  ]);
 
-  // Método para verificar si es la ruta actual
-  isCurrentRoute(route: string): boolean {
-    return this.router.url === route;
-  }
+  // Secciones del menú
+  readonly menuSections: MenuSection[] = [
+    {
+      title: 'Información Rápida',
+      links: [
+        { label: 'Home', path: '/home' },
+        { label: 'Tu Restaurante', path: '/tu-restaurante' },
+        { label: 'Precios', path: '/precios' },
+        { label: 'Preguntas Frecuentes', path: '/faq' }
+      ]
+    },
+    {
+      title: 'Soporte',
+      showContact: true,
+      links: [
+        { label: 'Contacto', path: '/contacto' },
+        { label: 'Términos de Servicio', path: '/terminos' },
+        { label: 'Política de Privacidad', path: '/privacidad' }
+      ]
+    }
+  ];
 }

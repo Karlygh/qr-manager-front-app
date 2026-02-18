@@ -53,6 +53,7 @@
   font-size: 0.95rem;
   transition: all 0.3s ease;
   font-weight: 400;
+  will-change: transform; /* Hint para el navegador */
 }
 
 .qr-link:hover {
@@ -144,23 +145,17 @@
     text-align: left;
   }
 
+  /* Alineación específica para móvil */
   .qr-social-icons {
     justify-content: center;
   }
 
-  .qr-link {
-    text-align: left;
+  .qr-link, .qr-contact-item {
+    justify-content: center; /* Si se usa flex */
+    text-align: left; /* Si no */
   }
-}
-
-@media (max-width: 480px) {
+  
   .qr-logo-brand {
-    font-size: 1.5rem;
-  }
-
-  .qr-social-icons a {
-    width: 36px;
-    height: 36px;
-    font-size: 1.25rem;
+     font-size: 1.5rem;
   }
 }

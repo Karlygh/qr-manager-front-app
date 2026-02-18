@@ -2,37 +2,26 @@
    Navbar Principal
 ========================== */
 .navbar {
-  position: sticky;
-  top: 0;
   z-index: 1000;
   font-family: 'Momo Trust Display', sans-serif;
 }
 
-/* ==========================
-   Navbar Color Personalizado
-========================== */
 .custom-navbar {
   background-color: #6aa486;
-  transition: background-color 0.3s ease;
 }
 
-/* ==========================
-   Links del Navbar
-========================== */
 .nav-link {
   color: #105f34;
   font-weight: 500;
-  transition: color 0.3s;
+  border: 2px solid transparent; 
+  transition: color 0.3s, border-color 0.3s;
 }
 
 .nav-link:hover {
   color: #e7e7e7;
-  border: 2px solid #105f34;
+  border-color: #105f34;
 }
 
-/* ==========================
-   Botón Primario
-========================== */
 .btn-primary {
   background-color: #105f34;
   border: none;
@@ -84,29 +73,25 @@
    REGLAS RESPONSIVE Y CORRECCIÓN DE ERRORES
 ========================================= */
 
-/* Comportamiento base del logo (Desktop/Tablet: 40px) */
-.navbar-brand img {
+
+.navbar-logo {
     width: 40px;
     height: 40px;
 }
 
-/* Ajuste de tamaño del Logo (Móvil: 48px) */
-/* Se aplica sólo cuando la pantalla es pequeña (hasta 575.98px) */
+
 @media (max-width: 575.98px) {
-    .navbar-brand img {
-        width: 78px; /* ¡Ahora más grande! */
+    .navbar-logo {
+        width: 78px; 
         height: 58px;
     }
 }
 
-/* Corrección de scroll: Eliminación de reglas que forzaban el nowrap */
+
 .navbar-nav {
     align-items: center; 
 }
 .navbar-collapse {
     width: 100%;
 }
-.navbar-logo {
-  width: 80px;  /* Ajusta el tamaño que quieras */
-  height: 50px;
-}
+

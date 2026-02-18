@@ -3,59 +3,47 @@
     
     <!-- Logo y Redes Sociales -->
     <div class="qr-footer-column">
-      <a href="/" class="qr-logo-brand">QR-MANAGER</a>
+      <a routerLink="/home" class="qr-logo-brand">QR-MANAGER</a>
       <p class="qr-slogan">Digitaliza tu menú. Simplifica la experiencia.</p>
       
       <div class="qr-social-icons">
-        <a [href]="facebook" target="_blank" rel="noopener" aria-label="Facebook">
-          <i class="fab fa-facebook-f"></i>
-        </a>
-        <a [href]="twitter" target="_blank" rel="noopener" aria-label="Twitter">
-          <i class="fab fa-twitter"></i>
-        </a>
-        <a [href]="instagram" target="_blank" rel="noopener" aria-label="Instagram">
-          <i class="fab fa-instagram"></i>
-        </a>
+        @for (social of socialItems; track social.platform) {
+          <a [href]="social.url" target="_blank" rel="noopener" [attr.aria-label]="social.platform">
+            <i [class]="social.icon"></i>
+          </a>
+        }
       </div>
     </div>
 
-    <!-- Información Rápida -->
-    <div class="qr-footer-column">
-      <h5>Información Rápida</h5>
-      <a routerLink="/" class="qr-link" [class.link-active]="isCurrentRoute('/')">
-        Home
-      </a>
-      <a routerLink="/restaurante" class="qr-link" [class.link-active]="isCurrentRoute('/restaurante')">
-        Tu Restaurante
-      </a>
-      <a routerLink="/precios" class="qr-link" [class.link-active]="isCurrentRoute('/precios')">
-        Precios
-      </a>
-      <a routerLink="/faq" class="qr-link" [class.link-active]="isCurrentRoute('/faq')">
-        Preguntas Frecuentes
-      </a>
-    </div>
+    <!-- Secciones del Menú Generadas Dinámicamente -->
+    @for (section of menuSections; track section.title) {
+      <div class="qr-footer-column">
+        <h5>{{ section.title }}</h5>
+        <div class="qr-links-wrapper">
+          @for (link of section.links; track link.path) {
+            <a [routerLink]="link.path" 
+               routerLinkActive="link-active" 
+               [routerLinkActiveOptions]="{exact: true}"
+               class="qr-link">
+              {{ link.label }}
+            </a>
+          }
+        </div>
 
-    <!-- Soporte y Legal -->
-    <div class="qr-footer-column">
-      <h5>Soporte</h5>
-      <a routerLink="/contacto" class="qr-link" [class.link-active]="isCurrentRoute('/contacto')">
-        Contacto
-      </a>
-      <a routerLink="/terminos" class="qr-link" [class.link-active]="isCurrentRoute('/terminos')">
-        Términos de Servicio
-      </a>
-      <a routerLink="/privacidad" class="qr-link" [class.link-active]="isCurrentRoute('/privacidad')">
-        Política de Privacidad
-      </a>
-      
-      <!-- Contacto Dinámico -->
-      <div class="qr-contact-item" *ngFor="let item of contactItems">
-        <a [href]="item.url" class="qr-link" target="_blank" rel="noopener">
-          {{ item.label }}
-        </a>
+        <!-- Inserción de Contacto Dinámico solo en la última sección (Soporte) -->
+        @if (section.showContact) {
+          <div class="qr-contact-wrapper">
+            @for (item of contactItems(); track item.label) {
+              <div class="qr-contact-item">
+                <a [href]="item.url" class="qr-link" target="_blank" rel="noopener">
+                  {{ item.label }}
+                </a>
+              </div>
+            }
+          </div>
+        }
       </div>
-    </div>
+    }
 
   </div>
 
@@ -63,7 +51,7 @@
   <div class="qr-footer-bottom">
     <hr class="qr-separator">
     <p class="qr-copyright">
-      &copy; {{ currentYear }} QR MANAGER. Todos los derechos reservados.
+      &copy; {{ currentYear() }} QR MANAGER. Todos los derechos reservados.
     </p>
   </div>
 </footer>

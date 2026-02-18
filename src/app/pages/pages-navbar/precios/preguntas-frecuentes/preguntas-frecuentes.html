@@ -1,201 +1,99 @@
-<section class="pricing-faq py-5">
-  <div class="container">
-    <h2 class="text-center fw-bold mb-4 titulo-dos">Preguntas Frecuentes</h2>
+<main aria-label="Preguntas Frecuentes y Garantías">
 
-    <div class="accordion" id="faqAccordion">
+  <!-- ======================
+       SECCIÓN FAQ
+  ====================== -->
+  <section class="pricing-faq py-5">
+    <div class="container">
+      <h2 class="text-center fw-bold mb-4 titulo-dos">Preguntas Frecuentes</h2>
 
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="faq1">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqItem1">
-            ¿Puedo cancelar cuando quiera?
-          </button>
-        </h2>
-        <div id="faqItem1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-          <div class="accordion-body">
-           Sí, tienes la libertad de cancelar tu suscripción en cualquier momento sin ningún tipo de penalización ni cargos adicionales. Al cancelar, tu acceso a los beneficios y funcionalidades de tu plan continuará hasta el final del período de facturación ya pagado, garantizando transparencia y seguridad. Nos comprometemos a que el proceso de cancelación sea rápido, sencillo y totalmente libre de complicaciones, para que tengas el control absoluto sobre tu suscripción en todo momento.
+      <div class="accordion" id="faqAccordion">
+        @for (item of faqs; track item.question; let i = $index) {
+          <div class="accordion-item">
+            <h2 class="accordion-header" [id]="'faqHeader' + i">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                      [attr.data-bs-target]="'#faqItem' + i" aria-expanded="false" [attr.aria-controls]="'faqItem' + i">
+                {{ item.question }}
+              </button>
+            </h2>
+            <div [id]="'faqItem' + i" class="accordion-collapse collapse" data-bs-parent="#faqAccordion" 
+                 [attr.aria-labelledby]="'faqHeader' + i">
+              <div class="accordion-body">
+                {{ item.answer }}
+              </div>
+            </div>
           </div>
-        </div>
+        }
       </div>
-
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="faq2">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqItem2">
-            ¿Cómo funciona la facturación anual?
-          </button>
-        </h2>
-        <div id="faqItem2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-          <div class="accordion-body">
-           La facturación anual te permite pagar un único monto por todo el año, lo que simplifica la gestión de tu suscripción y evita pagos mensuales repetidos. Además, al elegir el plan anual, obtienes meses adicionales sin coste, según la oferta vigente de tu plan, lo que maximiza el valor de tu inversión. Esta modalidad está diseñada para ofrecerte mayor comodidad, previsibilidad en los pagos y beneficios adicionales, garantizando que puedas disfrutar de nuestros servicios durante todo el año sin interrupciones.
-          </div>
-        </div>
-      </div>
-
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="faq3">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqItem3">
-            ¿Puedo cambiar de plan más adelante?
-          </button>
-        </h2>
-        <div id="faqItem3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-          <div class="accordion-body">
-            Sí, puedes subir o bajar de plan cuando lo necesites.
-          </div>
-        </div>
-      </div>
-
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="faq4">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqItem4">
-            ¿El soporte está incluido en todos los planes?
-          </button>
-        </h2>
-        <div id="faqItem4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-          <div class="accordion-body">
-            Sí, todos nuestros planes incluyen acceso al soporte técnico y de atención al cliente, garantizando que siempre tengas ayuda disponible cuando la necesites. La velocidad y prioridad de respuesta varían según el nivel de plan que hayas elegido, asegurando que cada usuario reciba un servicio adecuado a sus necesidades. Nuestro equipo de especialistas está preparado para resolver cualquier duda, incidencia o consulta de manera eficiente, brindando una experiencia fluida y confiable para que puedas aprovechar al máximo todos los beneficios de tu suscripción.
-          </div>
-        </div>
-      </div>
-
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="why-us py-5">
-  <div class="container">
-    <h2 class="text-center fw-bold mb-5 titulo-uno">¿Por qué elegirnos?</h2>
+  <!-- ======================
+       SECCIÓN POR QUÉ ELEGIRNOS
+  ====================== -->
+  <section class="why-us py-5">
+    <div class="container">
+      <h2 class="text-center fw-bold mb-5 titulo-uno">¿Por qué elegirnos?</h2>
 
-    <div class="row g-4">
-
-      <div class="col-md-4">
-        <div class="accordion">
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed text-center" type="button" data-bs-toggle="collapse" data-bs-target="#why1">
-                <div class="w-100">
-                  <h4 class="fw-bold mb-2">Seguridad Garantizada</h4>
-                  <p class="mb-0">Protegemos tus datos con estándares de nivel empresarial.</p>
+      <div class="row g-4">
+        @for (item of whyUs; track item.title; let i = $index) {
+          <div class="col-md-4">
+            <div class="accordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header" [id]="'whyHeader' + i">
+                  <button class="accordion-button collapsed text-center" type="button" data-bs-toggle="collapse" 
+                          [attr.data-bs-target]="'#whyItem' + i" aria-expanded="false" [attr.aria-controls]="'whyItem' + i">
+                    <div class="w-100">
+                      <h4 class="fw-bold mb-2">{{ item.title }}</h4>
+                      <p class="mb-0">{{ item.description }}</p>
+                    </div>
+                  </button>
+                </h2>
+                <div [id]="'whyItem' + i" class="accordion-collapse collapse" [attr.aria-labelledby]="'whyHeader' + i">
+                  <div class="accordion-body">
+                    {{ item.detail }}
+                  </div>
                 </div>
-              </button>
-            </h2>
-            <div id="why1" class="accordion-collapse collapse">
-              <div class="accordion-body">
-                Utilizamos cifrado avanzado, auditorías continuas y protocolos internacionales para asegurar la integridad y privacidad de tu información.
               </div>
             </div>
           </div>
-        </div>
+        }
       </div>
-
-      <div class="col-md-4">
-        <div class="accordion">
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed text-center" type="button" data-bs-toggle="collapse" data-bs-target="#why2">
-                <div class="w-100">
-                  <h4 class="fw-bold mb-2">Soporte 24/7</h4>
-                  <p class="mb-0">Un equipo listo para ayudarte en cualquier momento.</p>
-                </div>
-              </button>
-            </h2>
-            <div id="why2" class="accordion-collapse collapse">
-              <div class="accordion-body">
-                Nuestro equipo de expertos está disponible por chat, correo y ticket para resolver cualquier duda o incidencia con rapidez.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="accordion">
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed text-center" type="button" data-bs-toggle="collapse" data-bs-target="#why3">
-                <div class="w-100">
-                  <h4 class="fw-bold mb-2">Actualizaciones Constantes</h4>
-                  <p class="mb-0">Mejoras y nuevas funciones añadidas de forma continua.</p>
-                </div>
-              </button>
-            </h2>
-            <div id="why3" class="accordion-collapse collapse">
-              <div class="accordion-body">
-                Implementamos nuevas características y mejoras de rendimiento regularmente para mantener tu experiencia siempre al máximo nivel.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="guarantees py-5">
-  <div class="container text-center">
-    <h2 class="fw-bold mb-4 titulo-uno mt-4 ">Garantías</h2>
+  <!-- ======================
+       SECCIÓN GARANTÍAS
+  ====================== -->
+  <section class="guarantees py-5">
+    <div class="container text-center">
+      <h2 class="fw-bold mb-4 titulo-uno mt-4">Garantías</h2>
 
-    <div class="row g-4 justify-content-center guarantees-row">
-
-      <div class="col-md-4">
-        <div class="accordion">
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed text-center" type="button" data-bs-toggle="collapse" data-bs-target="#g1">
-                <div class="w-100">
-                  <h4 class="fw-bold mb-2">14 días de reembolso</h4>
-                  <p class="mb-0">Si no quedas satisfecho, te devolvemos tu dinero.</p>
+      <div class="row g-4 justify-content-center guarantees-row">
+        @for (item of guarantees; track item.title; let i = $index) {
+          <div class="col-md-4">
+            <div class="accordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header" [id]="'guaranteeHeader' + i">
+                  <button class="accordion-button collapsed text-center" type="button" data-bs-toggle="collapse" 
+                          [attr.data-bs-target]="'#guaranteeItem' + i" aria-expanded="false" [attr.aria-controls]="'guaranteeItem' + i">
+                    <div class="w-100">
+                      <h4 class="fw-bold mb-2">{{ item.title }}</h4>
+                      <p class="mb-0">{{ item.description }}</p>
+                    </div>
+                  </button>
+                </h2>
+                <div [id]="'guaranteeItem' + i" class="accordion-collapse collapse" [attr.aria-labelledby]="'guaranteeHeader' + i">
+                  <div class="accordion-body">
+                    {{ item.detail }}
+                  </div>
                 </div>
-              </button>
-            </h2>
-            <div id="g1" class="accordion-collapse collapse">
-              <div class="accordion-body">
-                Durante los primeros 14 días puedes solicitar un reembolso completo sin preguntas. Queremos que te sientas totalmente seguro con tu inversión.
               </div>
             </div>
           </div>
-        </div>
+        }
       </div>
-
-      <div class="col-md-4">
-        <div class="accordion">
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed text-center" type="button" data-bs-toggle="collapse" data-bs-target="#g2">
-                <div class="w-100">
-                  <h4 class="fw-bold mb-2">Pagos Seguros</h4>
-                  <p class="mb-0">Procesamos a través de plataformas certificadas.</p>
-                </div>
-              </button>
-            </h2>
-            <div id="g2" class="accordion-collapse collapse">
-              <div class="accordion-body">
-                Todas las transacciones son procesadas mediante proveedores auditados y certificados en estándares internacionales de seguridad.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="accordion">
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed text-center" type="button" data-bs-toggle="collapse" data-bs-target="#g3">
-                <div class="w-100">
-                  <h4 class="fw-bold mb-2">Sin cargos ocultos</h4>
-                  <p class="mb-0">Transparencia total en todos nuestros precios.</p>
-                </div>
-              </button>
-            </h2>
-            <div id="g3" class="accordion-collapse collapse">
-              <div class="accordion-body">
-                No aplicamos cargos sorpresa ni incrementos inesperados. Siempre sabrás exactamente cuánto pagas.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
-  </div>
-</section>
+  </section>
+
+</main>

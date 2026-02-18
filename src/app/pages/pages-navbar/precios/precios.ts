@@ -1,19 +1,20 @@
-import { Component,Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PreguntasFrecuentes } from "./preguntas-frecuentes/preguntas-frecuentes";
+import { Plan } from '../../../shared/models/plan.model';
 
 @Component({
   selector: 'app-precios',
   standalone: true,
   imports: [CommonModule, PreguntasFrecuentes],
   templateUrl: './precios.html',
-  styleUrls: ['./precios.css']
+  styleUrl: './precios.css'
 })
 export class Precios {
   @Input() mostrarFaqs: boolean = true;
   isYearly = false;
 
-  plans = [
+  plans: Plan[] = [
     {
       name: 'Profesional',
       monthlyPrice: '17.99€/mes',
@@ -64,15 +65,14 @@ export class Precios {
 
   togglePricing(): void {
     this.isYearly = !this.isYearly;
-    console.log('Toggle clicked:', this.isYearly, 'Active class should be:', this.isYearly ? 'added' : 'removed');
   }
 
-  getCurrentPrice(plan: any): string {
+  getCurrentPrice(plan: Plan): string {
     return this.isYearly ? plan.yearlyPrice : plan.monthlyPrice;
   }
 
   // Nueva función para calcular el precio anual con descuento y el equivalente mensual
-  getAnnualInfo(plan: any): { total: string, monthlyEquivalent: string, totalSavings: string } {
+  getAnnualInfo(plan: Plan): { total: string; monthlyEquivalent: string; totalSavings: string } {
     // Cálculo: (Precio Mensual * (12 - Meses Gratis))
     const monthsPaid = 12 - plan.freeMonths; 
     const totalCost = (plan.monthlyPriceNum * monthsPaid); 

@@ -30,11 +30,11 @@
   --color-border-light: #e0e0e0;
 
   /* 🌿 COLORES TEMA VERDE (contacto) */
-  --color-green-forest-deep: #0d4a2a;
-  --color-green-nav-hover: rgb(29, 132, 69);
   --color-contact-bg: #a2c9b5;
   --color-green-forest: #063f01;
   --color-green-forest-mid: #0a5c02;
+  --color-green-forest-deep: #0d4a2a;
+  --color-green-nav-hover: rgb(29, 132, 69);
   --color-bg-valid: #d1fad0;
   --color-bg-invalid: #f8d7da;
 
@@ -43,6 +43,35 @@
   --color-bg-hero-overlay-mid: rgba(5, 30, 20, 0.65);
   --color-bg-hero-overlay-light: rgba(5, 30, 20, 0.3);
   --color-bg-hero-description: rgba(16, 95, 52, 0.7);
+
+  /* 🎨 PRECIOS / FAQ / ACORDEÓN */
+  --color-price-blue: #007bff;
+  --color-card-border: #e5e5e5;
+  --color-card-dark: #111827;
+  --color-text-dark: #374151;
+  --color-switch-active: #22c55e;
+  --color-switch-track: #d1d5db;
+  --color-badge-bg: #ffedd5;
+  --color-badge-text: #92400e;
+  --color-accordion-bg: #e9f5ef;
+  --color-accordion-hover: rgb(205, 229, 201);
+  --color-titulo-uno: #104226;
+  --color-titulo-dos: #cce5d6;
+  --color-premium-gradient-end: #9ac3ad;
+  --color-annual-highlight: #292d2e;
+  --color-premium-border: #0d6efd;
+  --color-premium-gradient-start: #105f34;
+  --color-premium-shadow: rgba(250, 204, 21, 0.4);
+  --color-toggle-slider: #fff;
+  --color-toggle-shadow: rgba(0,0,0,0.12);
+  --color-toggle-focus: rgba(34,197,94,0.15);
+  /* Textos específicos */
+  --color-text-titulo-soft: #d5eadf;
+  --color-text-titulo-soft-dark: #104226;
+  --color-text-titulo-soft-light: #cce5d6;
+
+  --shadow-card: 0 8px 25px rgba(0, 0, 0, 0.1);
+  --shadow-card-hover: 0 8px 25px rgba(0,0,0,0.1);
 
   /* 🎨 FONDOS */
   --color-bg-light: #f8f9fa;
@@ -65,6 +94,7 @@
 
   /* 🎨 BORDES Y RADIOS */
   --radius-sm: 10px;
+  --radius-card: 15px;
   --radius-md: 18px;
   --radius-lg: 20px;
 

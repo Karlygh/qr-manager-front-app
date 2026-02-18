@@ -1,205 +1,28 @@
 /* ======================
-   LANDING PRICES
+   TÍTULOS
 ====================== */
-.landing-prices {
-  background: #f8f9fa;
-}
-
-/* ======================
-   PRICE CARD
-====================== */
-.price-card {
-  background: white;
-  border-radius: 15px;
-  transition: all 0.3s ease;
-  border: 1px solid #e5e5e5;
-}
-
-.price-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-}
-
-.price {
-  font-size: 2rem;
-  color: #007bff;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  display: inline-block;
-}
-
-.price--updating {
-  opacity: 0.4;
-  transform: translateY(-6px);
-}
-
-.price-card.featured {
-  border: 2px solid #000;
-  transform: scale(1.05);
-}
-
-.price-card.featured .price {
-  color: #000;
-}
-
 h2.titulo-uno {
-  color: #d5eadf; 
-  letter-spacing: 5px;
+  color: var(--color-text-titulo-soft-dark);
+  letter-spacing: 3px;
+  font-size: 1.5rem;
 }
 
-/* ======================
-   BUTTONS
-====================== */
-.price-card .btn {
-  border-radius: 10px;
-  padding: 0.6rem 1rem;
-  font-weight: 600;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  letter-spacing: 5px; /* Incluido */
-}
-
-.price-card .btn:active {
-  transform: translateY(1px);
-}
-
-.price-card.featured .btn {
-  background: #111827;
-  color: #fff;
-  border: none;
-}
-
-/* ======================
-   BADGE / AHORRO
-====================== */
-.price-badge {
-  display: inline-block;
-  background: #ffedd5;
-  color: #92400e;
-  font-weight: 700;
-  padding: 0.25rem 0.5rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-}
-
-/* ======================
-   SWITCH / TOGGLE
-====================== */
-.switch-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  font-size: 1rem;
-  user-select: none;
-  vertical-align: middle;
-}
-
-.switch-toggle .slider {
-  width: 56px;
-  height: 30px;
-  background: #d1d5db;
-  border-radius: 999px;
-  position: relative;
-  transition: background 0.25s ease;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.03);
-}
-
-.switch-toggle .slider::before {
-  content: "";
-  width: 26px;
-  height: 26px;
-  background: #fff;
-  border-radius: 50%;
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  transition: transform 0.25s cubic-bezier(.2,.9,.3,1);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
-}
-
-.switch-toggle.active .slider {
-  background: #22c55e;
-}
-
-.switch-toggle.active .slider::before {
-  transform: translateX(26px);
-}
-
-.switch-toggle span {
-  font-weight: 500;
-  color: #374151;
-  font-size: 0.95rem;
-}
-
-.switch-toggle:focus-within .slider {
-  box-shadow: 0 0 0 4px rgba(34,197,94,0.15);
-}
-
-.landing-prices .toggle-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 1rem;
-}
-
-/* ======================
-   RESPONSIVE
-====================== */
-@media (max-width: 992px) {
-  .price {
-    font-size: 1.6rem;
-  }
-  .switch-toggle .slider {
-    width: 50px;
-    height: 26px;
-  }
-  .switch-toggle .slider::before {
-    width: 22px;
-    height: 22px;
-  }
-}
-
-@media (max-width: 768px) {
-  .price-card.featured {
-    transform: scale(1);
-  }
-}
-
-/* Estilo especial para Premium */
-.price-card.premium {
-  border: 4px solid #0d6efd;
-  background: linear-gradient(135deg, #105f34, #9ac3ad);
-  color: #111827;
-}
-
-.price-card.premium .price {
-  color: #000000;
-}
-
-.price-card.premium .btn {
-  background: #111827;
-  color: #0d6efd;
-  border: 2px solid #0d6efd;
-}
-
-.price-card.premium:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(250, 204, 21, 0.4);
-}
-
-.annual-price-highlight {
-  color: #292d2e;
+h2.titulo-dos {
+  color: var(--color-text-titulo-soft-light);
+  letter-spacing: 3px;
+  font-size: 1.5rem;
 }
 
 /* ======================
    FAQ
 ====================== */
 .pricing-faq {
-  background: #105f34; /* Incluido */
+  background: var(--color-success);
 }
+
 .pricing-faq .accordion-button {
   font-weight: 600;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   transition: all 0.25s ease;
   font-size: 1.3rem;
 }
@@ -209,26 +32,24 @@ h2.titulo-uno {
 }
 
 .pricing-faq .accordion-item {
-  border: 1px solid #e5e5e5;
-  border-radius: 10px;
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-sm);
   margin-bottom: 10px;
   overflow: hidden;
+  background-color: var(--color-accordion-bg);
 }
 
-.accordion-item{
-  background-color: #e9f5ef;
-}
-.accordion-item:hover {
-  background-color: rgb(205, 229, 201);
+.pricing-faq .accordion-item:hover {
+  background-color: var(--color-accordion-hover);
 }
 
 /* ======================
    WHY US
 ====================== */
 .why-card {
-  background: #ffffff;
-  border-radius: 15px;
-  border: 1px solid #e5e5e5;
+  background: var(--color-bg-white);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-card-border);
   transition: all 0.3s ease;
   position: relative;
   overflow: visible;
@@ -236,7 +57,7 @@ h2.titulo-uno {
 
 .why-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  box-shadow: var(--shadow-card);
 }
 
 .why-card + .collapse {
@@ -252,9 +73,9 @@ h2.titulo-uno {
    GUARANTEES
 ====================== */
 .guarantee-card {
-  background: #ffffff;
-  border-radius: 15px;
-  border: 1px solid #e5e5e5;
+  background: var(--color-bg-white);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-card-border);
   transition: all 0.3s ease;
   position: relative;
   overflow: visible;
@@ -262,7 +83,7 @@ h2.titulo-uno {
 
 .guarantee-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-card);
 }
 
 .guarantee-card + .collapse {
@@ -275,14 +96,32 @@ h2.titulo-uno {
 }
 
 .guarantees {
-  padding-top: 4rem !important; /* Incluido */
-  padding-bottom: 10rem !important; /* Incluido */
+  padding-top: 4rem;
+  padding-bottom: 10rem;
 }
 
 .guarantees-row {
   max-width: 900px;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* ======================
+   RESPONSIVE
+====================== */
+@media (min-width: 1200px) and (max-width: 1919px) {
+  .pricing-faq .accordion-button {
+      font-size: 1.1rem;
+  }
+  
+  .guarantees {
+      padding-top: 2rem;
+      padding-bottom: 6rem;
+  }
+  
+  h2.titulo-uno, h2.titulo-dos {
+      font-size: 1rem;
+  }
 }
 
 @media (max-width: 576px) {
@@ -304,24 +143,11 @@ footer {
   position: relative;
   z-index: 2;
 }
-h2.titulo-uno {
-  color: #104226; 
-  letter-spacing: 3px;
-    font-size: 1.5rem;
 
-}
-h2.titulo-dos {
-  color: #cce5d6; 
-  letter-spacing: 3px;
-    font-size: 1.5rem;
-
-}
 /* ======================
    FIX RESPONSIVE OVERFLOW
 ====================== */
 @media (max-width: 576px) {
-
-  /* Evita que las tarjetas crezcan más del ancho de pantalla */
   .price-card,
   .price-card.premium,
   .price-card.featured {
@@ -329,27 +155,24 @@ h2.titulo-dos {
     width: 100%;
   }
 
-  /* Reduce el spacing del texto de los botones */
   .price-card .btn {
     letter-spacing: 1px;
     padding: 0.5rem 0.8rem;
   }
 
-  /* Asegura que no haya escala que cause overflow */
   .price-card.featured {
-    transform: scale(1) !important;
+    transform: scale(1);
   }
 
-  /* Reduce tamaño del precio para que no empuje el ancho */
   .price {
     font-size: 1.4rem;
   }
 
-  /* Ajusta slider toggle para no desbordar */
   .switch-toggle .slider {
     width: 45px;
     height: 24px;
   }
+
   .switch-toggle .slider::before {
     width: 20px;
     height: 20px;
