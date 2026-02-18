@@ -2,6 +2,10 @@
    CARTA WRAPPER - Contenedor principal
    ============================================ */
 .carta-wrapper {
+  --navbar-height: 56px;
+  --search-height: 96px;
+  --filters-height: 72px;
+  --subfilters-height: 64px;
   min-height: 100vh;
   background-color: var(--bg-section);
   color: var(--text-dark);
@@ -39,11 +43,8 @@ body {
   transition: transform 0.3s ease-in-out;
 }
 
-/* Header oculto en móviles al hacer scroll */
-@media (max-width: 768px) {
-  .business-header.header-hidden {
-    transform: translateY(-100%);
-  }
+.business-header.header-hidden {
+  transform: translateY(-100%);
 }
 .dark-theme .business-header {
   box-shadow: var(--carta-shadow-header-dark);
@@ -337,14 +338,16 @@ body {
    SEARCH BAR (STICKY)
    ============================================ */
 .search-bar-sticky {
+  position: -webkit-sticky;
   position: sticky;
-  top: var(--navbar-height);
-  z-index: 1020;
+  top: 0;
+  z-index: 1030;
   background: var(--bg-card);
   padding: 1rem;
   padding-bottom: 1.5rem;
   box-shadow: var(--carta-shadow-sticky);
   border-bottom: 1px solid var(--border-light);
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
 .search-container {
@@ -412,13 +415,15 @@ body {
    CATEGORY FILTERS (STICKY)
    ============================================ */
 .filters-sticky {
+  position: -webkit-sticky;
   position: sticky;
-  top: calc(var(--navbar-height) + var(--search-height));
-  z-index: 1015;
+  top: var(--search-height, 96px);
+  z-index: 1025;
   background-color: var(--bg-card);
   padding: 0.75rem 0;
   border-bottom: 2px solid var(--border-light);
   box-shadow: var(--carta-shadow-filters);
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
 .filters-scroll {
@@ -527,10 +532,23 @@ body {
    SUBCATEGORY FILTERS
    ============================================ */
 .subcategory-filters {
+  position: -webkit-sticky;
+  position: sticky;
+  top: calc(var(--search-height, 96px) + var(--filters-height, 72px));
+  z-index: 1020;
   background-color: var(--bg-section);
   padding: 0.625rem 0;
   border-bottom: 1px solid var(--border-light);
   box-shadow: var(--carta-shadow-subcategory-inset);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.main-wrapper.sticky-hidden .search-bar-sticky,
+.main-wrapper.sticky-hidden .filters-sticky,
+.main-wrapper.sticky-hidden .subcategory-filters {
+  transform: translateY(-120%);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .subcategory-title {
@@ -1109,6 +1127,9 @@ body {
 @media (max-width: 767px) {
   .carta-wrapper {
     --navbar-height: 56px;
+    --search-height: 92px;
+    --filters-height: 68px;
+    --subfilters-height: 60px;
   }
 
   .products-grid {

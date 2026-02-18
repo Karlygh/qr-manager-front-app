@@ -84,7 +84,7 @@
   }
 
   @if (!isLoading() && !errorMessage()) {
-    <div class="main-wrapper">
+    <div class="main-wrapper" [class.sticky-hidden]="isHeaderHidden()">
       <div class="search-bar-sticky">
         <div class="search-container">
           <i class="bi bi-search search-icon"></i>

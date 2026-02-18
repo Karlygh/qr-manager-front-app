@@ -248,20 +248,14 @@ export class CartaPrincipalComponent implements OnInit, OnDestroy {
     }
 
     const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const isMobile = window.innerWidth <= 768;
+    if (Math.abs(currentScrollTop - this.lastScrollTop) < this.scrollThreshold) {
+      return;
+    }
 
-    if (!isMobile) {
+    if (currentScrollTop > this.lastScrollTop && currentScrollTop > 60) {
+      this.isHeaderHidden.set(true);
+    } else if (currentScrollTop < this.lastScrollTop) {
       this.isHeaderHidden.set(false);
-    } else {
-      if (Math.abs(currentScrollTop - this.lastScrollTop) < this.scrollThreshold) {
-        return;
-      }
-
-      if (currentScrollTop > this.lastScrollTop && currentScrollTop > 60) {
-        this.isHeaderHidden.set(true);
-      } else if (currentScrollTop < this.lastScrollTop) {
-        this.isHeaderHidden.set(false);
-      }
     }
 
     this.lastScrollTop = currentScrollTop;
