@@ -1,40 +1,41 @@
-<form class="login-form" (ngSubmit)="onSubmit($event)">
-  
-  <!-- Mensaje de error -->
-  <div *ngIf="errorMessage" style="background: #fee2e2; color: #991b1b; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.875rem; border: 1px solid #fecaca;">
-    ⚠️ {{ errorMessage }}
-  </div>
-  
+<form class="login-form" (ngSubmit)="onSubmit()">
+
+  @if (errorMessage) {
+    <div class="alert-error">
+      ⚠️ {{ errorMessage }}
+    </div>
+  }
+
   <div class="form-group">
     <label for="email" class="form-label">Email</label>
-    <input 
-      type="email" 
-      id="email" 
-      class="form-control" 
-      placeholder="tu@email.com" 
+    <input
+      type="email"
+      id="email"
+      class="form-control"
+      placeholder="tu@email.com"
       [(ngModel)]="email"
       name="email"
       required>
   </div>
-  
+
   <div class="form-group">
     <label for="password" class="form-label">Contraseña</label>
-    <input 
-      type="password" 
-      id="password" 
-      class="form-control" 
-      placeholder="••••••••" 
+    <input
+      type="password"
+      id="password"
+      class="form-control"
+      placeholder="••••••••"
       [(ngModel)]="password"
       name="password"
       required>
   </div>
-  
+
   <div class="form-options">
-    <a href="#" class="forgot-password" routerLink="/recuperar-contraseña">¿Olvidaste la contraseña?</a>
+    <a class="forgot-password" routerLink="/recuperar-contraseña">¿Olvidaste la contraseña?</a>
   </div>
-  
+
   <button type="submit" class="btn-login">
     {{ isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
   </button>
-  
+
 </form>

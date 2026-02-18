@@ -12,12 +12,14 @@
   --color-success-dark: #0c4d2b;
   --color-success-light: #6aa486;
   --color-danger: #dc3545;
-  
+
   /* 🌿 COLORES TEMA VERDE (carta-digital) */
   --color-green-dark: #0a3b20;
   --color-green-medium: #4d9363;
   --color-green-text: #2d5a3d;
   --color-green-soft: #4d5f54;
+  --color-green-accent: #75c298;
+  --color-green-accent-light: #7ed2a4;
   --color-bg-green-light: #c7eed4;
   --color-bg-green-hover: #e8f3ea;
   --color-bg-green-card: #f5f9f6;
@@ -26,7 +28,22 @@
   --color-text-muted: #666;
   --color-border: #ccc;
   --color-border-light: #e0e0e0;
-  
+
+  /* 🌿 COLORES TEMA VERDE (contacto) */
+  --color-green-forest-deep: #0d4a2a;
+  --color-green-nav-hover: rgb(29, 132, 69);
+  --color-contact-bg: #a2c9b5;
+  --color-green-forest: #063f01;
+  --color-green-forest-mid: #0a5c02;
+  --color-bg-valid: #d1fad0;
+  --color-bg-invalid: #f8d7da;
+
+  /* 🌿 HERO OVERLAY (carta-digital, contacto y otros) */
+  --color-bg-hero-overlay-strong: rgba(5, 30, 20, 0.92);
+  --color-bg-hero-overlay-mid: rgba(5, 30, 20, 0.65);
+  --color-bg-hero-overlay-light: rgba(5, 30, 20, 0.3);
+  --color-bg-hero-description: rgba(16, 95, 52, 0.7);
+
   /* 🎨 FONDOS */
   --color-bg-light: #f8f9fa;
   --color-bg-white: #fff;
@@ -34,12 +51,17 @@
   --color-bg-success: #f6fdf9;
   --color-bg-alert: #f7faff;
   --color-bg-error: #fff7f7;
-  --color-overlay: rgba(0, 0, 0, 0.6);
+  --color-overlay: rgba(0, 0, 0, 0.7);
+
+  /* 🎨 TEXTO */
+  --color-text-white: #ffffff;
+  --color-text-hero-muted: #f0f0f0;
 
   /* 🎨 SOMBRAS */
   --shadow-sm: 0 10px 20px rgba(16, 95, 52, 0.2);
   --shadow-md: 0 10px 30px rgba(106, 164, 134, 0.2);
   --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.25);
+  --shadow-text: 2px 2px 4px rgba(0, 0, 0, 0.7);
 
   /* 🎨 BORDES Y RADIOS */
   --radius-sm: 10px;

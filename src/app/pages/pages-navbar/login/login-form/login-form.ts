@@ -7,7 +7,7 @@ import { AuthService } from '../../../../services/auth.service';
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [CommonModule, RouterModule,  FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './login-form.html',
   styleUrl: './login-form.css'
 })
@@ -15,14 +15,12 @@ export class LoginForm {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  email: string = '';
-  password: string = '';
-  isLoading: boolean = false;
-  errorMessage: string = '';
+  email = '';
+  password = '';
+  isLoading = false;
+  errorMessage = '';
 
-  onSubmit(event: Event): void {
-    event.preventDefault();
-    
+  onSubmit(): void {
     if (!this.email || !this.password) {
       this.errorMessage = 'Por favor completa todos los campos';
       return;
@@ -32,16 +30,12 @@ export class LoginForm {
     this.errorMessage = '';
 
     this.authService.login({ email: this.email, password: this.password }).subscribe({
-      next: (response) => {
-        console.log('✅ Login exitoso:', response);
-        console.log('🔑 Access Token guardado');
-        // Redirigir al panel de control
+      next: () => {
         this.router.navigate(['/panel-control']);
       },
       error: (error) => {
-        console.error('❌ Error en login:', error);
         this.isLoading = false;
-        
+
         if (error.status === 401) {
           this.errorMessage = 'Email o contraseña incorrectos';
         } else if (error.status === 0) {

@@ -1,3 +1,4 @@
+
 .login-form {
   display: flex;
   flex-direction: column;
@@ -13,15 +14,15 @@
 
 .form-label {
   font-weight: 500;
-  color: #495057;
+  color: var(--color-text-secondary);
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
 }
 
 .form-control {
   padding: 0.75rem 1rem;
-  border: 2px solid #e9ecef;
-  border-radius: 8px;
+  border: 2px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
   font-size: 0.875rem;
   transition: border-color 0.2s ease;
   width: 100%;
@@ -29,7 +30,7 @@
 }
 
 .form-control:focus {
-  border-color: #105f34;
+  border-color: var(--color-success);
   box-shadow: 0 0 0 0.2rem rgba(16, 95, 52, 0.25);
   outline: none;
 }
@@ -55,13 +56,13 @@
 
 .form-check-label {
   font-size: 0.875rem;
-  color: #6c757d;
+  color: var(--color-text-muted);
   white-space: nowrap;
 }
 
 .forgot-password {
   font-size: 0.875rem;
-  color: #105f34;
+  color: var(--color-success);
   text-decoration: none;
   white-space: nowrap;
 }
@@ -71,11 +72,11 @@
 }
 
 .btn-login {
-  background: #105f34;
-  color: white;
+  background: var(--color-success);
+  color: var(--color-text-white);
   border: none;
   padding: 0.75rem 1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -84,7 +85,18 @@
 }
 
 .btn-login:hover {
-  background: #0d4a2a;
+  background: var(--color-green-forest-deep);
+}
+
+/* Mensaje de error */
+.alert-error {
+  background: var(--color-bg-error);
+  color: var(--color-danger);
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  border: 1px solid #fecaca;
 }
 
 /* Responsive */
@@ -94,12 +106,12 @@
     align-items: flex-start;
     gap: 0.75rem;
   }
-  
+
   .form-control {
     padding: 0.625rem 0.875rem;
     font-size: 1rem;
   }
-  
+
   .btn-login {
     padding: 0.875rem 1rem;
     font-size: 1rem;
