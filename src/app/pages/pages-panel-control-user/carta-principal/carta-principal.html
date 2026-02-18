@@ -1,261 +1,295 @@
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-<div class="carta-wrapper" [class.dark-theme]="isDarkMode">
-
-<!-- Header personalizado -->
-<header class="business-header" [class.header-hidden]="isHeaderHidden">
-  <div class="container-fluid d-flex justify-content-between align-items-center py-3">
-    <div class="d-flex flex-column align-items-start">
-      <div class="d-flex align-items-center mb-1">
-        <i class="bi bi-shop me-2" style="font-size:1.7rem;color:var(--primary-color)"></i>
-        <span class="fw-bold" style="font-size:1.1rem;">Bienvenido a</span>
+<div class="carta-wrapper" [class.dark-theme]="isDarkMode()">
+  <header class="business-header" [class.header-hidden]="isHeaderHidden()">
+    <div class="container-fluid d-flex justify-content-between align-items-center py-3">
+      <div class="d-flex flex-column align-items-start">
+        <div class="d-flex align-items-center mb-1">
+          <i class="bi bi-shop me-2 business-icon"></i>
+          <span class="fw-bold business-subtitle">Bienvenido a</span>
+        </div>
+        <span class="business-title fw-bold">{{ businessName() }}</span>
       </div>
-      <span class="business-title fw-bold">{{ businessName }}</span>
-    </div>
-    
-    <!-- Menú Hamburguesa -->
-    <div class="header-actions">
-      <button class="menu-hamburger" (click)="toggleMenu()" [attr.aria-label]="isMenuOpen ? 'Cerrar menú' : 'Abrir menú'">
-        <i class="bi" [ngClass]="isMenuOpen ? 'bi-x-lg' : 'bi-list'"></i>
-      </button>
-      
-      <!-- Menú desplegable -->
-      <div class="dropdown-menu" [class.active]="isMenuOpen">
-        <a [routerLink]="['/panel', businessId, 'ver-instalaciones']" class="dropdown-item" (click)="toggleMenu()">
-          <i class="bi bi-house-door"></i>
-          <span>Instalaciones</span>
-        </a>
-        <a [routerLink]="['/panel', businessId, 'ver-wifi']" class="dropdown-item" (click)="toggleMenu()">
-          <i class="bi bi-info-circle"></i>
-          <span>Wifi</span>
-        </a>
-        <a [routerLink]="['/panel', businessId, 'ver-horario']" class="dropdown-item" (click)="toggleMenu()">
-          <i class="bi bi-telephone"></i>
-          <span>Horarios</span>
-        </a>
-        <a [routerLink]="['/panel', businessId, 'ver-google']" class="dropdown-item" (click)="toggleMenu()">
-          <i class="bi bi-google"></i>
-          <span>Google Reseñas</span>
-        </a>
-        <a [routerLink]="['/panel', businessId, 'ver-redes']" class="dropdown-item" (click)="toggleMenu()">
-          <i class="bi bi-gear"></i>
-          <span>Redes Sociales</span>
-        </a>
-      </div>
-      
-      <!-- Toggle Modo Oscuro -->
-      <button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Activar modo claro' : 'Activar modo oscuro'">
-        <i class="bi" [ngClass]="isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill'"></i>
-      </button>
-    </div>
-  </div>
-</header>
 
-<!-- Skeleton Loading -->
-<div *ngIf="isLoading" class="skeleton-container">
-  <div class="skeleton skeleton-search"></div>
-  <div class="skeleton-filters">
-    <div class="skeleton skeleton-chip" *ngFor="let i of [1,2,3,4,5]"></div>
-  </div>
-  <div class="skeleton-products">
-    <div class="skeleton skeleton-card" *ngFor="let i of [1,2,3,4,5,6]"></div>
-  </div>
-</div>
+      <div class="header-actions">
+        <button
+          class="menu-hamburger"
+          (click)="toggleMenu()"
+          [attr.aria-label]="isMenuOpen() ? 'Cerrar menú' : 'Abrir menú'"
+          aria-controls="header-menu"
+          [attr.aria-expanded]="isMenuOpen()"
+          type="button"
+        >
+          <i class="bi" [class.bi-x-lg]="isMenuOpen()" [class.bi-list]="!isMenuOpen()"></i>
+        </button>
 
-<!-- Error State -->
-<div *ngIf="errorMessage && !isLoading" class="error-state">
-  <div class="error-icon">⚠️</div>
-  <h3>Ups, algo salió mal</h3>
-  <p>{{ errorMessage }}</p>
-  <button class="btn-retry" (click)="retryLoadData()">
-    <i class="bi bi-arrow-clockwise"></i> Reintentar
-  </button>
-</div>
-
-<!-- Main Content -->
-<div class="main-wrapper" *ngIf="!isLoading && !errorMessage">
-
-  <!-- Search Bar (Sticky) -->
-  <div class="search-bar-sticky">
-    <div class="search-container">
-      <i class="bi bi-search search-icon"></i>
-      <input
-        type="text"
-        class="search-input"
-        placeholder="Buscar platos, bebidas..."
-        [(ngModel)]="searchTerm"
-        (input)="onSearch()"
-      />
-      <button *ngIf="searchTerm" class="clear-search-btn" (click)="searchTerm=''; onSearch()">
-        <i class="bi bi-x-circle-fill"></i>
-      </button>
-    </div>
-  </div>
-
-  <!-- Category Filters (Sticky) -->
-  <div class="filters-sticky">
-    <div class="filters-scroll">
-      <!-- Botón "Todos" -->
-      <button
-        class="filter-chip"
-        [class.active]="selectedCategoryId === null && selectedSubcategoryId === null && !searchTerm"
-        (click)="clearFilters()">
-        <span class="filter-emoji">🍽️</span>
-        <span class="filter-text">Todos</span>
-        <span class="filter-count">({{ allProducts.length }})</span>
-      </button>
-
-      <!-- Filtros de categorías -->
-      <button
-        *ngFor="let category of categories"
-        class="filter-chip"
-        [class.active]="selectedCategoryId === category.id"
-        (click)="filterByCategory(category.id)">
-        <span class="filter-emoji">{{ category.emoji }}</span>
-        <span class="filter-text">{{ category.name }}</span>
-        <span class="filter-count">({{ getCategoryCount(category.id) }})</span>
-      </button>
-
-      <!-- Botón Limpiar filtros -->
-      <button
-        *ngIf="hasActiveFilters()"
-        class="filter-chip filter-chip-clear"
-        (click)="clearFilters()">
-        <i class="bi bi-x-lg"></i>
-        <span class="filter-text">Limpiar</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- Subcategory Filters (si hay) -->
-  <div class="subcategory-filters" *ngIf="subcategories.length > 0">
-    <div class="subcategory-title">Subcategorías</div>
-    <div class="filters-scroll">
-      <button
-        *ngFor="let sub of subcategories"
-        class="sub-chip"
-        [class.active]="selectedSubcategoryId === sub.id"
-        (click)="filterBySubcategory(sub.id)">
-        {{ sub.name }}
-        <span class="filter-count">({{ getSubcategoryCount(sub.id) }})</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- Products Container -->
-  <div class="products-container">
-
-    <!-- Empty State: Sin resultados de búsqueda -->
-    <div *ngIf="filteredProducts.length === 0 && searchTerm" class="empty-state">
-      <div class="empty-icon">🔍</div>
-      <h3>No encontramos "{{ searchTerm }}"</h3>
-      <p>Intenta buscar con otras palabras</p>
-      <button class="btn-clear-search" (click)="searchTerm=''; onSearch()">
-        <i class="bi bi-arrow-left"></i> Limpiar búsqueda
-      </button>
-    </div>
-
-    <!-- Empty State: Sin productos en categoría -->
-    <div *ngIf="filteredProducts.length === 0 && !searchTerm && selectedCategoryId" class="empty-state">
-      <div class="empty-icon">🍽️</div>
-      <h3>Aún no hay productos disponibles</h3>
-      <p>Esta sección está en construcción</p>
-      <button class="btn-clear-search" (click)="clearFilters()">
-        <i class="bi bi-arrow-left"></i> Ver todos
-      </button>
-    </div>
-
-    <!-- Empty State: Sin productos en absoluto -->
-    <div *ngIf="allProducts.length === 0" class="empty-state">
-      <div class="empty-icon">📋</div>
-      <h3>No hay productos disponibles</h3>
-      <p>Actualmente no hay productos en el menú</p>
-    </div>
-
-    <!-- Product Grid -->
-    <div class="products-grid" *ngIf="filteredProducts.length > 0">
-      <div
-        class="product-card"
-        *ngFor="let product of filteredProducts"
-        (click)="onProductClick(product)">
-
-        <div class="product-image-wrapper">
-          <img
-            *ngIf="getProductImage(product)"
-            [src]="getProductImage(product)"
-            [alt]="product.name"
-            class="product-image"
-            loading="lazy"
-          />
-          <div *ngIf="!getProductImage(product)" class="product-image-placeholder">
-            <i class="bi bi-image"></i>
-          </div>
+        <div id="header-menu" class="dropdown-menu" [class.active]="isMenuOpen()">
+          <a [routerLink]="['/panel', businessId(), 'ver-instalaciones']" class="dropdown-item" (click)="closeMenu()" aria-label="Ir a instalaciones">
+            <i class="bi bi-house-door"></i>
+            <span>Instalaciones</span>
+          </a>
+          <a [routerLink]="['/panel', businessId(), 'ver-wifi']" class="dropdown-item" (click)="closeMenu()" aria-label="Ir a wifi">
+            <i class="bi bi-info-circle"></i>
+            <span>Wifi</span>
+          </a>
+          <a [routerLink]="['/panel', businessId(), 'ver-horario']" class="dropdown-item" (click)="closeMenu()" aria-label="Ir a horarios">
+            <i class="bi bi-telephone"></i>
+            <span>Horarios</span>
+          </a>
+          <a [routerLink]="['/panel', businessId(), 'ver-google']" class="dropdown-item" (click)="closeMenu()" aria-label="Ir a reseñas de Google">
+            <i class="bi bi-google"></i>
+            <span>Google Reseñas</span>
+          </a>
+          <a [routerLink]="['/panel', businessId(), 'ver-redes']" class="dropdown-item" (click)="closeMenu()" aria-label="Ir a redes sociales">
+            <i class="bi bi-gear"></i>
+            <span>Redes Sociales</span>
+          </a>
         </div>
 
-        <div class="product-body">
-          <h3 class="product-name">{{ product.name }}</h3>
-          <p class="product-description" *ngIf="product.description">
-            {{ truncateText(product.description, 80) }}
-          </p>
-          <div class="product-footer">
-            <span class="product-price">{{ formatPrice(product.price) }}</span>
-            <button class="btn-view-product">
-              <i class="bi bi-plus-circle"></i>
+        <button
+          class="theme-toggle"
+          (click)="toggleTheme()"
+          [attr.aria-label]="isDarkMode() ? 'Activar modo claro' : 'Activar modo oscuro'"
+          type="button"
+        >
+          <i class="bi" [class.bi-sun-fill]="isDarkMode()" [class.bi-moon-fill]="!isDarkMode()"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  @if (isLoading()) {
+    <div class="skeleton-container" aria-label="Cargando contenido" role="status">
+      <div class="skeleton skeleton-search"></div>
+      <div class="skeleton-filters">
+        @for (item of skeletonFilters; track item) {
+          <div class="skeleton skeleton-chip"></div>
+        }
+      </div>
+      <div class="skeleton-products">
+        @for (item of skeletonCards; track item) {
+          <div class="skeleton skeleton-card"></div>
+        }
+      </div>
+    </div>
+  }
+
+  @if (errorMessage() && !isLoading()) {
+    <div class="error-state" role="alert" aria-live="assertive">
+      <div class="error-icon">⚠️</div>
+      <h3>Ups, algo salió mal</h3>
+      <p>{{ errorMessage() }}</p>
+      <button class="btn-retry" (click)="retryLoadData()" aria-label="Reintentar carga" type="button">
+        <i class="bi bi-arrow-clockwise"></i> Reintentar
+      </button>
+    </div>
+  }
+
+  @if (!isLoading() && !errorMessage()) {
+    <div class="main-wrapper">
+      <div class="search-bar-sticky">
+        <div class="search-container">
+          <i class="bi bi-search search-icon"></i>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Buscar platos, bebidas..."
+            [ngModel]="searchTerm()"
+            (ngModelChange)="onSearchInput($event)"
+            aria-label="Buscar productos"
+          />
+          @if (searchTerm()) {
+            <button class="clear-search-btn" (click)="clearSearch()" aria-label="Limpiar búsqueda" type="button">
+              <i class="bi bi-x-circle-fill"></i>
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="filters-sticky">
+        <div class="filters-scroll" role="list" aria-label="Filtros de categorías">
+          <button
+            class="filter-chip"
+            [class.active]="selectedCategoryId() === null && selectedSubcategoryId() === null && !searchTerm()"
+            (click)="clearFilters()"
+            aria-label="Mostrar todos los productos"
+            type="button"
+          >
+            <span class="filter-emoji">🍽️</span>
+            <span class="filter-text">Todos</span>
+            <span class="filter-count">({{ allProducts().length }})</span>
+          </button>
+
+          @for (category of categoriesWithCount(); track category.id) {
+            <button
+              class="filter-chip"
+              [class.active]="selectedCategoryId() === category.id"
+              (click)="filterByCategory(category.id)"
+              [attr.aria-label]="'Filtrar por ' + category.name"
+              type="button"
+            >
+              <span class="filter-emoji">{{ category.emoji }}</span>
+              <span class="filter-text">{{ category.name }}</span>
+              <span class="filter-count">({{ category.count }})</span>
+            </button>
+          }
+
+          @if (hasActiveFilters()) {
+            <button class="filter-chip filter-chip-clear" (click)="clearFilters()" aria-label="Limpiar filtros activos" type="button">
+              <i class="bi bi-x-lg"></i>
+              <span class="filter-text">Limpiar</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      @if (subcategoriesWithCount().length > 0) {
+        <div class="subcategory-filters">
+          <div class="subcategory-title">Subcategorías</div>
+          <div class="filters-scroll" role="list" aria-label="Filtros de subcategorías">
+            @for (sub of subcategoriesWithCount(); track sub.id) {
+              <button
+                class="sub-chip"
+                [class.active]="selectedSubcategoryId() === sub.id"
+                (click)="filterBySubcategory(sub.id)"
+                [attr.aria-label]="'Filtrar por subcategoría ' + sub.name"
+                type="button"
+              >
+                {{ sub.name }}
+                <span class="filter-count">({{ sub.count }})</span>
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      <div class="products-container">
+        @if (showSearchEmptyState()) {
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <h3>No encontramos "{{ trimmedSearchTerm() }}"</h3>
+            <p>Intenta buscar con otras palabras</p>
+            <button class="btn-clear-search" (click)="clearSearch()" aria-label="Limpiar búsqueda" type="button">
+              <i class="bi bi-arrow-left"></i> Limpiar búsqueda
             </button>
           </div>
-          <div class="product-allergens" *ngIf="getAllergenNames(product).length > 0">
-            <i class="bi bi-info-circle"></i>
-            <span>{{ getAllergensText(product) }}</span>
+        }
+
+        @if (showCategoryEmptyState()) {
+          <div class="empty-state">
+            <div class="empty-icon">🍽️</div>
+            <h3>Aún no hay productos disponibles</h3>
+            <p>Esta sección está en construcción</p>
+            <button class="btn-clear-search" (click)="clearFilters()" aria-label="Ver todos los productos" type="button">
+              <i class="bi bi-arrow-left"></i> Ver todos
+            </button>
           </div>
+        }
+
+        @if (showGlobalEmptyState()) {
+          <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <h3>No hay productos disponibles</h3>
+            <p>Actualmente no hay productos en el menú</p>
+          </div>
+        }
+
+        @if (productCards().length > 0) {
+          <div class="products-grid" role="list" aria-label="Listado de productos">
+            @for (product of productCards(); track product.id) {
+              <div class="product-card" (click)="onProductClick(product)" role="listitem" [attr.aria-label]="'Ver detalle de ' + product.name">
+                <div class="product-image-wrapper">
+                  @if (product.hasImage) {
+                    <img
+                      [src]="product.imageUrl"
+                      [alt]="product.name"
+                      class="product-image"
+                      loading="lazy"
+                    />
+                  } @else {
+                    <div class="product-image-placeholder" aria-label="Producto sin imagen">
+                      <i class="bi bi-image"></i>
+                    </div>
+                  }
+                </div>
+
+                <div class="product-body">
+                  <h3 class="product-name">{{ product.name }}</h3>
+                  @if (product.description) {
+                    <p class="product-description">{{ product.truncatedDescription }}</p>
+                  }
+                  <div class="product-footer">
+                    <span class="product-price">{{ product.formattedPrice }}</span>
+                    <button class="btn-view-product" aria-label="Abrir detalle de producto" type="button">
+                      <i class="bi bi-plus-circle"></i>
+                    </button>
+                  </div>
+                  @if (product.allergenNames.length > 0) {
+                    <div class="product-allergens" [attr.aria-label]="'Alérgenos: ' + product.allergensText">
+                      <i class="bi bi-info-circle"></i>
+                      <span>{{ product.allergensText }}</span>
+                    </div>
+                  }
+                </div>
+              </div>
+            } @empty {
+              <div class="empty-state">
+                <div class="empty-icon">📋</div>
+                <h3>No hay productos para mostrar</h3>
+                <p>Ajusta los filtros para intentar de nuevo</p>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      @if (hasActiveFilters() && showClearButton()) {
+        <button
+          class="btn-clear-filters-floating"
+          (click)="clearFilters()"
+          aria-label="Limpiar filtros"
+          type="button"
+        >
+          <i class="bi bi-x-circle"></i> Limpiar filtros
+        </button>
+      }
+    </div>
+  }
+
+  @if (selectedProduct(); as selected) {
+    <div class="product-modal-overlay" (click)="closeProductModal()" role="dialog" aria-modal="true" aria-label="Detalle de producto">
+      <div class="product-modal" (click)="$event.stopPropagation()">
+        <button class="modal-close-btn" (click)="closeProductModal()" aria-label="Cerrar detalle de producto" type="button">
+          <i class="bi bi-x-lg"></i>
+        </button>
+
+        @if (selected.hasImage) {
+          <div class="modal-image-wrapper">
+            <img [src]="selected.imageUrl" [alt]="selected.name" />
+          </div>
+        }
+
+        <div class="modal-content-wrapper">
+          <h2 class="modal-product-name">{{ selected.name }}</h2>
+
+          @if (selected.description) {
+            <div class="modal-section modal-description-section">
+              <p class="modal-product-description">{{ selected.description }}</p>
+            </div>
+          }
+
+          <div class="modal-section modal-price-section">
+            <p class="modal-product-price">{{ selected.formattedPrice }}</p>
+          </div>
+
+          @if (selected.allergenNames.length > 0) {
+            <div class="modal-section modal-allergens-section">
+              <div class="modal-allergens">
+                <h4><i class="bi bi-info-circle"></i> Alérgenos</h4>
+                <p>{{ selected.allergensText }}</p>
+              </div>
+            </div>
+          }
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Botón flotante "Limpiar filtros" -->
-  <button
-    *ngIf="hasActiveFilters() && showClearButton"
-    class="btn-clear-filters-floating"
-    (click)="clearFilters()">
-    <i class="bi bi-x-circle"></i> Limpiar filtros
-  </button>
-
+  }
 </div>
-
-<!-- Product Modal -->
-<div class="product-modal-overlay" *ngIf="selectedProduct" (click)="closeProductModal()">
-  <div class="product-modal" (click)="$event.stopPropagation()">
-    <button class="modal-close-btn" (click)="closeProductModal()">
-      <i class="bi bi-x-lg"></i>
-    </button>
-
-    <div class="modal-image-wrapper" *ngIf="getProductImage(selectedProduct)">
-      <img [src]="getProductImage(selectedProduct)" [alt]="selectedProduct.name" />
-    </div>
-
-    <div class="modal-content-wrapper">
-      <h2 class="modal-product-name">{{ selectedProduct.name }}</h2>
-
-      <div class="modal-section modal-description-section" *ngIf="selectedProduct.description">
-        <p class="modal-product-description">
-          {{ selectedProduct.description }}
-        </p>
-      </div>
-
-      <div class="modal-section modal-price-section">
-        <p class="modal-product-price">{{ formatPrice(selectedProduct.price) }}</p>
-      </div>
-
-      <div class="modal-section modal-allergens-section" *ngIf="getAllergenNames(selectedProduct).length > 0">
-        <div class="modal-allergens">
-          <h4><i class="bi bi-info-circle"></i> Alérgenos</h4>
-          <p>{{ getAllergensText(selectedProduct) }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-</div> <!-- /carta-wrapper -->
