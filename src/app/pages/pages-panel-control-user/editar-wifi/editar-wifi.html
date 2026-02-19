@@ -37,20 +37,19 @@
                             <p class="text-muted">Configura la primera red WiFi para tus clientes.</p>
                         </div>
 
-                        <form *ngIf="wifiData || showCreateForm" (ngSubmit)="saveWifi()">
+                        <form *ngIf="wifiData || showCreateForm" [formGroup]="wifiForm" (ngSubmit)="openSaveModal()">
                             <div class="mb-3">
                                 <label for="wifiName" class="form-label fw-bold">Nombre de la Red WiFi *</label>
                                 <input type="text"
                                        id="wifiName"
                                        class="form-control"
-                                       [(ngModel)]="wifiForm.name"
-                                       name="wifiName"
+                                       formControlName="name"
                                        placeholder="Ej: CafeWiFi_Gratis"
-                                       [disabled]="isSaving"
-                                       required
-                                       minlength="3"
-                                       maxlength="32">
+                                       [disabled]="isSaving">
                                 <small class="form-text text-muted">Este es el nombre que verán tus clientes en la lista de redes WiFi</small>
+                                <div *ngIf="getErrorMessage('name')" class="text-danger small mt-1">
+                                    {{ getErrorMessage('name') }}
+                                </div>
                             </div>
 
                             <div class="mb-4">
@@ -59,20 +58,20 @@
                                     <input [type]="showPassword ? 'text' : 'password'"
                                            id="wifiPassword"
                                            class="form-control"
-                                           [(ngModel)]="wifiForm.password"
-                                           name="wifiPassword"
+                                           formControlName="password"
                                            placeholder="Contraseña de la red WiFi"
-                                           [disabled]="isSaving"
-                                           required
-                                           minlength="8"
-                                           maxlength="63">
-                                    <button class="btn btn-outline-secondary"
+                                           [disabled]="isSaving">
+                                <button class="btn btn-outline-secondary"
                                             type="button"
-                                            (click)="togglePasswordVisibility()">
+                                            (click)="togglePasswordVisibility()"
+                                            aria-label="Mostrar u ocultar contraseña">
                                         <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
                                     </button>
                                 </div>
-                                <small class="form-text text-muted">Mínimo 8 caracteres. Usa una contraseña segura.</small>
+                                <small class="form-text text-muted">Usa la contraseña wifi de tu Router.</small>
+                                <div *ngIf="getErrorMessage('password')" class="text-danger small mt-1">
+                                    {{ getErrorMessage('password') }}
+                                </div>
                             </div>
 
                             <div class="d-flex gap-3">
@@ -85,7 +84,7 @@
 
                                 <button type="submit"
                                         class="btn custom-btn-secondary"
-                                        [disabled]="isSaving || !wifiForm.name || !wifiForm.password">
+                                        [disabled]="isSaving || wifiForm.invalid">
                                     <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2"></span>
                                     <i *ngIf="!isSaving" class="bi bi-check-lg me-1"></i>
                                     {{ isSaving ? 'Guardando...' : (wifiData ? 'Actualizar WiFi' : 'Crear WiFi') }}
@@ -118,6 +117,48 @@
     </div>
 </div>
 
+<!-- Modal de Confirmación para Guardar -->
+<div class="modal" *ngIf="showSaveModal">
+    <div class="modal-backdrop" (click)="closeSaveModal()"></div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>✅ Confirmar Actualización</h5>
+                <button type="button" 
+                        (click)="closeSaveModal()" 
+                        aria-label="Cerrar modal de confirmación">×</button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que quieres {{ wifiData ? 'actualizar' : 'crear' }} la configuración WiFi?</p>
+                <div class="modal-info" *ngIf="wifiForm.valid">
+                    <div class="info-row">
+                        <span class="info-label">Red WiFi:</span>
+                        <span class="info-value">{{ wifiForm.value.name }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeSaveModal()">Cancelar</button>
+                <button type="button" class="btn custom-btn-secondary" (click)="confirmSave()">
+                    <i class="bi bi-check-lg me-1"></i> Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Éxito -->
+<div class="success-overlay" *ngIf="showSuccessModal">
+    <div class="success-modal animate-pop">
+        <div class="icon-circle">
+            <i class="bi bi-check-lg"></i>
+        </div>
+        <h3 class="modal-title">¡WiFi {{ wifiData ? 'Actualizado' : 'Creado' }}!</h3>
+        <p class="modal-description">La configuración se guardó correctamente</p>
+        <div class="loader"></div>
+    </div>
+</div>
+
 <!-- Modal de Confirmación para Eliminar -->
 <div class="modal" *ngIf="showDeleteModal">
     <div class="modal-backdrop" (click)="closeDeleteModal()"></div>
@@ -125,7 +166,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5>⚠️ Confirmar Eliminación</h5>
-                <button type="button" (click)="closeDeleteModal()">×</button>
+                <button type="button" 
+                        (click)="closeDeleteModal()" 
+                        aria-label="Cerrar modal de eliminación">×</button>
             </div>
             <div class="modal-body">
                 <p>¿Estás seguro de que quieres eliminar la configuración WiFi <strong>"{{ wifiData?.name }}"</strong>?</p>

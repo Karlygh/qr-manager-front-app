@@ -71,6 +71,12 @@ export class BusinessService {
     return this.http.patch(`${this.businessUrl}/${businessId}/wifi/${wifiId}`, wifiData);
   }
 
+  saveOrUpdateWifi(businessId: string, wifiData: any, existingWifiId?: number): Observable<any> {
+    return existingWifiId 
+      ? this.updateWifi(businessId, existingWifiId, wifiData)
+      : this.createWifi(wifiData);
+  }
+
   deleteWifi(businessId: string, wifiId: number): Observable<any> {
     const url = `${this.businessUrl}/${businessId}/wifi/${wifiId}`;
 
@@ -80,4 +86,7 @@ export class BusinessService {
 
     return this.http.delete(url);
   }
+
+ 
+
 }
