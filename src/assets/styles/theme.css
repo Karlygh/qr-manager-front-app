@@ -103,6 +103,22 @@
   --spacing-md: 1rem;
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
+
+  /* ======================================================================
+     DETALLES NEGOCIO (feature tokens)
+     Nota: tokens específicos para no pisar la paleta global.
+     ====================================================================== */
+  --detalles-color-primary: #2d7c5f;
+  --detalles-color-primary-dark: #1e523f;
+  --detalles-color-primary-light: #e8f5f0;
+  --detalles-color-primary-lighter: #effaf4;
+  --detalles-color-border: #d0e6dd;
+  --detalles-color-text: #333333;
+  --detalles-color-text-muted: var(--color-text-muted);
+  --detalles-color-text-white: var(--color-text-white);
+  --detalles-color-error: var(--color-danger);
+  --detalles-color-error-bg: var(--color-bg-invalid);
+  --detalles-radius-card: var(--radius-md);
 }
 
 /* ========================================================================

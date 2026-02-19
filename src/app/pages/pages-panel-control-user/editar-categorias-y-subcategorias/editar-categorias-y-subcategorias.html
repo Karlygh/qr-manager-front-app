@@ -1,18 +1,21 @@
 <!-- MENSAJE DE NOTIFICACIÓN -->
-<div class="notification-container" *ngIf="mensaje.visible" [ngClass]="'notification-' + mensaje.tipo">
+@if (mensaje().visible) {
+<div class="notification-container" [class]="'notification-' + mensaje().tipo">
   <div class="notification-content">
     <span class="notification-icon">
-      {{ mensaje.tipo === 'exito' ? '✅' : mensaje.tipo === 'error' ? '❌' : '⚠️' }}
+      {{ mensaje().tipo === 'exito' ? '✅' : mensaje().tipo === 'error' ? '❌' : '⚠️' }}
     </span>
-    <span class="notification-text">{{ mensaje.texto }}</span>
+    <span class="notification-text">{{ mensaje().texto }}</span>
   </div>
 </div>
+}
 
 <!-- CONTENEDOR PRINCIPAL -->
 <div class="container-fluid py-4">
 
   <!-- PANTALLA INICIAL - SELECCIÓN DE TIPO -->
-  <div *ngIf="tipoEdicion === 'inicial'" class="initial-screen">
+  @if (tipoEdicion() === 'inicial') {
+  <div class="initial-screen">
     <div class="initial-content">
       <h1 class="mb-5">Gestionar Categorías y Subcategorías</h1>
       <p class="subtitle mb-5" style="color: #333333;">Selecciona qué deseas editar:</p>
@@ -27,9 +30,11 @@
       </div>
     </div>
   </div>
+  }
 
   <!-- VISTA: GESTIONAR CATEGORÍAS -->
-  <div *ngIf="tipoEdicion === 'categorias'" class="view-container">
+  @if (tipoEdicion() === 'categorias') {
+  <div class="view-container">
     <!-- HEADER -->
     <div class="view-header">
       <div class="header-title">
@@ -39,7 +44,7 @@
         <h2 class="ms-3">Categorías</h2>
       </div>
       <div class="header-actions">
-        <button class="btn-refresh" (click)="refrescar()" [disabled]="cargando">
+        <button class="btn-refresh" (click)="refrescar()" [disabled]="cargando()">
           <i class="bi bi-arrow-clockwise"></i> Refrescar
         </button>
         <button class="btn btn-success btn-sm ms-2" (click)="abrirModalCrear()">
@@ -67,43 +72,52 @@
           type="text"
           class="form-control"
           placeholder="Buscar categoría..."
-          [(ngModel)]="filtro"
-          (ngModelChange)="filtrarLista()"
+          [value]="filtro()"
+          (input)="filtro.set($any($event.target).value)"
         />
-        <button class="btn-clear" *ngIf="filtro" (click)="limpiarFiltro()" aria-label="Limpiar búsqueda">
+        @if (filtro()) {
+        <button class="btn-clear" (click)="limpiarFiltro()" aria-label="Limpiar búsqueda">
           ✕
         </button>
+        }
       </div>
     </div>
 
     <!-- ESTADO DE CARGA -->
-    <div *ngIf="cargando" class="loading-state">
+    @if (cargando()) {
+    <div class="loading-state">
       <div class="spinner-border" role="status">
         <span class="visually-hidden">Cargando...</span>
       </div>
       <p class="mt-3">Cargando categorías...</p>
     </div>
+    }
 
     <!-- LISTA VACÍA -->
-    <div *ngIf="!cargando && estaVacioCategorias && !filtro" class="empty-state">
+    @if (!cargando() && estaVacioCategorias() && !filtro()) {
+    <div class="empty-state">
       <p class="empty-icon">📭</p>
       <p class="empty-text">No hay categorías registradas.</p>
       <button class="btn btn-success" (click)="abrirModalCrear()">
         Crear tu primera categoría
       </button>
     </div>
+    }
 
     <!-- SIN RESULTADOS DE BÚSQUEDA -->
-    <div *ngIf="!cargando && estaVacioCategorias && filtro" class="empty-state">
+    @if (!cargando() && estaVacioCategorias() && filtro()) {
+    <div class="empty-state">
       <p class="empty-icon">🔍</p>
-      <p class="empty-text">Sin resultados para "{{ filtro }}"</p>
+      <p class="empty-text">Sin resultados para "{{ filtro() }}"</p>
       <button class="btn btn-outline-secondary btn-sm" (click)="limpiarFiltro()">
         Limpiar búsqueda
       </button>
     </div>
+    }
 
     <!-- TABLA DE CATEGORÍAS -->
-    <div *ngIf="!cargando && !estaVacioCategorias" class="table-responsive">
+    @if (!cargando() && !estaVacioCategorias()) {
+    <div class="table-responsive">
       <table class="table table-hover table-striped">
         <thead class="table-header">
           <tr>
@@ -113,7 +127,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let categoria of categoriasFiltered">
+          @for (categoria of categoriasFiltered(); track categoria.id) {
+          <tr>
             <td class="category-name">{{ categoria.name }}</td>
             <td class="text-center">
               <span class="badge" style="background-color: #28724a; color: white; font-size: 0.78rem;">{{ getProductCount(categoria.id) }}</span>
@@ -135,13 +150,17 @@
               </button>
             </td>
           </tr>
+          }
         </tbody>
       </table>
     </div>
+    }
   </div>
+  }
 
   <!-- VISTA: GESTIONAR SUBCATEGORÍAS -->
-  <div *ngIf="tipoEdicion === 'subcategorias'" class="view-container">
+  @if (tipoEdicion() === 'subcategorias') {
+  <div class="view-container">
     <!-- HEADER -->
     <div class="view-header">
       <div class="header-title">
@@ -151,14 +170,26 @@
         <h2 class="ms-3">Subcategorías</h2>
       </div>
       <div class="header-actions">
-        <button class="btn-refresh" (click)="refrescar()" [disabled]="cargando">
+        <button class="btn-refresh" (click)="refrescar()" [disabled]="cargando()">
           <i class="bi bi-arrow-clockwise"></i> Refrescar
         </button>
-        <button class="btn btn-success btn-sm ms-2" (click)="abrirModalCrear()" [disabled]="!categoriaSeleccionada && tipoEdicion === 'subcategorias' && categorias.length === 0">
+        <button class="btn btn-success btn-sm ms-2" (click)="abrirModalCrear()" [disabled]="cargando() || categorias().length === 0">
           <i class="bi bi-plus-circle"></i> Crear Subcategoría
         </button>
       </div>
     </div>
+
+    <!-- MENSAJE SI NO HAY CATEGORÍAS -->
+    @if (!cargando() && categorias().length === 0) {
+    <div class="alert alert-warning mt-3" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      <strong>No hay categorías disponibles.</strong> 
+      Primero debes crear al menos una categoría antes de poder crear subcategorías.
+      <button class="btn btn-sm btn-primary ms-2" (click)="tipoEdicion.set('categorias'); cargarCategorias()">
+        <i class="bi bi-folder-plus"></i> Ir a crear categorías
+      </button>
+    </div>
+    }
 
     <!-- BÚSQUEDA -->
     <div class="search-container">
@@ -168,43 +199,52 @@
           type="text"
           class="form-control"
           placeholder="Buscar subcategoría..."
-          [(ngModel)]="filtro"
-          (ngModelChange)="filtrarLista()"
+          [value]="filtro()"
+          (input)="filtro.set($any($event.target).value)"
         />
-        <button class="btn-clear" *ngIf="filtro" (click)="limpiarFiltro()" aria-label="Limpiar búsqueda">
+        @if (filtro()) {
+        <button class="btn-clear" (click)="limpiarFiltro()" aria-label="Limpiar búsqueda">
           ✕
         </button>
+        }
       </div>
     </div>
 
     <!-- ESTADO DE CARGA -->
-    <div *ngIf="cargando" class="loading-state">
+    @if (cargando()) {
+    <div class="loading-state">
       <div class="spinner-border" role="status">
         <span class="visually-hidden">Cargando...</span>
       </div>
       <p class="mt-3">Cargando subcategorías...</p>
     </div>
+    }
 
     <!-- LISTA VACÍA -->
-    <div *ngIf="!cargando && estaVacioSubcategorias && !filtro" class="empty-state">
+    @if (!cargando() && estaVacioSubcategorias() && !filtro()) {
+    <div class="empty-state">
       <p class="empty-icon">📭</p>
       <p class="empty-text">No hay subcategorías en esta categoría.</p>
       <button class="btn btn-success" (click)="abrirModalCrear()">
         Crear primera subcategoría
       </button>
     </div>
+    }
 
     <!-- SIN RESULTADOS DE BÚSQUEDA -->
-    <div *ngIf="!cargando && estaVacioSubcategorias && filtro" class="empty-state">
+    @if (!cargando() && estaVacioSubcategorias() && filtro()) {
+    <div class="empty-state">
       <p class="empty-icon">🔍</p>
-      <p class="empty-text">Sin resultados para "{{ filtro }}"</p>
+      <p class="empty-text">Sin resultados para "{{ filtro() }}"</p>
       <button class="btn btn-outline-secondary btn-sm" (click)="limpiarFiltro()">
         Limpiar búsqueda
       </button>
     </div>
+    }
 
     <!-- TABLA DE SUBCATEGORÍAS -->
-    <div *ngIf="!cargando && !estaVacioSubcategorias" class="table-responsive">
+    @if (!cargando() && !estaVacioSubcategorias()) {
+    <div class="table-responsive">
       <table class="table table-hover table-striped">
         <thead class="table-header">
           <tr>
@@ -214,7 +254,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let subcategoria of subcategoriasFiltered">
+          @for (subcategoria of subcategoriasFiltered(); track subcategoria.id) {
+          <tr>
             <td class="subcategory-name">{{ subcategoria.name }}</td>
             <td class="text-center">
               <span class="badge" style="background-color: #28724a; color: white; font-size: 1.2rem;">{{ getProductCount(subcategoria.id) }}</span>
@@ -236,42 +277,62 @@
               </button>
             </td>
           </tr>
+          }
         </tbody>
       </table>
     </div>
+    }
   </div>
+  }
 
 </div>
 
 <!-- ===== MODALES ===== -->
 
 <!-- MODAL: CREAR CATEGORÍA O SUBCATEGORÍA -->
-<div class="modal-overlay" *ngIf="modal.show && modal.type === 'crear'" (click)="cerrarModal()">
+@if (modal().show && modal().type === 'crear') {
+<div class="modal-overlay" (click)="cerrarModal()">
   <div class="modal-dialog" (click)="$event.stopPropagation()">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">
-          {{ tipoEdicion === 'categorias' ? 'Nueva Categoría' : 'Nueva Subcategoría' }}
+          {{ tipoEdicion() === 'categorias' ? 'Nueva Categoría' : 'Nueva Subcategoría' }}
         </h5>
         <button type="button" class="btn-close" (click)="cerrarModal()"></button>
       </div>
 
       <div class="modal-body">
         <!-- Selector de categoría para subcategorías sin categoría preseleccionada -->
-        <div class="form-group" *ngIf="tipoEdicion === 'subcategorias' && !categoriaSeleccionada">
-          <label class="form-label">Categoría</label>
-          <select class="form-control" [(ngModel)]="categoriaPendienteSubcategoria">
-            <option [ngValue]="null" disabled>Selecciona una categoría</option>
-            <option *ngFor="let cat of categorias" [ngValue]="cat">{{ cat.name }}</option>
-          </select>
-        </div>
+        @if (tipoEdicion() === 'subcategorias' && !categoriaSeleccionada()) {
+          @if (categorias().length === 0) {
+          <div class="alert alert-warning" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>No hay categorías disponibles.</strong> 
+            Primero debes crear al menos una categoría antes de poder crear subcategorías.
+            <button class="btn btn-sm btn-primary ms-2 mt-2" (click)="cerrarModal(); tipoEdicion.set('categorias'); cargarCategorias()">
+              <i class="bi bi-folder-plus"></i> Ir a crear categorías
+            </button>
+          </div>
+          } @else {
+          <div class="form-group">
+            <label class="form-label">Categoría</label>
+            <select class="form-control" [value]="categoriaPendienteSubcategoria()?.id || ''" (change)="onCategoriaChange($event)">
+              <option [value]="''" disabled>Selecciona una categoría</option>
+              @for (cat of categorias(); track cat.id) {
+              <option [value]="cat.id">{{ cat.name }}</option>
+              }
+            </select>
+          </div>
+          }
+        }
 
         <div class="form-group">
           <label class="form-label">Nombre</label>
           <input
             type="text"
             class="form-control"
-            [(ngModel)]="nombreInput"
+            [value]="nombreInput()"
+            (input)="nombreInput.set($any($event.target).value)"
             placeholder="Ingresa el nombre"
             (keyup.enter)="crearItem()"
             autofocus
@@ -285,23 +346,27 @@
           type="button"
           class="btn btn-success"
           (click)="crearItem()"
-          [disabled]="!isValidInput() || cargando || (tipoEdicion === 'subcategorias' && !categoriaSeleccionada && !categoriaPendienteSubcategoria)"
+          [disabled]="!isValidInput() || cargando() || (tipoEdicion() === 'subcategorias' && categorias().length === 0) || (tipoEdicion() === 'subcategorias' && !categoriaSeleccionada() && !categoriaPendienteSubcategoria())"
         >
-          <span *ngIf="cargando" class="spinner-border spinner-border-sm me-2"></span>
+          @if (cargando()) {
+          <span class="spinner-border spinner-border-sm me-2"></span>
+          }
           Crear
         </button>
       </div>
     </div>
   </div>
 </div>
+}
 
 <!-- MODAL: EDITAR CATEGORÍA O SUBCATEGORÍA -->
-<div class="modal-overlay" *ngIf="modal.show && modal.type === 'editar'" (click)="cerrarModal()">
+@if (modal().show && modal().type === 'editar') {
+<div class="modal-overlay" (click)="cerrarModal()">
   <div class="modal-dialog" (click)="$event.stopPropagation()">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">
-          {{ tipoEdicion === 'categorias' ? 'Editar Categoría' : 'Editar Subcategoría' }}
+          {{ tipoEdicion() === 'categorias' ? 'Editar Categoría' : 'Editar Subcategoría' }}
         </h5>
         <button type="button" class="btn-close" (click)="cerrarModal()"></button>
       </div>
@@ -312,7 +377,8 @@
           <input
             type="text"
             class="form-control"
-            [(ngModel)]="nombreInput"
+            [value]="nombreInput()"
+            (input)="nombreInput.set($any($event.target).value)"
             placeholder="Ingresa el nombre"
             (keyup.enter)="editarItem()"
             autofocus
@@ -326,18 +392,22 @@
           type="button"
           class="btn btn-primary"
           (click)="editarItem()"
-          [disabled]="!isValidInput() || cargando"
+          [disabled]="!isValidInput() || cargando()"
         >
-          <span *ngIf="cargando" class="spinner-border spinner-border-sm me-2"></span>
+          @if (cargando()) {
+          <span class="spinner-border spinner-border-sm me-2"></span>
+          }
           Guardar
         </button>
       </div>
     </div>
   </div>
 </div>
+}
 
 <!-- MODAL: CONFIRMAR ELIMINACIÓN -->
-<div class="modal-overlay" *ngIf="modal.show && modal.type === 'eliminar'" (click)="cerrarModal()">
+@if (modal().show && modal().type === 'eliminar') {
+<div class="modal-overlay" (click)="cerrarModal()">
   <div class="modal-dialog modal-dialog-centered" (click)="$event.stopPropagation()">
     <div class="modal-content modal-danger">
       <div class="modal-header border-danger">
@@ -350,15 +420,17 @@
       <div class="modal-body">
         <p class="mb-3">
           ¿Estás seguro de que deseas eliminar:
-          <strong>{{ modal.itemSeleccionado?.name }}</strong>
+          <strong>{{ modal().itemSeleccionado?.name }}</strong>
         </p>
 
-        <div *ngIf="tieneProductosItem" class="alert alert-warning alert-sm" role="alert">
+        @if (tieneProductosItem()) {
+        <div class="alert alert-warning alert-sm" role="alert">
           <i class="bi bi-exclamation-circle"></i>
-          Esta {{ tipoEdicion === 'categorias' ? 'categoría' : 'subcategoría' }} tiene
-          <strong>{{ totalProductosEliminar }} producto(s) asociado(s)</strong>.
+          Esta {{ tipoEdicion() === 'categorias' ? 'categoría' : 'subcategoría' }} tiene
+          <strong>{{ totalProductosEliminar() }} producto(s) asociado(s)</strong>.
           Se desasociarán automáticamente.
         </div>
+        }
       </div>
 
       <div class="modal-footer">
@@ -367,14 +439,17 @@
           type="button"
           class="btn btn-danger"
           (click)="eliminarItem()"
-          [disabled]="cargando"
+          [disabled]="cargando()"
         >
-          <span *ngIf="cargando" class="spinner-border spinner-border-sm me-2"></span>
+          @if (cargando()) {
+          <span class="spinner-border spinner-border-sm me-2"></span>
+          }
           Eliminar
         </button>
       </div>
     </div>
   </div>
 </div>
+}
 
 

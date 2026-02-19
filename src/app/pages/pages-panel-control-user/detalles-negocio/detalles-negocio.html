@@ -1,63 +1,85 @@
 <div class="detalles-container">
   
-  <div *ngIf="cargando" class="loading-message">
-    Cargando detalles del negocio...
+  @if (cargando()) {
+  <div class="loading-message" role="status" aria-live="polite">
+    <div class="skeleton-card">
+      <div class="skeleton-header"></div>
+      <div class="skeleton-body">
+        <div class="skeleton-line skeleton-title"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line short"></div>
+      </div>
+    </div>
   </div>
+  }
 
-  <div *ngIf="!cargando && negocio" class="negocio-card">
+  @if (error() && !cargando()) {
+  <div class="error-message" role="alert">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    No se pudo cargar el negocio. Por favor, intenta nuevamente.
+  </div>
+  }
+
+  @if (puedeMostrarContenido()) {
+  <div class="negocio-card">
 
     <!-- Encabezado -->
     <div class="card-header">
-      <h3 class="header-title">Detalles del Negocio</h3>
-      <span class="id-badge">ID: {{ negocio.id }}</span>
+      <p class="header-subtitle">Detalles del Negocio</p>
+      <span class="id-badge">ID: {{ negocio()?.id }}</span>
     </div>
 
     <!-- Contenido -->
     <div class="card-body">
 
       <!-- Nombre del negocio -->
-      <h2 class="business-name">{{ negocio.name }}</h2>
+      <h1 class="business-name">{{ negocio()?.name }}</h1>
 
       <!-- Descripción -->
-      <div *ngIf="negocio.description" class="info-block">
+      @if (negocio()?.description) {
+      <div class="info-block">
         <span class="label">Descripción</span>
-        <p class="value">{{ negocio.description }}</p>
+        <p class="value">{{ negocio()?.description }}</p>
       </div>
+      }
 
       <div class="divider"></div>
 
       <!-- Datos de contacto -->
-      <h5 class="section-title">Datos de contacto</h5>
+      <h2 class="section-title">Datos de Contacto</h2>
 
       <div class="contact-grid">
         <div class="info-block">
           <span class="label">Email</span>
-          <p class="value">{{ negocio.email }}</p>
+          <p class="value">{{ negocio()?.email }}</p>
         </div>
 
         <div class="info-block">
           <span class="label">Teléfono</span>
-          <p class="value" *ngIf="negocio.phoneNumber; else noPhone">
-            {{ negocio.phoneNumber }}
-          </p>
-          <ng-template #noPhone>
-            <p class="value muted">No especificado</p>
-          </ng-template>
+          @if (negocio()?.phoneNumber) {
+          <p class="value">{{ negocio()?.phoneNumber }}</p>
+          } @else {
+          <p class="value muted">No especificado</p>
+          }
         </div>
       </div>
 
       <div class="info-block">
         <span class="label">Dirección</span>
-        <p class="value">{{ negocio.address }}</p>
+        <p class="value">{{ negocio()?.address }}</p>
       </div>
 
       <!-- Botón -->
+      @if (rutaPanelControl()) {
       <div class="action-container">
-        <a [routerLink]="['/panel-control-business', negocio.id]" class="btn-panel">
+        <a [routerLink]="rutaPanelControl()!" class="btn-panel" aria-label="Ir al Panel de Control">
           Ir al Panel de Control
         </a>
       </div>
+      }
 
     </div>
   </div>
+  }
 </div>

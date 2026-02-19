@@ -1,58 +1,63 @@
 // detalles-negocio.ts
 
-import { Component, OnInit, inject } from '@angular/core'; // 👈 Importamos 'inject'
+import { Component, inject, ChangeDetectionStrategy, computed, isDevMode, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { ActivatedRoute, RouterModule } from '@angular/router'; 
+import { ActivatedRoute, RouterLink } from '@angular/router'; 
+import { map, switchMap, catchError, startWith } from 'rxjs/operators';
+import { of } from 'rxjs';
 import { BusinessService } from '../../../services/business.service';
 import { Business } from '../../../models/business.model'; 
 
 @Component({
   selector: 'app-detalles-negocio', 
   standalone: true,
-  imports: [CommonModule, RouterModule, HttpClientModule], 
+  imports: [CommonModule, RouterLink], 
   templateUrl: './detalles-negocio.html',
-  styleUrls: ['./detalles-negocio.css'] 
+  styleUrls: ['./detalles-negocio.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DetallesNegocioComponent implements OnInit { 
-  
-  cargando: boolean = true;
-  negocioId: string | null = null;
-  negocio: Business | null = null; 
-  
-  // ✅ 1. Usar inject() para obtener las dependencias
-  private route = inject(ActivatedRoute);
-  private businessService = inject(BusinessService);
-  
-  // ❌ Eliminamos el constructor (o lo dejamos vacío si solo inyecta)
+export class DetallesNegocioComponent {
+  
+  private readonly route = inject(ActivatedRoute);
+  private readonly businessService = inject(BusinessService);
 
-  ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      this.negocioId = params.get('id'); 
-      if (this.negocioId) {
-        this.cargarNegocio(this.negocioId);
-      }
-    });
-  }
+  readonly error = signal<boolean>(false);
 
-  cargarNegocio(id: string): void {
-    this.cargando = true;
-    console.log('Cargando negocio con ID:', id);
-    
-    // ✅ 2. Lógica de servicio
-    this.businessService.getBusinessById(id).subscribe({
-      next: (data) => {
-        console.log('Datos recibidos:', data);
-        this.negocio = data; 
-        this.cargando = false;
-      },
-      error: (err) => {
-        console.error('Error al cargar negocio:', err);
-        console.error('Status:', err.status);
-        console.error('URL:', err.url);
-        this.negocio = null;
-        this.cargando = false;
-      }
-    });
+  // Flujo reactivo declarativo
+  readonly negocio = toSignal(
+    this.route.paramMap.pipe(
+      map(params => params.get('id')),
+      switchMap(id => {
+        if (!id) return of(null);
+        this.error.set(false);
+        return this.businessService.getBusinessById(id).pipe(
+          catchError(err => {
+            this.error.set(true);
+            this.logError(err);
+            return of(null);
+          })
+        );
+      }),
+      startWith(undefined)
+    )
+  );
+
+  // Computed values
+  readonly cargando = computed(() => this.negocio() === undefined);
+  readonly puedeMostrarContenido = computed(() => this.negocio() !== null && this.negocio() !== undefined);
+  readonly rutaPanelControl = computed(() => {
+    const id = this.negocio()?.id;
+    return id ? ['/panel-control-business', id] : null;
+  });
+
+  private logError(err: any): void {
+    if (isDevMode()) {
+      console.error('Error al cargar negocio:', {
+        status: err.status,
+        url: err.url,
+        error: err.error
+      });
+    }
   }
 }

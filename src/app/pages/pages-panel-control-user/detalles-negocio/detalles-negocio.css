@@ -1,43 +1,92 @@
-/* =============================================
-   DETALLES DE NEGOCIO - UI PROFESIONAL
-   Paleta: Verde corporativo #2d7c5f
-   ============================================= */
+
 
 /* Contenedor principal */
 .detalles-container {
-  padding: 40px 20px;
+  padding: var(--spacing-xl) var(--spacing-md);
   min-height: 100vh;
-  background-color: #effaf4;
+  background-color: var(--detalles-color-primary-lighter);
 }
 
 /* Mensaje de carga */
 .loading-message {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Skeleton Loader */
+.skeleton-card {
+  background-color: var(--detalles-color-primary-light);
+  border: 1px solid var(--detalles-color-border);
+  border-radius: var(--detalles-radius-card);
+  overflow: hidden;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-header {
+  background-color: var(--detalles-color-primary);
+  height: 120px;
+  opacity: 0.3;
+}
+
+.skeleton-body {
+  padding: 32px;
+}
+
+.skeleton-line {
+  height: 20px;
+  background-color: var(--detalles-color-border);
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.skeleton-title {
+  height: 32px;
+  width: 60%;
+  margin: 0 auto 28px;
+}
+
+.skeleton-line.short {
+  width: 40%;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Mensaje de error */
+.error-message {
+  max-width: 700px;
+  margin: 0 auto var(--spacing-md);
+  padding: var(--spacing-md);
+  background-color: var(--detalles-color-error-bg);
+  color: var(--detalles-color-error);
+  border: 1px solid var(--detalles-color-error);
+  border-radius: var(--detalles-radius-card);
   text-align: center;
-  color: #2d7c5f;
-  font-size: 1rem;
-  padding: 20px;
+  font-weight: 500;
 }
 
 /* Tarjeta principal */
 .negocio-card {
   max-width: 700px;
   margin: 0 auto;
-  background-color: #e8f5f0;
-  border: 1px solid #d0e6dd;
-  border-radius: 12px;
+  background-color: var(--detalles-color-primary-light);
+  border: 1px solid var(--detalles-color-border);
+  border-radius: var(--detalles-radius-card);
   overflow: hidden;
 }
 
 /* Encabezado */
 .card-header {
-  background-color: #2d7c5f;
-  padding: 24px;
+  background-color: var(--detalles-color-primary);
+  padding: var(--spacing-lg);
   text-align: center;
 }
 
-.header-title {
-  margin: 0 0 10px 0;
-  color: #ffffff;
+.header-subtitle {
+  margin: 0 0 var(--spacing-sm) 0;
+  color: var(--detalles-color-text-white);
   font-size: 1.5rem;
   font-weight: 500;
   letter-spacing: 0.02em;
@@ -46,8 +95,8 @@
 /* Badge ID */
 .id-badge {
   display: inline-block;
-  background-color: #e8f5f0;
-  color: #2d7c5f;
+  background-color: var(--detalles-color-primary-light);
+  color: var(--detalles-color-primary);
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -63,21 +112,21 @@
 .business-name {
   text-align: center;
   font-size: 1.75rem;
-  color: #333333;
+  color: var(--detalles-color-text);
   font-weight: 600;
   margin: 0 0 28px 0;
 }
 
 /* Bloques de información */
 .info-block {
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-md);
 }
 
 /* Labels */
 .label {
   display: block;
   font-size: 0.8rem;
-  color: #2d7c5f;
+  color: var(--detalles-color-primary);
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -87,28 +136,28 @@
 /* Valores */
 .value {
   font-size: 1rem;
-  color: #333333;
+  color: var(--detalles-color-text);
   font-weight: 400;
-  background-color: #ffffff;
+  background-color: var(--detalles-color-primary-light);
   padding: 12px 16px;
   border-radius: 8px;
   margin: 0;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--detalles-color-border);
 }
 
 /* Divisor */
 .divider {
   height: 1px;
-  background-color: #d0e6dd;
+  background-color: var(--detalles-color-border);
   margin: 28px 0;
 }
 
 /* Título de sección */
 .section-title {
-  color: #2d7c5f;
+  color: var(--detalles-color-primary);
   font-size: 1.1rem;
   font-weight: 500;
-  margin: 0 0 20px 0;
+  margin: 0 0 var(--spacing-md) 0;
 }
 
 /* Grid de contacto */
@@ -120,7 +169,7 @@
 
 /* Texto apagado */
 .muted {
-  color: #888888;
+  color: var(--detalles-color-text-muted);
 }
 
 /* Contenedor del botón */
@@ -132,8 +181,8 @@
 /* Botón panel */
 .btn-panel {
   display: inline-block;
-  background-color: #2d7c5f;
-  color: #ffffff;
+  background-color: var(--detalles-color-primary);
+  color: var(--detalles-color-text-white);
   padding: 14px 32px;
   border-radius: 8px;
   text-decoration: none;
@@ -143,8 +192,13 @@
 }
 
 .btn-panel:hover {
-  background-color: #246b51;
-  color: #ffffff;
+  background-color: var(--detalles-color-primary-dark);
+  color: var(--detalles-color-text-white);
+}
+
+.btn-panel:focus {
+  outline: 2px solid var(--detalles-color-primary);
+  outline-offset: 2px;
 }
 
 /* =============================================
@@ -160,7 +214,7 @@
     padding: 20px;
   }
 
-  .header-title {
+  .header-subtitle {
     font-size: 1.25rem;
   }
 
