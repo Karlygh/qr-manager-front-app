@@ -172,8 +172,8 @@
     padding: 0.4em 0.8em;
     font-size: 0.85rem;
 }
-.badge-configured {
-    background-color: #198754;
+.badge-partial-closure {
+    background-color: #17a2b8;
     color: white;
     font-weight: 400;
     padding: 0.4em 0.8em;

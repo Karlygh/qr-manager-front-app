@@ -42,6 +42,8 @@ export class KitchenScheduleService {
   private http = inject(HttpClient);
   private apiUrl = 'http://91.107.235.58:8081/api/v1/schedule/kitchen-hours';
 
+  getSchedulesByBusiness = this.getKitchenHoursByBusiness;
+
   getKitchenHoursByBusiness(businessId: number): Observable<KitchenHour[]> {
     return this.http.get<KitchenHourResponse[]>(`${this.apiUrl}/${businessId}`).pipe(
       map(responses => this.convertResponsesToKitchenHours(responses)),
@@ -64,6 +66,7 @@ export class KitchenScheduleService {
     };
 
     const dayGroupId = schedules[0]?.dayGroupId;
+    
     if (dayGroupId) {
       return this.http.patch<KitchenHourResponse>(`${this.apiUrl}/${dayGroupId}`, request);
     } else {
@@ -71,7 +74,7 @@ export class KitchenScheduleService {
     }
   }
 
-  saveAllKitchenHours(businessId: number, allSchedules: KitchenHour[]): Observable<KitchenHour[]> {
+  saveAllSchedules(businessId: number, allSchedules: KitchenHour[]): Observable<KitchenHour[]> {
     const schedulesByDay = this.groupSchedulesByDay(allSchedules);
     const requests: KitchenHourRequest[] = [];
     
@@ -93,10 +96,13 @@ export class KitchenScheduleService {
     );
   }
 
-  deleteAllKitchenHours(businessId: number): Observable<void> {
+  deleteAllSchedules(businessId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/all/${businessId}`);
   }
 
+  // Deprecated methods - mantener por compatibilidad
+  saveAllKitchenHours = this.saveAllSchedules;
+  deleteAllKitchenHours = this.deleteAllSchedules;
   deleteDaySchedule(dayGroupId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${dayGroupId}`);
   }

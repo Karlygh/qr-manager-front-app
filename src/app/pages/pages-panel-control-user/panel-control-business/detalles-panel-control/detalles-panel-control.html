@@ -259,8 +259,11 @@
                                 <span class="badge" [ngClass]="schedule.status ? 'custom-badge-success' : 'custom-badge-danger'">
                                     {{ schedule.status ? 'Abierto' : 'Cerrado' }}
                                 </span>
-                                <span *ngIf="schedule.isSplit" class="badge bg-warning text-dark ms-2" style="font-size: 0.7rem;">
+                                <span *ngIf="schedule.isSplit && !schedule.hasPartialClosure" class="badge bg-warning text-dark ms-2" style="font-size: 0.7rem;">
                                     <i class="bi bi-clock-history"></i> Partido
+                                </span>
+                                <span *ngIf="schedule.hasPartialClosure" class="badge badge-partial-closure ms-2" style="font-size: 0.7rem;">
+                                    <i class="bi bi-dash-circle"></i> Parcial
                                 </span>
                             </td>
                         </tr>
@@ -292,8 +295,11 @@
                                 <span class="badge" [ngClass]="schedule.status ? 'custom-badge-success' : 'custom-badge-danger'">
                                     {{ schedule.status ? 'Abierto' : 'Cerrado' }}
                                 </span>
-                                <span *ngIf="schedule.isSplit" class="badge bg-warning text-dark ms-2" style="font-size: 0.7rem;">
+                                <span *ngIf="schedule.isSplit && !schedule.hasPartialClosure" class="badge bg-warning text-dark ms-2" style="font-size: 0.7rem;">
                                     <i class="bi bi-clock-history"></i> Partido
+                                </span>
+                                <span *ngIf="schedule.hasPartialClosure" class="badge badge-partial-closure ms-2" style="font-size: 0.7rem;">
+                                    <i class="bi bi-dash-circle"></i> Parcial
                                 </span>
                             </td>
                         </tr>

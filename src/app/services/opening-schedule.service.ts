@@ -42,6 +42,8 @@ export class OpeningScheduleService {
   private http = inject(HttpClient);
   private apiUrl = 'http://91.107.235.58:8081/api/v1/schedule/opening-hours';
 
+  getSchedulesByBusiness = this.getOpeningHoursByBusiness;
+
   getOpeningHoursByBusiness(businessId: number): Observable<OpeningHour[]> {
     return this.http.get<OpeningHourResponse[]>(`${this.apiUrl}/${businessId}`).pipe(
       map(responses => this.convertResponsesToOpeningHours(responses)),
@@ -64,6 +66,7 @@ export class OpeningScheduleService {
     };
 
     const dayGroupId = schedules[0]?.dayGroupId;
+    
     if (dayGroupId) {
       return this.http.patch<OpeningHourResponse>(`${this.apiUrl}/${dayGroupId}`, request);
     } else {
@@ -71,7 +74,7 @@ export class OpeningScheduleService {
     }
   }
 
-  saveAllOpeningHours(businessId: number, allSchedules: OpeningHour[]): Observable<OpeningHour[]> {
+  saveAllSchedules(businessId: number, allSchedules: OpeningHour[]): Observable<OpeningHour[]> {
     const schedulesByDay = this.groupSchedulesByDay(allSchedules);
     const requests: OpeningHourRequest[] = [];
     
@@ -93,10 +96,13 @@ export class OpeningScheduleService {
     );
   }
 
-  deleteAllOpeningHours(businessId: number): Observable<void> {
+  deleteAllSchedules(businessId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/all/${businessId}`);
   }
 
+  // Deprecated methods - mantener por compatibilidad
+  saveAllOpeningHours = this.saveAllSchedules;
+  deleteAllOpeningHours = this.deleteAllSchedules;
   deleteDaySchedule(dayGroupId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${dayGroupId}`);
   }

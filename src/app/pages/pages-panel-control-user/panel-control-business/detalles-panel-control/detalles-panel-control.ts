@@ -13,6 +13,7 @@ interface GroupedSchedule {
   intervals: { opening: string; closing: string; }[];
   status: boolean;
   isSplit: boolean;
+  hasPartialClosure?: boolean;
 }
 
 @Component({
@@ -54,7 +55,8 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
           day: schedule.day,
           intervals: [],
           status: schedule.status,
-          isSplit: false
+          isSplit: false,
+          hasPartialClosure: false
         };
       }
 
@@ -66,7 +68,15 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
           });
         });
 
-        grouped[schedule.day].isSplit = grouped[schedule.day].intervals.length > 1;
+        const hasMultipleIntervals = grouped[schedule.day].intervals.length > 1;
+        grouped[schedule.day].isSplit = hasMultipleIntervals;
+        // Parcial = tiene 2 horarios PERO el status general está en false (cerrado)
+        grouped[schedule.day].hasPartialClosure = hasMultipleIntervals && !schedule.status;
+        
+        // Debug
+        if (hasMultipleIntervals) {
+          console.log(`📊 ${schedule.day}: intervals=${grouped[schedule.day].intervals.length}, status=${schedule.status}, hasPartialClosure=${grouped[schedule.day].hasPartialClosure}`);
+        }
       }
     });
 

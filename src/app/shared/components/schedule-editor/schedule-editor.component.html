@@ -1,0 +1,261 @@
+<div class="schedule-container">
+  <h2>{{ title }}</h2>
+
+  <div class="back-button-container">
+    <button (click)="goBack()" class="btn-back" [attr.aria-label]="'Volver al panel'">
+      <i class="bi bi-arrow-left"></i> Volver al Panel
+    </button>
+  </div>
+
+  <p class="schedule-instructions">{{ instructionText }}</p>
+
+  <!-- ✓ MEJORADO: Mostrar contador de cambios sin guardar -->
+  @if (hasAnyChanges()) {
+    <div class="alert alert-warning">
+      <i class="bi bi-exclamation-circle"></i>
+      Tienes <strong>{{ changesCount() }}</strong> cambio(s) sin guardar
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-error" role="alert">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      {{ errorMessage() }}
+    </div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success" role="alert">
+      <i class="bi bi-check-circle-fill"></i>
+      {{ successMessage() }}
+    </div>
+  }
+
+  <div class="schedule-grid">
+    @for (day of days; track day) {
+      <div class="schedule-day-card">
+        <div class="day-header">
+          <h3>{{ getDayName(day) }}</h3>
+        </div>
+
+        <div class="schedules-list">
+          @for (
+            schedule of daySchedules()[day];
+            track schedule.tempId || schedule.id || $index;
+            let i = $index
+          ) {
+            <div
+              class="schedule-item"
+              [class.schedule-item-second]="i === 1"
+              [class.schedule-item-modified]="isModified(schedule)"
+              [class.schedule-item-error]="hasError(schedule)"
+            >
+              <!-- ✓ NUEVO: Indicador visual de estado -->
+              <div class="schedule-status-header">
+                <div class="schedule-number">
+                  Horario {{ i + 1 }}
+                  @if (isModified(schedule)) {
+                    <span class="badge-modified">● Modificado</span>
+                  }
+                  @if (hasError(schedule)) {
+                    <span class="badge-error">⚠ Error</span>
+                  }
+                </div>
+              </div>
+
+              <div class="time-inputs">
+                <div class="input-group">
+                  <label [for]="'opening-' + (schedule.tempId || schedule.id || $index)">
+                    Apertura:
+                  </label>
+                  <input
+                    [id]="'opening-' + (schedule.tempId || schedule.id || $index)"
+                    type="time"
+                    [ngModel]="schedule.openingTime"
+                    (ngModelChange)="onScheduleChange(schedule, 'openingTime', $event)"
+                    class="time-input"
+                    [class.input-error]="hasError(schedule)"
+                    aria-label="Hora de apertura"
+                  />
+                </div>
+
+                <div class="input-group">
+                  <label [for]="'closing-' + (schedule.tempId || schedule.id || $index)">
+                    Cierre:
+                  </label>
+                  <input
+                    [id]="'closing-' + (schedule.tempId || schedule.id || $index)"
+                    type="time"
+                    [ngModel]="schedule.closingTime"
+                    (ngModelChange)="onScheduleChange(schedule, 'closingTime', $event)"
+                    class="time-input"
+                    [class.input-error]="hasError(schedule)"
+                    aria-label="Hora de cierre"
+                  />
+                </div>
+
+                <!-- ✓ NUEVO: Mostrar error de validación -->
+                @if (hasError(schedule)) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle-fill"></i>
+                    {{ getError(schedule) }}
+                  </div>
+                }
+              </div>
+
+              <div class="status-toggle">
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    [ngModel]="schedule.status"
+                    (ngModelChange)="onScheduleChange(schedule, 'status', $event)"
+                    aria-label="Estado abierto/cerrado"
+                  />
+                  <span class="slider"></span>
+                </label>
+                <span class="status-label">
+                  {{ schedule.status ? 'Abierto' : 'Cerrado' }}
+                </span>
+              </div>
+
+              <div class="actions">
+                <!-- ✓ MEJORADO: Botón guardar con feedback visual -->
+                <button
+                  (click)="saveSchedule(schedule)"
+                  [disabled]="
+                    isSaving(schedule) ||
+                    !isModified(schedule) ||
+                    hasError(schedule)
+                  "
+                  class="btn btn-save-individual"
+                  [attr.aria-label]="
+                    isModified(schedule)
+                      ? 'Guardar horario modificado'
+                      : 'Sin cambios'
+                  "
+                  [title]="
+                    isModified(schedule)
+                      ? 'Guardar cambios'
+                      : 'No hay cambios'
+                  "
+                >
+                  @if (isSaving(schedule)) {
+                    <span class="spinner-small"></span>
+                    Guardando...
+                  } @else if (isModified(schedule)) {
+                    <i class="bi bi-check-circle"></i>
+                    Guardar
+                  } @else {
+                    <i class="bi bi-check"></i>
+                    Guardado
+                  }
+                </button>
+
+                <button
+                  (click)="deleteSchedule(day, schedule)"
+                  [disabled]="daySchedules()[day].length === 1"
+                  class="btn btn-delete"
+                  [attr.aria-label]="'Eliminar horario'"
+                  title="Eliminar"
+                >
+                  <i class="bi bi-trash"></i>
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- ✓ Botón para agregar horario partido -->
+        @if (canAddSchedule(day)) {
+          <button
+            (click)="addSplitSchedule(day)"
+            class="btn-add-split"
+            [attr.aria-label]="'Agregar segundo horario a ' + getDayName(day)"
+          >
+            <i class="bi bi-plus-circle"></i> Añadir horario partido
+          </button>
+        } @else {
+          <div class="max-schedules-notice">
+            Máximo 2 horarios por día
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- ✓ MEJORADO: Acciones globales -->
+  <div class="global-actions">
+    <button
+      (click)="saveAllSchedules()"
+      [disabled]="loading() || !hasAnyChanges()"
+      class="btn btn-save-all"
+      [attr.aria-label]="'Guardar todos los horarios'"
+      [title]="hasAnyChanges() ? 'Guardar todos los cambios' : 'No hay cambios'"
+    >
+      @if (loading()) {
+        <span class="spinner-small"></span>
+        Guardando todos...
+      } @else {
+        <i class="bi bi-cloud-check"></i>
+        Guardar Todos ({{ changesCount() }})
+      }
+    </button>
+
+    <button
+      (click)="deleteAllSchedules()"
+      class="btn btn-delete-all"
+      [attr.aria-label]="'Resetear todos los horarios'"
+    >
+      <i class="bi bi-arrow-counterclockwise"></i>
+      Resetear
+    </button>
+  </div>
+</div>
+
+<!-- ✓ NUEVO: Modal de confirmación de eliminación -->
+@if (showDeleteModal()) {
+  <div class="modal-overlay" (click)="cancelDelete()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <i class="bi bi-exclamation-triangle-fill modal-icon"></i>
+        <h3>Confirmar Eliminación</h3>
+      </div>
+      
+      <div class="modal-body">
+        <p class="modal-question">¿Estás seguro de que deseas eliminar este horario?</p>
+        
+        @if (deleteModalData()) {
+          <div class="modal-info">
+            <div class="info-row">
+              <span class="info-label">Día:</span>
+              <span class="info-value">{{ getDayName(deleteModalData()!.day) }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Horario:</span>
+              <span class="info-value">
+                {{ deleteModalData()!.schedule.openingTime }} - {{ deleteModalData()!.schedule.closingTime }}
+              </span>
+            </div>
+          </div>
+        }
+        
+        <p class="modal-warning">
+          <i class="bi bi-info-circle"></i>
+          Esta acción es permanente y no se puede deshacer.
+        </p>
+      </div>
+      
+      <div class="modal-actions">
+        <button (click)="cancelDelete()" class="btn-modal btn-cancel">
+          <i class="bi bi-x-circle"></i>
+          Cancelar
+        </button>
+        <button (click)="confirmDelete()" class="btn-modal btn-confirm-delete">
+          <i class="bi bi-trash-fill"></i>
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+}
