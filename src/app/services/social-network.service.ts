@@ -75,6 +75,17 @@ export class SocialNetworkService {
   }
 
   /**
+   * DELETE /api/v1/social-network/{id}
+   * Elimina una red social específica por su ID.
+   */
+  deleteSocialNetwork(id: number): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/${id}`,
+      this.httpOptions
+    );
+  }
+
+  /**
    * DELETE /api/v1/social-network/all/{businessId}
    * Elimina todas las redes sociales de un negocio.
    */
