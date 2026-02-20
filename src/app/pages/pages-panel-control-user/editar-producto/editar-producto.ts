@@ -40,9 +40,9 @@ export class EditarProducto implements OnInit, OnDestroy {
   businessId: number = 0;
   productId: number = 0;
 
-  // Producto original y editable
-  productoOriginal: ProductResponse | null = null;
-  productoEditado: ProductResponse | null = null;
+  // Producto original y editable (ahora como signals)
+  productoOriginal = signal<ProductResponse | null>(null);
+  productoEditado = signal<ProductResponse | null>(null);
 
   // Datos de catálogos
   categorias: Category[] = [];
@@ -68,6 +68,9 @@ export class EditarProducto implements OnInit, OnDestroy {
   isSaving = signal(false);
   errorMessage = signal<string | null>(null);
 
+  // Modal de confirmación
+  showConfirmModal = signal(false);
+
   // Scroll: mostrar/ocultar barra de acciones en móvil
   showActionBar = signal(true);
   private lastScrollY = 0;
@@ -91,51 +94,49 @@ export class EditarProducto implements OnInit, OnDestroy {
     this.lastScrollY = currentScrollY;
   }
 
-  // Subcategorías filtradas según categoría seleccionada
   subcategoriasFiltradas = computed(() => {
-    const categoriaId = this.currentDrawer().type === 'categoria' 
-      ? this.tempCategoriaId 
-      : this.productoEditado?.categoryId || 0;
-    
+    const categoriaId = this.tempCategoriaId || this.productoEditado()?.categoryId || 0;
     return this.todasLasSubcategorias.filter(sub => sub.categoryId === categoriaId);
   });
 
-  // Verificar si hay cambios pendientes
-  get hayCambiosPendientes(): boolean {
-    if (!this.productoOriginal || !this.productoEditado) return false;
+  hayCambiosPendientes = computed(() => {
+    const original = this.productoOriginal();
+    const editado = this.productoEditado();
+    
+    if (!original || !editado) return false;
     
     const cambiosEnDatos = 
-      this.productoEditado.name !== this.productoOriginal.name ||
-      this.productoEditado.description !== this.productoOriginal.description ||
-      this.productoEditado.price !== this.productoOriginal.price ||
-      this.productoEditado.categoryId !== this.productoOriginal.categoryId ||
-      this.productoEditado.subCategoryId !== this.productoOriginal.subCategoryId ||
-      JSON.stringify(this.productoEditado.allergens) !== JSON.stringify(this.productoOriginal.allergens);
+      editado.name !== original.name ||
+      editado.description !== original.description ||
+      editado.price !== original.price ||
+      editado.categoryId !== original.categoryId ||
+      editado.subCategoryId !== original.subCategoryId ||
+      JSON.stringify(editado.allergens) !== JSON.stringify(original.allergens);
     
     return cambiosEnDatos || this.tempImagenFile !== null;
-  }
+  });
 
-  // Nombre de la categoría actual
-  get nombreCategoriaActual(): string {
-    if (!this.productoEditado) return 'Seleccionar';
-    const categoria = this.categorias.find(c => c.id === this.productoEditado?.categoryId);
+  nombreCategoriaActual = computed(() => {
+    const editado = this.productoEditado();
+    if (!editado) return 'Seleccionar';
+    const categoria = this.categorias.find(c => c.id === editado.categoryId);
     return categoria?.name || 'Seleccionar';
-  }
+  });
 
-  // Nombre de la subcategoría actual
-  get nombreSubcategoriaActual(): string {
-    if (!this.productoEditado) return 'Seleccionar';
-    const subcategoria = this.todasLasSubcategorias.find(s => s.id === this.productoEditado?.subCategoryId);
+  nombreSubcategoriaActual = computed(() => {
+    const editado = this.productoEditado();
+    if (!editado) return 'Seleccionar';
+    const subcategoria = this.todasLasSubcategorias.find(s => s.id === editado.subCategoryId);
     return subcategoria?.name || 'Seleccionar';
-  }
+  });
 
-  // Nombres de alérgenos actuales
-  get nombresAlergenosActuales(): string {
-    if (!this.productoEditado?.allergens || this.productoEditado.allergens.length === 0) {
+  nombresAlergenosActuales = computed(() => {
+    const editado = this.productoEditado();
+    if (!editado?.allergens || editado.allergens.length === 0) {
       return 'Ninguno';
     }
-    return this.productoEditado.allergens.map(a => a.name).join(', ');
-  }
+    return editado.allergens.map(a => a.name).join(', ');
+  });
 
   ngOnInit(): void {
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
@@ -178,8 +179,8 @@ export class EditarProducto implements OnInit, OnDestroy {
       alergenos: this.allergenService.getAllAllergens()
     }).pipe(takeUntil(this.destroy$)).subscribe({
       next: (data) => {
-        this.productoOriginal = { ...data.producto };
-        this.productoEditado = { ...data.producto };
+        this.productoOriginal.set({ ...data.producto });
+        this.productoEditado.set({ ...data.producto });
         this.categorias = data.categorias;
         this.alergenos = data.alergenos;
 
@@ -212,19 +213,19 @@ export class EditarProducto implements OnInit, OnDestroy {
 
   // Abrir drawers
   abrirDrawerNombre(): void {
-    this.tempNombre = this.productoEditado?.name || '';
+    this.tempNombre = this.productoEditado()?.name || '';
     this.currentDrawer.set({ type: 'nombre', title: 'Editar Nombre' });
     this.drawerOpen.set(true);
   }
 
   abrirDrawerDescripcion(): void {
-    this.tempDescripcion = this.productoEditado?.description || '';
+    this.tempDescripcion = this.productoEditado()?.description || '';
     this.currentDrawer.set({ type: 'descripcion', title: 'Editar Descripción' });
     this.drawerOpen.set(true);
   }
 
   abrirDrawerPrecio(): void {
-    this.tempPrecio = this.productoEditado?.price || 0;
+    this.tempPrecio = this.productoEditado()?.price || 0;
     this.currentDrawer.set({ type: 'precio', title: 'Editar Precio' });
     this.drawerOpen.set(true);
   }
@@ -237,19 +238,18 @@ export class EditarProducto implements OnInit, OnDestroy {
   }
 
   abrirDrawerCategoria(): void {
-    this.tempCategoriaId = this.productoEditado?.categoryId || 0;
+    this.tempCategoriaId = this.productoEditado()?.categoryId || 0;
     this.currentDrawer.set({ type: 'categoria', title: 'Editar Categoría' });
     this.drawerOpen.set(true);
   }
 
   abrirDrawerSubcategoria(): void {
-    this.tempSubcategoriaId = this.productoEditado?.subCategoryId || 0;
+    this.tempSubcategoriaId = this.productoEditado()?.subCategoryId || 0;
     this.currentDrawer.set({ type: 'subcategoria', title: 'Editar Subcategoría' });
     this.drawerOpen.set(true);
   }
-
   abrirDrawerAlergenos(): void {
-    this.tempAlergenosIds = this.productoEditado?.allergens?.map(a => a.id) || [];
+    this.tempAlergenosIds = this.productoEditado()?.allergens?.map(a => a.id) || [];
     this.currentDrawer.set({ type: 'alergenos', title: 'Editar Alérgenos' });
     this.drawerOpen.set(true);
   }
@@ -257,6 +257,18 @@ export class EditarProducto implements OnInit, OnDestroy {
   // Cerrar drawer
   cerrarDrawer(): void {
     this.drawerOpen.set(false);
+    
+    // Resetear valores temporales al cerrar
+    if (this.currentDrawer().type === 'categoria') {
+      this.tempCategoriaId = 0;
+    }
+    if (this.currentDrawer().type === 'subcategoria') {
+      this.tempSubcategoriaId = 0;
+    }
+    if (this.currentDrawer().type === 'alergenos') {
+      this.tempAlergenosIds = [];
+    }
+    
     setTimeout(() => {
       this.currentDrawer.set({ type: null, title: '' });
     }, 300);
@@ -304,24 +316,25 @@ export class EditarProducto implements OnInit, OnDestroy {
 
   // Confirmar cambios del drawer
   confirmarDrawer(): void {
-    if (!this.productoEditado) return;
+    const editado = this.productoEditado();
+    if (!editado) return;
 
     const tipo = this.currentDrawer().type;
 
     switch (tipo) {
       case 'nombre':
         if (this.tempNombre.trim()) {
-          this.productoEditado.name = this.tempNombre.trim();
+          this.productoEditado.update(p => p ? { ...p, name: this.tempNombre.trim() } : null);
         }
         break;
 
       case 'descripcion':
-        this.productoEditado.description = this.tempDescripcion.trim();
+        this.productoEditado.update(p => p ? { ...p, description: this.tempDescripcion.trim() } : null);
         break;
 
       case 'precio':
         if (this.tempPrecio > 0) {
-          this.productoEditado.price = this.tempPrecio;
+          this.productoEditado.update(p => p ? { ...p, price: this.tempPrecio } : null);
         }
         break;
 
@@ -330,21 +343,21 @@ export class EditarProducto implements OnInit, OnDestroy {
 
       case 'categoria':
         if (this.tempCategoriaId) {
-          this.productoEditado.categoryId = this.tempCategoriaId;
-          this.productoEditado.subCategoryId = 0;
+          this.productoEditado.update(p => p ? { ...p, categoryId: this.tempCategoriaId, subCategoryId: 0 } : null);
         }
         break;
 
       case 'subcategoria':
         if (this.tempSubcategoriaId) {
-          this.productoEditado.subCategoryId = this.tempSubcategoriaId;
+          this.productoEditado.update(p => p ? { ...p, subCategoryId: this.tempSubcategoriaId } : null);
         }
         break;
 
       case 'alergenos':
-        this.productoEditado.allergens = this.alergenos.filter(a => 
+        const allergensSeleccionados = this.alergenos.filter(a => 
           this.tempAlergenosIds.includes(a.id)
         );
+        this.productoEditado.update(p => p ? { ...p, allergens: allergensSeleccionados } : null);
         break;
     }
 
@@ -353,45 +366,59 @@ export class EditarProducto implements OnInit, OnDestroy {
 
   // Guardar todos los cambios
   guardarCambios(): void {
-    if (!this.productoEditado || !this.hayCambiosPendientes) {
+    const editado = this.productoEditado();
+    if (!editado || !this.hayCambiosPendientes()) {
       return;
     }
 
-    if (!confirm('¿Deseas guardar los cambios realizados?')) {
-      return;
-    }
+    // Mostrar modal de confirmación en lugar de alert
+    this.showConfirmModal.set(true);
+  }
 
+  // Métodos del modal de confirmación
+  closeConfirmModal(): void {
+    this.showConfirmModal.set(false);
+  }
+
+  confirmSave(): void {
     this.isSaving.set(true);
     this.errorMessage.set(null);
 
     const formData = new FormData();
-
-    if (this.productoOriginal && this.productoEditado.name !== this.productoOriginal.name) {
-      formData.append('name', this.productoEditado.name);
+    const editado = this.productoEditado();
+    const original = this.productoOriginal();
+    
+    if (!editado || !original) {
+      this.isSaving.set(false);
+      return;
     }
 
-    if (this.productoOriginal && this.productoEditado.description !== this.productoOriginal.description) {
-      formData.append('description', this.productoEditado.description || '');
+    if (original && editado.name !== original.name) {
+      formData.append('name', editado.name);
     }
 
-    if (this.productoOriginal && this.productoEditado.price !== this.productoOriginal.price) {
-      formData.append('price', this.productoEditado.price.toString());
+    if (original && editado.description !== original.description) {
+      formData.append('description', editado.description || '');
+    }
+
+    if (original && editado.price !== original.price) {
+      formData.append('price', editado.price.toString());
     }
 
     if (this.tempImagenFile) {
       formData.append('image', this.tempImagenFile);
     }
 
-    if (this.productoOriginal && this.productoEditado.categoryId !== this.productoOriginal.categoryId) {
-      formData.append('categoryId', this.productoEditado.categoryId?.toString() || '');
+    if (original && editado.categoryId !== original.categoryId && editado.categoryId) {
+      formData.append('categoryId', editado.categoryId.toString());
     }
 
-    if (this.productoOriginal && this.productoEditado.subCategoryId !== this.productoOriginal.subCategoryId) {
-      formData.append('subcategoryId', this.productoEditado.subCategoryId?.toString() || '');
+    if (original && editado.subCategoryId !== original.subCategoryId && editado.subCategoryId) {
+      formData.append('subcategoryId', editado.subCategoryId.toString());
     }
 
-    const allergenIds = this.productoEditado.allergens?.map(a => a.id).join(',') || '';
-    const originalAllergenIds = this.productoOriginal?.allergens?.map(a => a.id).join(',') || '';
+    const allergenIds = editado.allergens?.map(a => a.id).join(',') || '';
+    const originalAllergenIds = original?.allergens?.map(a => a.id).join(',') || '';
     
     if (allergenIds !== originalAllergenIds) {
       formData.append('allergenIds', allergenIds);
@@ -416,7 +443,7 @@ export class EditarProducto implements OnInit, OnDestroy {
 
   // Cancelar y volver
   cancelar(): void {
-    if (this.hayCambiosPendientes) {
+    if (this.hayCambiosPendientes()) {
       if (!confirm('Hay cambios sin guardar. ¿Deseas salir sin guardar?')) {
         return;
       }

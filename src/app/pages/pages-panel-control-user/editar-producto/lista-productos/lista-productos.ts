@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProductosService } from '../../../../services/productos.service';
@@ -21,9 +21,18 @@ export class ListaProductos implements OnInit {
 
   businessId: number = 0;
   productos = signal<ProductResponse[]>([]);
+  categorias = signal<any[]>([]);
   isLoading = signal(false);
   error = signal<string | null>(null);
-  categoriesMap = signal<{ [key: number]: string }>({});
+
+  // Computed para el mapa de categorías - se actualiza automáticamente
+  categoriesMap = computed(() => {
+    const map: { [key: number]: string } = {};
+    this.categorias().forEach(cat => {
+      map[cat.id] = cat.name;
+    });
+    return map;
+  });
 
   ngOnInit(): void {
     // Obtener businessId de la ruta
@@ -61,13 +70,7 @@ export class ListaProductos implements OnInit {
         });
 
         this.productos.set(productosOrdenados);
-
-        // Crear mapa de categoryId => nombre de categoría
-        const mapCategories: { [key: number]: string } = {};
-        data.categorias.forEach(cat => {
-          mapCategories[cat.id] = cat.name;
-        });
-        this.categoriesMap.set(mapCategories);
+        this.categorias.set(data.categorias);
 
         this.isLoading.set(false);
       },
