@@ -1,7 +1,6 @@
 import { FacilityResponse } from "./facility.model";
 import { KitchenHourResponse } from "./kitchen-hour.model";
 import { OpeningHourResponse } from "./opening-hour.model";
-import { ProductResponse } from "./product.model";
 import { SocialNetworkResponse } from "./social-network.model";
 import { WifiResponse } from "./wifi.model";
 
@@ -32,7 +31,7 @@ export interface BusinessResponse {
 }
 
 export interface BusinessWithProductsResponse extends BusinessResponse {
-  products: ProductResponse[];
+  products?: any[]; // ProductResponse[]
 }
 
 export interface PageBusinessResponse {

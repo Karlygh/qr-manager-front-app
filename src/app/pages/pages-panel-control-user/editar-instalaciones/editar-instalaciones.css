@@ -1,6 +1,6 @@
 /* Spinner (Cargando) */
 .spinner-border.color-primary {
-    color: #20c997;
+    color: var(--panel-color-accent);
 }
 
 /* --- Estilo del Header: Imagen Sutil --- */
@@ -9,13 +9,13 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    color: white; 
+    color: var(--color-text-white); 
     padding: 30px 40px; 
     border-radius: 12px; 
     position: relative;
     overflow: hidden; 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2); 
+    box-shadow: var(--panel-shadow-header); 
+    border-bottom: 1px solid var(--panel-color-white-overlay); 
 }
 
 /* Capa Oscura */
@@ -26,7 +26,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(44, 58, 52, 0.75);
+    background: var(--panel-color-header-overlay);
     z-index: 1;
     border-radius: 12px;
 }
@@ -34,16 +34,16 @@
 .business-header > * {
     position: relative;
     z-index: 2;
-    color: #105f34;
+    color: var(--color-success);
 }
 
 .business-header h1 {
-    color: #20864e;
+    color: var(--panel-color-heading);
 }
 
 .business-logo {
-    background-color: white; 
-    border: 3px solid #20c997; 
+    background-color: var(--color-bg-white); 
+    border: 3px solid var(--panel-color-accent); 
     border-radius: 50%; 
     transition: transform 0.3s ease;
 }
@@ -54,32 +54,32 @@
 
 /* --- Estilos de Tarjetas (Cards) --- */
 .custom-card {
-    border: 1px solid #dee2e6; 
+    border: 1px solid var(--panel-color-border); 
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); 
+    box-shadow: var(--panel-shadow-card); 
     transition: all 0.3s ease;
 }
 
 .custom-card:hover {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--panel-shadow-card-hover);
     transform: translateY(-2px);
 }
 
 /* Alerta de Error */
 .custom-alert-danger {
-    background-color: #f8d7da;
-    border-color: #f5c2c7;
-    color: #842029;
-    padding: 1rem;
-    margin-bottom: 1.5rem;
+    background-color: var(--panel-color-alert-bg);
+    border-color: var(--panel-color-alert-border);
+    color: var(--panel-color-alert-text);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
     border-radius: 0.5rem;
     font-weight: bold;
 }
 
 /* Botones */
 .custom-btn-secondary {
-    background-color: #198754;
-    color: white;
+    background-color: var(--panel-color-primary);
+    color: var(--color-text-white);
     border: none;
     transition: all 0.3s ease;
     font-weight: 500;
@@ -87,49 +87,49 @@
 }
 
 .custom-btn-secondary:hover {
-    background-color: #157347;
-    color: white;
+    background-color: var(--panel-color-primary-dark);
+    color: var(--color-text-white);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(25, 135, 84, 0.4);
+    box-shadow: var(--panel-shadow-btn-hover);
 }
 
 .custom-btn-secondary:disabled {
-    background-color: #6c757d;
+    background-color: var(--panel-color-muted);
     transform: none;
     box-shadow: none;
 }
 
 /* Formulario */
 .form-label {
-    color: #198754;
-    margin-bottom: 0.5rem;
+    color: var(--panel-color-primary);
+    margin-bottom: var(--spacing-sm);
 }
 
 .form-control {
-    border: 2px solid #e9ecef;
+    border: 2px solid var(--panel-color-border-soft);
     border-radius: 8px;
     padding: 0.75rem 1rem;
     transition: all 0.3s ease;
 }
 
 .form-control:focus {
-    border-color: #20c997;
-    box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25);
-    background-color: #f8fffe;
+    border-color: var(--panel-color-accent);
+    box-shadow: var(--panel-shadow-focus-ring);
+    background-color: var(--panel-color-bg-focus);
 }
 
 .color-primary {
-    color: #198754 !important;
+    color: var(--panel-color-primary) !important;
 }
 
 p.lead {
-    color: #a0ce16;
+    color: var(--panel-color-lead);
 }
 
 /* Badges para instalaciones */
 .custom-badge-info {
-    background-color: #198754;
-    color: white;
+    background-color: var(--panel-color-primary);
+    color: var(--color-text-white);
     font-size: 0.9rem;
     border-radius: 8px;
 }
@@ -141,48 +141,48 @@ p.lead {
 
 .facility-badge:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3);
-    border-color: #20c997;
+    box-shadow: var(--panel-shadow-badge-hover);
+    border-color: var(--panel-color-accent);
 }
 
 .facility-badge .btn-outline-danger {
     opacity: 1 !important;
     transition: all 0.3s ease;
-    color: white !important;
+    color: var(--color-text-white) !important;
     border-color: transparent !important;
-    background-color: rgba(220, 53, 69, 0.3) !important;
+    background-color: var(--panel-color-danger-light) !important;
 }
 
 .facility-badge .btn-outline-danger:hover {
-    background-color: rgba(220, 53, 69, 0.6) !important;
-    color: white !important;
+    background-color: var(--panel-color-danger-medium) !important;
+    color: var(--color-text-white) !important;
     transform: scale(1.1);
 }
 
 /* Botones de instalaciones predefinidas */
 .btn-outline-success {
-    border-color: #198754;
-    color: #198754;
+    border-color: var(--panel-color-primary);
+    color: var(--panel-color-primary);
     transition: all 0.3s ease;
 }
 
 .btn-outline-success:hover {
-    background-color: #198754;
-    border-color: #198754;
-    color: white;
+    background-color: var(--panel-color-primary);
+    border-color: var(--panel-color-primary);
+    color: var(--color-text-white);
     transform: translateY(-1px);
 }
 
 /* Buscador */
 .input-group-text {
-    background-color: #f8f9fa;
-    border-color: #e9ecef;
-    color: #198754;
+    background-color: var(--color-bg-light);
+    border-color: var(--panel-color-border-soft);
+    color: var(--panel-color-primary);
 }
 
 /* Contador de instalaciones */
 .badge.bg-secondary {
-    background-color: #6c757d !important;
+    background-color: var(--panel-color-muted) !important;
     font-size: 0.7rem;
 }
 
@@ -217,7 +217,7 @@ p.lead {
 }
 
 .modal-backdrop {
-    background: rgba(0, 0, 0, 0.5);
+    background: var(--panel-color-modal-backdrop);
     position: fixed;
     top: 0;
     left: 0;
@@ -235,16 +235,16 @@ p.lead {
 }
 
 .modal-content {
-    background: white;
+    background: var(--color-bg-white);
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--panel-shadow-modal);
     overflow: hidden;
 }
 
 .modal-header {
-    background: linear-gradient(135deg, #dc3545, #c82333);
-    color: white;
-    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, var(--color-danger), var(--panel-color-danger-dark));
+    color: var(--color-text-white);
+    padding: var(--spacing-md) var(--spacing-lg);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -258,7 +258,7 @@ p.lead {
 .modal-header button {
     background: none;
     border: none;
-    color: white;
+    color: var(--color-text-white);
     font-size: 1.5rem;
     cursor: pointer;
     padding: 0;
@@ -272,19 +272,19 @@ p.lead {
 }
 
 .modal-header button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: var(--panel-color-white-overlay);
 }
 
 .modal-body {
-    padding: 1.5rem;
+    padding: var(--spacing-lg);
 }
 
 .modal-footer {
-    padding: 1rem 1.5rem;
+    padding: var(--spacing-md) var(--spacing-lg);
     display: flex;
     justify-content: flex-end;
-    gap: 0.5rem;
-    border-top: 1px solid #dee2e6;
+    gap: var(--spacing-sm);
+    border-top: 1px solid var(--panel-color-border);
 }
 
 .modal-footer .btn {
@@ -295,15 +295,15 @@ p.lead {
 }
 
 .modal-footer .btn-secondary {
-    background-color: #6c757d;
-    border-color: #6c757d;
-    color: white;
+    background-color: var(--panel-color-muted);
+    border-color: var(--panel-color-muted);
+    color: var(--color-text-white);
 }
 
 .modal-footer .btn-danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
-    color: white;
+    background-color: var(--color-danger);
+    border-color: var(--color-danger);
+    color: var(--color-text-white);
 }
 
 .modal-footer .btn:hover {

@@ -106,7 +106,7 @@
 
   /* ======================================================================
      DETALLES NEGOCIO (feature tokens)
-     Nota: tokens específicos para no pisar la paleta global.
+
      ====================================================================== */
   --detalles-color-primary: #2d7c5f;
   --detalles-color-primary-dark: #1e523f;
@@ -227,4 +227,50 @@
   --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.5);
 
   --placeholder-gradient: linear-gradient(135deg, #2c2c2c 0%, #383838 100%);
+}
+
+/* ========================================================================
+   PANEL CONTROL TOKENS (editar-instalaciones, editar-contacto, etc.)
+   ========================================================================
+   Tokens compartidos por las páginas de edición del panel de control.
+   ======================================================================== */
+:root {
+  /* 🎨 COLORES BASE PANEL */
+  --panel-color-accent: #20c997;
+  --panel-color-primary: #198754;
+  --panel-color-primary-dark: #157347;
+  --panel-color-heading: #20864e;
+  --panel-color-lead: #a0ce16;
+  --panel-color-muted: #6c757d;
+
+  /* 🎨 BORDES */
+  --panel-color-border: #dee2e6;
+  --panel-color-border-soft: #e9ecef;
+
+  /* 🎨 FONDOS */
+  --panel-color-bg-focus: #f8fffe;
+
+  /* 🎨 ALERTAS */
+  --panel-color-alert-bg: var(--color-bg-invalid);       /* #f8d7da */
+  --panel-color-alert-border: #f5c2c7;
+  --panel-color-alert-text: #842029;
+
+  /* 🎨 DANGER / MODAL */
+  --panel-color-danger-dark: #c82333;
+  --panel-color-danger-light: rgba(220, 53, 69, 0.3);
+  --panel-color-danger-medium: rgba(220, 53, 69, 0.6);
+
+  /* 🎨 OVERLAYS */
+  --panel-color-header-overlay: rgba(44, 58, 52, 0.75);
+  --panel-color-white-overlay: rgba(255, 255, 255, 0.2);
+  --panel-color-modal-backdrop: rgba(0, 0, 0, 0.5);
+
+  /* 🎨 SOMBRAS */
+  --panel-shadow-header: 0 4px 15px rgba(0, 0, 0, 0.1);
+  --panel-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --panel-shadow-card-hover: 0 8px 20px rgba(0, 0, 0, 0.15);
+  --panel-shadow-btn-hover: 0 4px 12px rgba(25, 135, 84, 0.4);
+  --panel-shadow-badge-hover: 0 4px 12px rgba(25, 135, 84, 0.3);
+  --panel-shadow-focus-ring: 0 0 0 0.25rem rgba(32, 201, 151, 0.25);
+  --panel-shadow-modal: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
