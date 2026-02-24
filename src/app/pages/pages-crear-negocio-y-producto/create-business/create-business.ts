@@ -11,7 +11,8 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { BusinessService, BusinessCreationResponse } from '../../../services/business.service';
+import { BusinessCreationResponse } from '../../../shared/models/business.model';
+import { BusinessService } from '../../../services/business.service';
 import { NotificationService } from '../../../services/notification.service';
 import { LoggerService } from '../../../services/logger.service';
 import { BusinessFormData, FileValidationError } from './models/business-form.interface';

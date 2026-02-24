@@ -3,8 +3,10 @@ import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/route
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BusinessService } from '../../../../services/business.service';
-import { CategoryService, Category } from '../../../../services/category.service';
-import { SubCategoryService, SubCategory } from '../../../../services/subcategory.service';
+import { Category } from '../../../../shared/models/category.model';
+import { CategoryService } from '../../../../services/category.service';
+import { SubCategory } from '../../../../shared/models/subcategory.model';
+import { SubCategoryService } from '../../../../services/subcategory.service';
 import { ProductosService } from '../../../../services/productos.service';
 import { Business } from '../../../../models/business.model';
 

@@ -2,7 +2,8 @@ import { Component, OnInit, inject, signal, computed, DestroyRef } from '@angula
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { SocialNetwork, SocialNetworkService } from '../../../services/social-network.service';
+import { SocialNetwork } from '../../../shared/models/social-network.model';
+import { SocialNetworkService } from '../../../services/social-network.service';
 
 @Component({
   selector: 'app-google-opiniones',

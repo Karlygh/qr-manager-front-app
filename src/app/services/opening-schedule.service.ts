@@ -2,38 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-
-export interface OpeningHour {
-  id?: number;
-  businessId: number;
-  day: string;
-  openingTime: string;
-  closingTime: string;
-  status?: boolean;
-  dayGroupId?: number;
-}
-
-export interface OpeningHourResponse {
-  id: number;
-  businessId: number;
-  day: string;
-  status: boolean;
-  intervals: {
-    id: number;
-    startTime: string;
-    endTime: string;
-  }[];
-}
-
-export interface OpeningHourRequest {
-  businessId: number;
-  day: string;
-  status: boolean;
-  intervals: {
-    startTime: string;
-    endTime: string;
-  }[];
-}
+import { OpeningHour, OpeningHourResponse, OpeningHourRequest } from '../shared/models/opening-hour.model';
 
 @Injectable({
   providedIn: 'root'

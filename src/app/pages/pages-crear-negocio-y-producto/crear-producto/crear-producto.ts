@@ -5,8 +5,10 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil, finalize, catchError, of, forkJoin } from 'rxjs';
 
-import { CategoryService, Category } from '../../../services/category.service';
-import { SubCategoryService, SubCategory } from '../../../services/subcategory.service';
+import { Category } from '../../../shared/models/category.model';
+import { CategoryService } from '../../../services/category.service';
+import { SubCategory } from '../../../shared/models/subcategory.model';
+import { SubCategoryService } from '../../../services/subcategory.service';
 import { ProductosService } from '../../../services/productos.service';
 import { AllergenService } from '../../../services/allergen.service';
 import { AllergenResponse } from '../../../shared/models/allergen.model';

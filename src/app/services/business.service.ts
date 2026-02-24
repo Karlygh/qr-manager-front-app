@@ -2,10 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environments } from '../environments/environments';
-
-export interface BusinessCreationResponse {
-  id: number;
-}
+import { BusinessCreationResponse } from '../shared/models/business.model';
 
 @Injectable({
   providedIn: 'root'

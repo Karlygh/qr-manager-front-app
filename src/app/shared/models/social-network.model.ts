@@ -1,11 +1,5 @@
-export interface SocialNetworkRequest {
-  businessId?: number;
-  name?: string;
-  url?: string;
-}
-
-export interface SocialNetworkResponse {
-  id: number;
+export interface SocialNetwork {
+  id?: number;
   businessId: number;
   name: string;
   url: string;

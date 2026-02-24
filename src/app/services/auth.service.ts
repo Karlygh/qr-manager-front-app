@@ -3,26 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-
-// Interfaces según la documentación de la API
-export interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
-  expiresIn: number;
-  refreshExpiresIn: number;
-}
-
-export interface RegisterResponse {
-  userId: string;
-  message: string;
-}
-
-export interface RefreshTokenResponse {
-  accessToken: string;
-  refreshToken: string;
-  expiresIn: number;
-  refreshExpiresIn: number;
-}
+import { LoginResponse, RegisterResponse, RefreshTokenResponse } from '../shared/models/auth.model';
 
 @Injectable({
   providedIn: 'root'

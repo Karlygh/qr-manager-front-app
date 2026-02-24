@@ -15,8 +15,10 @@ import { RouterLink } from '@angular/router';
 import { Subject, forkJoin, takeUntil } from 'rxjs';
 import { LayoutService } from '../../../services/layout.service';
 import { ProductosService } from '../../../services/productos.service';
-import { CategoryService, Category } from '../../../services/category.service';
-import { SubCategoryService, SubCategory } from '../../../services/subcategory.service';
+import { Category } from '../../../shared/models/category.model';
+import { CategoryService } from '../../../services/category.service';
+import { SubCategory } from '../../../shared/models/subcategory.model';
+import { SubCategoryService } from '../../../services/subcategory.service';
 import { BusinessService } from '../../../services/business.service';
 import { ProductResponse } from '../../../shared/models/product.model';
 

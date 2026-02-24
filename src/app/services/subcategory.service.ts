@@ -2,17 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-
-export interface SubCategory {
-  id: number;
-  name: string;
-  categoryId: number;
-}
-
-export interface SubCategoryRequest {
-  name: string;
-  categoryId: number;
-}
+import { SubCategory, SubCategoryRequest } from '../shared/models/subcategory.model';
 
 @Injectable({
   providedIn: 'root'

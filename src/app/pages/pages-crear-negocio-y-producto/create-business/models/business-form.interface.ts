@@ -6,10 +6,6 @@ export interface BusinessFormData {
   description: string;
 }
 
-export interface BusinessCreationResponse {
-  id: number;
-}
-
 export interface FileValidationError {
   type: 'SIZE' | 'TYPE' | 'EXTENSION';
   message: string;

@@ -6,8 +6,10 @@ import { Subject, forkJoin, takeUntil } from 'rxjs';
 
 // Services
 import { ProductosService } from '../../../services/productos.service';
-import { CategoryService, Category } from '../../../services/category.service';
-import { SubCategoryService, SubCategory } from '../../../services/subcategory.service';
+import { Category } from '../../../shared/models/category.model';
+import { CategoryService } from '../../../services/category.service';
+import { SubCategory } from '../../../shared/models/subcategory.model';
+import { SubCategoryService } from '../../../services/subcategory.service';
 import { AllergenService } from '../../../services/allergen.service';
 
 // Models

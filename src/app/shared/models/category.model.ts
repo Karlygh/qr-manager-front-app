@@ -1,11 +1,6 @@
-export interface CategoryRequest {
-  name?: string;
-  image?: File;
-}
-
-export interface CategoryResponse {
+export interface Category {
   id: number;
-  businessId: number;
   name: string;
+  businessId: number;
   image?: string;
 }

@@ -1,17 +1,12 @@
 import { FacilityResponse } from "./facility.model";
 import { KitchenHourResponse } from "./kitchen-hour.model";
 import { OpeningHourResponse } from "./opening-hour.model";
-import { SocialNetworkResponse } from "./social-network.model";
+import { SocialNetwork } from "./social-network.model";
 import { WifiResponse } from "./wifi.model";
 
 
-export interface BusinessRequest {
-  name: string;
-  address?: string;
-  phoneNumber?: string;
-  email?: string;
-  description?: string;
-  imageLogo?: File; // format: binary
+export interface BusinessCreationResponse {
+  id: number;
 }
 
 export interface BusinessResponse {
@@ -27,21 +22,5 @@ export interface BusinessResponse {
   openingHours?: OpeningHourResponse[];
   kitchenHours?: KitchenHourResponse[];
   facilities?: FacilityResponse[];
-  socialNetworks?: SocialNetworkResponse[];
-}
-
-export interface BusinessWithProductsResponse extends BusinessResponse {
-  products?: any[]; // ProductResponse[]
-}
-
-export interface PageBusinessResponse {
-  content: BusinessResponse[];
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  number: number;
-  numberOfElements: number;
-  first: boolean;
-  last: boolean;
-  empty: boolean;
+  socialNetworks?: SocialNetwork[];
 }

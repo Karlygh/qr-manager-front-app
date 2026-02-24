@@ -17,24 +17,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
-
-export interface ScheduleHour {
-  id?: number;
-  businessId: number;
-  day: string;
-  openingTime: string;
-  closingTime: string;
-  status?: boolean;
-  dayGroupId?: number;
-  tempId?: string;
-}
-
-export interface ScheduleService<T extends ScheduleHour> {
-  saveDaySchedules(businessId: number, day: string, schedules: T[]): Observable<any>;
-  saveAllSchedules?(businessId: number, schedules: T[]): Observable<T[]>;
-  deleteAllSchedules?(businessId: number): Observable<void>;
-  getSchedulesByBusiness?(businessId: number): Observable<T[]>;
-}
+import { ScheduleHour, ScheduleService } from '../../models/schedule.model';
 
 interface ScheduleState<T extends ScheduleHour> {
   current: T;           // Estado actual del schedule

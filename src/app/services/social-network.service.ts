@@ -1,14 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-// Definición de la interfaz de la Red Social
-export interface SocialNetwork {
-  id?: number; // El ID es opcional al crear
-  businessId: number;
-  name: string;
-  url: string;
-}
+import { SocialNetwork } from '../shared/models/social-network.model';
 
 @Injectable({
   providedIn: 'root'
