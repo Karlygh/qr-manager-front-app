@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environments } from '../environments/environments';
-import { AllergenResponse } from '../shared/models/allergen.model';
+import { environments } from '../../environments/environments';
+import { AllergenResponse } from '../../shared/models/allergen.model';
 
 @Injectable({
   providedIn: 'root'

@@ -4,10 +4,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Category } from '../../../shared/models/category.model';
-import { CategoryService } from '../../../services/category.service';
+import { CategoryService } from '../../../core/services/category.service';
 import { SubCategory, SubCategoryRequest } from '../../../shared/models/subcategory.model';
-import { SubCategoryService } from '../../../services/subcategory.service';
-import { ProductosService } from '../../../services/productos.service';
+import { SubCategoryService } from '../../../core/services/subcategory.service';
+import { ProductosService } from '../../../core/services/productos.service';
 import { ProductResponse } from '../../../shared/models/product.model';
 
 interface ModalState {

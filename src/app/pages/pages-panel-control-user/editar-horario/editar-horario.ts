@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { KitchenHour } from '../../../shared/models/kitchen-hour.model';
-import { KitchenScheduleService } from '../../../services/kitchen-schedule.service';
+import { KitchenScheduleService } from '../../../core/services/kitchen-schedule.service';
 import { ScheduleEditorComponent } from '../../../shared/components/schedule-editor/schedule-editor.component';
 
 @Component({

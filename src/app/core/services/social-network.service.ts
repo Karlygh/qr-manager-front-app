@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { SocialNetwork } from '../shared/models/social-network.model';
+import { SocialNetwork } from '../../shared/models/social-network.model';
 
 @Injectable({
   providedIn: 'root'

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../../../services/auth.service';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-regristo-login',

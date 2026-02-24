@@ -3,7 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { LoginResponse, RegisterResponse, RefreshTokenResponse } from '../shared/models/auth.model';
+import { LoginResponse, RegisterResponse, RefreshTokenResponse } from '../../shared/models/auth.model';
 
 @Injectable({
   providedIn: 'root'

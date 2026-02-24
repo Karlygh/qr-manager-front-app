@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, computed, signal, effect } from '@angular/core';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { BusinessService } from '../../../services/business.service';
+import { BusinessService } from '../../../core/services/business.service';
 import { Business, Facility } from '../../../shared/models/business.model';
 
 @Component({

@@ -12,9 +12,9 @@ import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { BusinessCreationResponse } from '../../../shared/models/business.model';
-import { BusinessService } from '../../../services/business.service';
-import { NotificationService } from '../../../services/notification.service';
-import { LoggerService } from '../../../services/logger.service';
+import { BusinessService } from '../../../core/services/business.service';
+import { NotificationService } from '../../../core/services/notification.service';
+import { LoggerService } from '../../../core/services/logger.service';
 import { BusinessFormData, FileValidationError } from './models/business-form.interface';
 import { BUSINESS_CREATION_CONSTANTS } from './constants/business-creation.constants';
 import { BusinessSuccessModalComponent } from './components/business-success-modal.component';

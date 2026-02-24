@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OpeningHour } from '../../../../shared/models/opening-hour.model';
-import { OpeningScheduleService } from '../../../../services/opening-schedule.service';
+import { OpeningScheduleService } from '../../../../core/services/opening-schedule.service';
 import { ScheduleEditorComponent } from '../../../../shared/components/schedule-editor/schedule-editor.component';
 
 @Component({

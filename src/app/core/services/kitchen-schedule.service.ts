@@ -2,30 +2,30 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { DayOfWeek } from '../shared/types/day-of-week.type';
-import { OpeningHour, OpeningHourResponse, OpeningHourRequest } from '../shared/models/opening-hour.model';
+import { DayOfWeek } from '../../shared/types/day-of-week.type';
+import { KitchenHour, KitchenHourResponse, KitchenHourRequest } from '../../shared/models/kitchen-hour.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class OpeningScheduleService {
+export class KitchenScheduleService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://91.107.235.58:8081/api/v1/schedule/opening-hours';
+  private apiUrl = 'http://91.107.235.58:8081/api/v1/schedule/kitchen-hours';
 
-  getSchedulesByBusiness = this.getOpeningHoursByBusiness;
+  getSchedulesByBusiness = this.getKitchenHoursByBusiness;
 
-  getOpeningHoursByBusiness(businessId: number): Observable<OpeningHour[]> {
-    return this.http.get<OpeningHourResponse[]>(`${this.apiUrl}/${businessId}`).pipe(
-      map(responses => this.convertResponsesToOpeningHours(responses)),
+  getKitchenHoursByBusiness(businessId: number): Observable<KitchenHour[]> {
+    return this.http.get<KitchenHourResponse[]>(`${this.apiUrl}/${businessId}`).pipe(
+      map(responses => this.convertResponsesToKitchenHours(responses)),
       catchError(error => {
-        console.error('Error fetching opening hours:', error);
+        console.error('Error fetching kitchen hours:', error);
         return of([]);
       })
     );
   }
 
-  saveDaySchedules(businessId: number, day: DayOfWeek, schedules: OpeningHour[]): Observable<OpeningHourResponse> {
-    const request: OpeningHourRequest = {
+  saveDaySchedules(businessId: number, day: DayOfWeek, schedules: KitchenHour[]): Observable<KitchenHourResponse> {
+    const request: KitchenHourRequest = {
       businessId: businessId,
       day: day,
       status: schedules.length > 0 && schedules[0].status !== undefined ? schedules[0].status : true,
@@ -38,15 +38,15 @@ export class OpeningScheduleService {
     const dayGroupId = schedules[0]?.dayGroupId;
     
     if (dayGroupId) {
-      return this.http.patch<OpeningHourResponse>(`${this.apiUrl}/${dayGroupId}`, request);
+      return this.http.patch<KitchenHourResponse>(`${this.apiUrl}/${dayGroupId}`, request);
     } else {
-      return this.http.post<OpeningHourResponse>(`${this.apiUrl}/${businessId}`, request);
+      return this.http.post<KitchenHourResponse>(`${this.apiUrl}/${businessId}`, request);
     }
   }
 
-  saveAllSchedules(businessId: number, allSchedules: OpeningHour[]): Observable<OpeningHour[]> {
+  saveAllSchedules(businessId: number, allSchedules: KitchenHour[]): Observable<KitchenHour[]> {
     const schedulesByDay = this.groupSchedulesByDay(allSchedules);
-    const requests: OpeningHourRequest[] = [];
+    const requests: KitchenHourRequest[] = [];
     
     Object.keys(schedulesByDay).forEach(day => {
       const daySchedules = schedulesByDay[day];
@@ -61,8 +61,8 @@ export class OpeningScheduleService {
       });
     });
 
-    return this.http.post<OpeningHourResponse[]>(`${this.apiUrl}/all/${businessId}`, requests).pipe(
-      map(responses => this.convertResponsesToOpeningHours(responses))
+    return this.http.post<KitchenHourResponse[]>(`${this.apiUrl}/all/${businessId}`, requests).pipe(
+      map(responses => this.convertResponsesToKitchenHours(responses))
     );
   }
 
@@ -71,18 +71,18 @@ export class OpeningScheduleService {
   }
 
   // Deprecated methods - mantener por compatibilidad
-  saveAllOpeningHours = this.saveAllSchedules;
-  deleteAllOpeningHours = this.deleteAllSchedules;
+  saveAllKitchenHours = this.saveAllSchedules;
+  deleteAllKitchenHours = this.deleteAllSchedules;
   deleteDaySchedule(dayGroupId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${dayGroupId}`);
   }
 
-  private convertResponsesToOpeningHours(responses: OpeningHourResponse[]): OpeningHour[] {
-    const openingHours: OpeningHour[] = [];
+  private convertResponsesToKitchenHours(responses: KitchenHourResponse[]): KitchenHour[] {
+    const kitchenHours: KitchenHour[] = [];
     
     responses.forEach(response => {
       response.intervals.forEach(interval => {
-        openingHours.push({
+        kitchenHours.push({
           id: interval.id,
           businessId: response.businessId,
           day: response.day,
@@ -94,11 +94,11 @@ export class OpeningScheduleService {
       });
     });
     
-    return openingHours;
+    return kitchenHours;
   }
 
-  private groupSchedulesByDay(schedules: OpeningHour[]): { [key: string]: OpeningHour[] } {
-    const grouped: { [key: string]: OpeningHour[] } = {};
+  private groupSchedulesByDay(schedules: KitchenHour[]): { [key: string]: KitchenHour[] } {
+    const grouped: { [key: string]: KitchenHour[] } = {};
     
     schedules.forEach(schedule => {
       if (!grouped[schedule.day]) {

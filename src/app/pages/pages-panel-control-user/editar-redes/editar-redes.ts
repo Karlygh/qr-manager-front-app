@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { SocialNetwork } from '../../../shared/models/social-network.model';
-import { SocialNetworkService } from '../../../services/social-network.service';
+import { SocialNetworkService } from '../../../core/services/social-network.service';
 
 @Component({
   selector: 'app-editar-redes',

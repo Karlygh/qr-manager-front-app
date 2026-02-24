@@ -6,11 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil, finalize, catchError, of, forkJoin } from 'rxjs';
 
 import { Category } from '../../../shared/models/category.model';
-import { CategoryService } from '../../../services/category.service';
+import { CategoryService } from '../../../core/services/category.service';
 import { SubCategory } from '../../../shared/models/subcategory.model';
-import { SubCategoryService } from '../../../services/subcategory.service';
-import { ProductosService } from '../../../services/productos.service';
-import { AllergenService } from '../../../services/allergen.service';
+import { SubCategoryService } from '../../../core/services/subcategory.service';
+import { ProductosService } from '../../../core/services/productos.service';
+import { AllergenService } from '../../../core/services/allergen.service';
 import { AllergenResponse } from '../../../shared/models/allergen.model';
 
 enum MessageType {

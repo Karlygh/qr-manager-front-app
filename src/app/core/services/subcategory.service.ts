@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-import { SubCategory, SubCategoryRequest } from '../shared/models/subcategory.model';
+import { SubCategory, SubCategoryRequest } from '../../shared/models/subcategory.model';
 
 @Injectable({
   providedIn: 'root'

@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { ProductResponse } from '../shared/models/product.model';
+import { ProductResponse } from '../../shared/models/product.model';
 
 @Injectable({
   providedIn: 'root'

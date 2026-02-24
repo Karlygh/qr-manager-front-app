@@ -2,7 +2,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BusinessService } from '../../../services/business.service';
+import { BusinessService } from '../../../core/services/business.service';
 import { Business } from '../../../shared/models/business.model';
 import { FormLabelPipe } from '../../../shared/pipes/form-label.pipe';
 

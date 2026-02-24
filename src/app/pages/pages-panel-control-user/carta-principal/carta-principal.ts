@@ -13,13 +13,13 @@ import { isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Subject, forkJoin, takeUntil } from 'rxjs';
-import { LayoutService } from '../../../services/layout.service';
-import { ProductosService } from '../../../services/productos.service';
+import { LayoutService } from '../../../core/services/layout.service';
+import { ProductosService } from '../../../core/services/productos.service';
 import { Category } from '../../../shared/models/category.model';
-import { CategoryService } from '../../../services/category.service';
+import { CategoryService } from '../../../core/services/category.service';
 import { SubCategory } from '../../../shared/models/subcategory.model';
-import { SubCategoryService } from '../../../services/subcategory.service';
-import { BusinessService } from '../../../services/business.service';
+import { SubCategoryService } from '../../../core/services/subcategory.service';
+import { BusinessService } from '../../../core/services/business.service';
 import { ProductResponse } from '../../../shared/models/product.model';
 
 interface CategoryWithIcon extends Category {

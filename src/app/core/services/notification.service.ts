@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Notification } from '../shared/models/notification.model';
+import { Notification } from '../../shared/models/notification.model';
 
 @Injectable({
   providedIn: 'root'

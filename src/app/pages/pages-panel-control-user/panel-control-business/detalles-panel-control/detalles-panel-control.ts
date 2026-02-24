@@ -2,12 +2,12 @@ import { Component, OnInit, AfterViewInit, PLATFORM_ID, inject, OnDestroy } from
 import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BusinessService } from '../../../../services/business.service';
+import { BusinessService } from '../../../../core/services/business.service';
 import { Category } from '../../../../shared/models/category.model';
-import { CategoryService } from '../../../../services/category.service';
+import { CategoryService } from '../../../../core/services/category.service';
 import { SubCategory } from '../../../../shared/models/subcategory.model';
-import { SubCategoryService } from '../../../../services/subcategory.service';
-import { ProductosService } from '../../../../services/productos.service';
+import { SubCategoryService } from '../../../../core/services/subcategory.service';
+import { ProductosService } from '../../../../core/services/productos.service';
 import { Business } from '../../../../shared/models/business.model';
 import { DayOfWeek } from '../../../../shared/types/day-of-week.type';
 

@@ -1,8 +1,8 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ProductosService } from '../../../../services/productos.service';
-import { CategoryService } from '../../../../services/category.service';
+import { ProductosService } from '../../../../core/services/productos.service';
+import { CategoryService } from '../../../../core/services/category.service';
 import { ProductResponse } from '../../../../shared/models/product.model';
 import { forkJoin } from 'rxjs';
 
