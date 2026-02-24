@@ -8,7 +8,7 @@ import { CategoryService } from '../../../../services/category.service';
 import { SubCategory } from '../../../../shared/models/subcategory.model';
 import { SubCategoryService } from '../../../../services/subcategory.service';
 import { ProductosService } from '../../../../services/productos.service';
-import { Business } from '../../../../models/business.model';
+import { Business } from '../../../../shared/models/business.model';
 import { DayOfWeek } from '../../../../shared/types/day-of-week.type';
 
 interface GroupedSchedule {

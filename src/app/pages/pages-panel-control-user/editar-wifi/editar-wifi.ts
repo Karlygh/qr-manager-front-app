@@ -5,7 +5,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BusinessService } from '../../../services/business.service';
-import { Business } from '../../../models/business.model';
+import { Business } from '../../../shared/models/business.model';
 import { WifiResponse } from '../../../shared/models/wifi.model';
 
 @Component({

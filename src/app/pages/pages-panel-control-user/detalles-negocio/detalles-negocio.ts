@@ -7,7 +7,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map, switchMap, catchError, startWith } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { BusinessService } from '../../../services/business.service';
-import { Business } from '../../../models/business.model'; 
+import { Business } from '../../../shared/models/business.model'; 
 
 @Component({
   selector: 'app-detalles-negocio', 

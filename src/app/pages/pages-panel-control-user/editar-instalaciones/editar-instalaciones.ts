@@ -3,7 +3,7 @@ import { Component, OnInit, inject, computed, signal, effect } from '@angular/co
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BusinessService } from '../../../services/business.service';
-import { Business, Facility } from '../../../models/business.model';
+import { Business, Facility } from '../../../shared/models/business.model';
 
 @Component({
   selector: 'app-editar-instalaciones',
