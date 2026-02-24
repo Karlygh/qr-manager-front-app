@@ -1,9 +1,10 @@
 import { Observable } from 'rxjs';
+import { DayOfWeek } from '../types/day-of-week.type';
 
 export interface ScheduleHour {
   id?: number;
   businessId: number;
-  day: string;
+  day: DayOfWeek;
   openingTime: string;
   closingTime: string;
   status?: boolean;
@@ -12,7 +13,7 @@ export interface ScheduleHour {
 }
 
 export interface ScheduleService<T extends ScheduleHour> {
-  saveDaySchedules(businessId: number, day: string, schedules: T[]): Observable<any>;
+  saveDaySchedules(businessId: number, day: DayOfWeek, schedules: T[]): Observable<any>;
   saveAllSchedules?(businessId: number, schedules: T[]): Observable<T[]>;
   deleteAllSchedules?(businessId: number): Observable<void>;
   getSchedulesByBusiness?(businessId: number): Observable<T[]>;

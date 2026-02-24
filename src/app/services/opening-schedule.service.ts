@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { DayOfWeek } from '../shared/types/day-of-week.type';
 import { OpeningHour, OpeningHourResponse, OpeningHourRequest } from '../shared/models/opening-hour.model';
 
 @Injectable({
@@ -23,7 +24,7 @@ export class OpeningScheduleService {
     );
   }
 
-  saveDaySchedules(businessId: number, day: string, schedules: OpeningHour[]): Observable<OpeningHourResponse> {
+  saveDaySchedules(businessId: number, day: DayOfWeek, schedules: OpeningHour[]): Observable<OpeningHourResponse> {
     const request: OpeningHourRequest = {
       businessId: businessId,
       day: day,
@@ -51,7 +52,7 @@ export class OpeningScheduleService {
       const daySchedules = schedulesByDay[day];
       requests.push({
         businessId: businessId,
-        day: day,
+        day: day as DayOfWeek,
         status: daySchedules.length > 0 && daySchedules[0].status !== undefined ? daySchedules[0].status : true,
         intervals: daySchedules.map(s => ({
           startTime: this.normalizeTime(s.openingTime),

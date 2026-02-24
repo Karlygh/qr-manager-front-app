@@ -9,9 +9,10 @@ import { SubCategory } from '../../../../shared/models/subcategory.model';
 import { SubCategoryService } from '../../../../services/subcategory.service';
 import { ProductosService } from '../../../../services/productos.service';
 import { Business } from '../../../../models/business.model';
+import { DayOfWeek } from '../../../../shared/types/day-of-week.type';
 
 interface GroupedSchedule {
-  day: string;
+  day: DayOfWeek;
   intervals: { opening: string; closing: string; }[];
   status: boolean;
   isSplit: boolean;
@@ -48,7 +49,7 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
   private readonly ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
   private groupSchedulesByDay(schedules: any[]): GroupedSchedule[] {
-    const dayOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    const dayOrder: DayOfWeek[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     const grouped: { [key: string]: GroupedSchedule } = {};
 
     schedules.forEach(schedule => {
@@ -358,15 +359,15 @@ export class DetallesPanelControl implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  getDayName(day: string): string {
-    const dayNames: { [key: string]: string } = {
-      'monday': 'Lunes',
-      'tuesday': 'Martes',
-      'wednesday': 'Miércoles',
-      'thursday': 'Jueves',
-      'friday': 'Viernes',
-      'saturday': 'Sábado',
-      'sunday': 'Domingo'
+  getDayName(day: DayOfWeek): string {
+    const dayNames: Record<DayOfWeek, string> = {
+      monday: 'Lunes',
+      tuesday: 'Martes',
+      wednesday: 'Miércoles',
+      thursday: 'Jueves',
+      friday: 'Viernes',
+      saturday: 'Sábado',
+      sunday: 'Domingo'
     };
     return dayNames[day] || day;
   }

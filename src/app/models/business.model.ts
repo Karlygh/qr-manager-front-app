@@ -1,6 +1,7 @@
 // src/app/models/business.model.ts
 
 // Interfaces de objetos anidados (Wi-Fi, Horarios, etc.)
+import { DayOfWeek } from '../shared/types/day-of-week.type';
 export interface Wifi {
   id: number;
   businessId: number;
@@ -11,7 +12,7 @@ export interface Wifi {
 export interface Hour {
   id: number;
   businessId: number;
-  day: string;
+  day: DayOfWeek;
   openingTime: string; // Formato "HH:mm:ss"
   closingTime: string; // Formato "HH:mm:ss"
   status: boolean;

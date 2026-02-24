@@ -1,7 +1,9 @@
+import { DayOfWeek } from '../types/day-of-week.type';
+
 export interface OpeningHour {
   id?: number;
   businessId: number;
-  day: string;
+  day: DayOfWeek;
   openingTime: string;
   closingTime: string;
   status?: boolean;
@@ -11,7 +13,7 @@ export interface OpeningHour {
 export interface OpeningHourResponse {
   id: number;
   businessId: number;
-  day: string;
+  day: DayOfWeek;
   status: boolean;
   intervals: {
     id: number;
@@ -22,7 +24,7 @@ export interface OpeningHourResponse {
 
 export interface OpeningHourRequest {
   businessId: number;
-  day: string;
+  day: DayOfWeek;
   status: boolean;
   intervals: {
     startTime: string;

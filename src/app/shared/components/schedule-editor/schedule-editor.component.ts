@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { ScheduleHour, ScheduleService } from '../../models/schedule.model';
+import { DayOfWeek } from '../../types/day-of-week.type';
 
 interface ScheduleState<T extends ScheduleHour> {
   current: T;           // Estado actual del schedule
@@ -48,11 +49,19 @@ export class ScheduleEditorComponent<T extends ScheduleHour> implements OnInit, 
   private router = inject(Router);
   private destroy$ = new Subject<void>(); // ✓ NUEVO: Para limpiar subscripciones
 
-  days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  days: DayOfWeek[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
   // ✓ MEJORADO: Tracking de estado por schedule
   scheduleStates = signal<Map<string, ScheduleState<T>>>(new Map());
-  daySchedules = signal<{ [key: string]: T[] }>({});
+  daySchedules = signal<Record<DayOfWeek, T[]>>({
+    monday: [],
+    tuesday: [],
+    wednesday: [],
+    thursday: [],
+    friday: [],
+    saturday: [],
+    sunday: []
+  });
 
   loading = signal(false);
   errorMessage = signal<string | null>(null);
@@ -60,7 +69,7 @@ export class ScheduleEditorComponent<T extends ScheduleHour> implements OnInit, 
 
   // ✓ NUEVO: Modal de confirmación
   showDeleteModal = signal(false);
-  deleteModalData = signal<{ day: string; schedule: T } | null>(null);
+  deleteModalData = signal<{ day: DayOfWeek; schedule: T } | null>(null);
 
   // ✓ NUEVO: Detectar si hay cambios sin guardar
   hasAnyChanges = computed(() => {
@@ -93,10 +102,16 @@ export class ScheduleEditorComponent<T extends ScheduleHour> implements OnInit, 
 
   // ✓ MEJORADO: Agrupar y crear estados para cada schedule
   groupSchedulesByDay(hours: T[]) {
-    const grouped: { [key: string]: T[] } = {};
+    const grouped: Record<DayOfWeek, T[]> = {
+      monday: [],
+      tuesday: [],
+      wednesday: [],
+      thursday: [],
+      friday: [],
+      saturday: [],
+      sunday: []
+    };
     const states = new Map<string, ScheduleState<T>>();
-
-    this.days.forEach(day => (grouped[day] = []));
 
     hours.forEach(hour => {
       if (!grouped[hour.day]) grouped[hour.day] = [];
@@ -141,7 +156,15 @@ export class ScheduleEditorComponent<T extends ScheduleHour> implements OnInit, 
   }
 
   initializeEmptySchedules() {
-    const schedules: { [key: string]: T[] } = {};
+    const schedules: Record<DayOfWeek, T[]> = {
+      monday: [],
+      tuesday: [],
+      wednesday: [],
+      thursday: [],
+      friday: [],
+      saturday: [],
+      sunday: []
+    };
     const states = new Map<string, ScheduleState<T>>();
 
     this.days.forEach(day => {
@@ -162,7 +185,7 @@ export class ScheduleEditorComponent<T extends ScheduleHour> implements OnInit, 
     this.scheduleStates.set(states);
   }
 
-  createDefaultSchedule(day: string): T {
+  createDefaultSchedule(day: DayOfWeek): T {
     return {
       businessId: this.businessId,
       day,
@@ -285,7 +308,7 @@ export class ScheduleEditorComponent<T extends ScheduleHour> implements OnInit, 
   }
 
   // ✓ NUEVO: Re-validar todos los horarios del mismo día para limpiar errores cruzados
-  private revalidateDaySchedules(day: string, statesMap: Map<string, ScheduleState<T>>) {
+  private revalidateDaySchedules(day: DayOfWeek, statesMap: Map<string, ScheduleState<T>>) {
     const dayHours = this.daySchedules()[day];
     
     dayHours.forEach(h => {
@@ -370,7 +393,7 @@ export class ScheduleEditorComponent<T extends ScheduleHour> implements OnInit, 
       });
   }
 
-  addSplitSchedule(day: string) {
+  addSplitSchedule(day: DayOfWeek) {
     const daySchedulesArray = this.daySchedules()[day];
 
     if (daySchedulesArray.length >= 2) {
@@ -399,11 +422,11 @@ export class ScheduleEditorComponent<T extends ScheduleHour> implements OnInit, 
     this.scheduleStates.set(new Map(states));
   }
 
-  canAddSchedule(day: string): boolean {
+  canAddSchedule(day: DayOfWeek): boolean {
     return (this.daySchedules()[day]?.length || 0) < 2;
   }
 
-  deleteSchedule(day: string, schedule: T) {
+  deleteSchedule(day: DayOfWeek, schedule: T) {
     const daySchedulesArray = this.daySchedules()[day];
 
     if (daySchedulesArray.length === 1) {
@@ -589,8 +612,8 @@ export class ScheduleEditorComponent<T extends ScheduleHour> implements OnInit, 
     });
   }
 
-  getDayName(day: string): string {
-    const names: { [key: string]: string } = {
+  getDayName(day: DayOfWeek): string {
+    const names: Record<DayOfWeek, string> = {
       monday: 'Lunes',
       tuesday: 'Martes',
       wednesday: 'Miércoles',
